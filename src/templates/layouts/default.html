@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>{{libraryName}}</title>
+    <link rel="stylesheet" href="{{assets.styles.global}}">
+  </head>
+  <body>
+    <div class="body">
+      {% block main %}
+      {% endblock %}
+    </div>
+
+    <script>window.userName = "{{userName}}"</script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    {% if webpackConfig.multipleBundles %}
+      <script src="{{assets.javascript.vendors}}"></script>
+    {% endif %}
+    <script src="{{assets.javascript.main}}"></script>
+  </body>
+</html>
