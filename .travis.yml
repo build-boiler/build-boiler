@@ -26,4 +26,4 @@ install:
 script:
 - gulp
 after_script:
-- if [[ -v ${TRAVIS_TAG} ]]; then cd dist && ./publish.sh; fi
+- if [ -z ${TRAVIS_TAG+x} ]; then echo "skipping publish"; else cd dist && ./publish.sh; fi
