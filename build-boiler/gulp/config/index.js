@@ -25,7 +25,7 @@ export default function(config) {
   const isDevRoot = TRAVIS_BRANCH === devBranch;
   const parentDist = parentSync(__dirname, 'dist');
   const parentMod = parentSync(__dirname, 'node_modules');
-  const rootDir = parentDist || parentMod || path.resolve(__dirname, '..', '..');
+  const rootDir = parentMod || parentDist || path.resolve(__dirname, '..', '..');
   //const isModule = !_.isUndefined(parentDist || parentMod);
 
   const babelrc = `{
