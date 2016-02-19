@@ -10,4 +10,6 @@ export default function(app) {
   Object.keys(customTags).forEach((tag) => {
     instance.addExtension(tag, new customTags[tag](app));
   });
+
+  return instance;
 }

@@ -1,3 +1,6 @@
+import callParent from '../utils/run-parent-fn';
+import runFn from '../utils/run-custom-task';
+
 export default function(gulp, plugins, config) {
   const {sources, utils} = config;
   const {buildDir, srcDir} = sources;
@@ -9,15 +12,24 @@ export default function(gulp, plugins, config) {
   ];
 
   return () => {
-    return gulp.src(src, {base: srcDir})
-      .pipe(rename((fp) => {
-        const {basename} = fp;
+    const parentConfig = callParent(arguments, {src});
+    const {
+      src: newSrc,
+      fn
+    } = parentConfig;
 
-        if (basename === 'favicon') {
-          fp.dirname = '';
-        }
-      }))
-      .pipe(gulp.dest(buildDir));
+    const task = () => {
+      return gulp.src(newSrc, {base: srcDir})
+        .pipe(rename((fp) => {
+          const {basename} = fp;
+
+          if (basename === 'favicon') {
+            fp.dirname = '';
+          }
+        }))
+        .pipe(gulp.dest(buildDir));
+    };
+
+    return runFn(task, fn);
   };
 }
-

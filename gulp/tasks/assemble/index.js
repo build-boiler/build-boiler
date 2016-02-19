@@ -1,7 +1,7 @@
 export default function(gulp, plugins, config, opts) {
   /*eslint-disable*/
-  const {app, nunj} = opts;
-  console.log('****CALLED***');
+  const {src, data} = opts;
+  const {app, nunj, assets} = data;
 
   app.onLoad(/\.html$/, (file, next) => {
     console.log('ASSEMBLE', file.path);

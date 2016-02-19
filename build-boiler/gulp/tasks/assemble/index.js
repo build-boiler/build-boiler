@@ -10,6 +10,8 @@ import buildNunjucksConfig from './nunjucks-config';
 import Plasma from 'plasma';
 import makeTools from '../webpack/isomorpic-tools';
 import renameKey from '../../utils/rename-key';
+import callParent from '../../utils/run-parent-fn';
+import runFn from '../../utils/run-custom-task';
 
 export default function(gulp, plugins, config) {
   const {browserSync, gutil} = plugins;
@@ -56,7 +58,7 @@ export default function(gulp, plugins, config) {
     }
   });
 
-  buildNunjucksConfig(app);
+  const nunj = buildNunjucksConfig(app);
 
   app.engine('.html', consolidate.nunjucks);
 
@@ -78,28 +80,6 @@ export default function(gulp, plugins, config) {
    * Create the isomorphic "snippets"
    */
   return (cb) => {
-    app.task('build', () => {
-      let stream = app.src(src)
-        .pipe(app.renderFile())
-        .pipe(app.dest(buildDir))
-        .on('data', (file) => {
-          log(`Rendered ${blue(renameKey(file.path))}`);
-        })
-        .on('error', (err) => {
-          logError({err, plugin: '[assemble]: build'});
-        });
-
-      if (isDev) {
-        stream = stream.pipe(browserSync.stream());
-      }
-
-      return stream;
-    });
-
-    app.task('watch', ['build'], () => {
-      app.watch(addbase(srcDir, 'templates/**/*.html'), ['build']);
-      cb();
-    });
 
     const statsDir = addbase(buildDir);
 
@@ -108,12 +88,54 @@ export default function(gulp, plugins, config) {
       const assets = _.merge({}, tools.assets(), _.omit(globalStats, 'assets'), {images: globalStats.assets});
       app.data({assets});
 
-      app.build(isDev ? ['watch'] : ['build'], (err) => {
-        if (err) {
-          logError({err, plugin: '[assemble]: run'});
+      const parentConfig = callParent(arguments, {
+        src,
+        data: {
+          app,
+          assets,
+          nunj
         }
+      });
+
+      const {
+        src: newSrc,
+        data,
+        fn
+      } = parentConfig;
+
+      app.task('build', () => {
+        let stream = app.src(newSrc)
+          .pipe(app.renderFile())
+          .pipe(app.dest(buildDir))
+          .on('data', (file) => {
+            log(`Rendered ${blue(renameKey(file.path))}`);
+          })
+          .on('error', (err) => {
+            logError({err, plugin: '[assemble]: build'});
+          });
+
+        if (isDev) {
+          stream = stream.pipe(browserSync.stream());
+        }
+
+        return stream;
+      });
+
+      app.task('watch', ['build'], () => {
+        app.watch(data.watch || addbase(srcDir, 'templates/**/*.html'), ['build']);
         cb();
       });
+
+      const task = (done) => {
+        app.build(isDev ? ['watch'] : ['build'], (err) => {
+          if (err) {
+            logError({err, plugin: '[assemble]: run'});
+          }
+          done();
+        });
+      };
+
+      runFn(task, fn, cb);
     }).catch((err) => {
       logError({err, plugin: '[assemble: server]'});
     });

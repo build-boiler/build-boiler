@@ -1,4 +1,6 @@
 import open from 'open';
+import callParent from '../utils/run-parent-fn';
+import runFn from '../utils/run-custom-task';
 
 export default function(gulp, plugins, config) {
   const {browserSync} = plugins;
@@ -31,9 +33,20 @@ export default function(gulp, plugins, config) {
       }
     };
 
-    browserSync(bsConfig, () => {
-      open(openPath);
-      cb();
-    });
+    const parentConfig = callParent(arguments, {data: bsConfig});
+
+    const {
+      data,
+      fn
+    } = parentConfig;
+
+    const task = (done) => {
+      browserSync(data, () => {
+        open(openPath);
+        done();
+      });
+    };
+
+    return runFn(task, fn, cb);
   };
 }
