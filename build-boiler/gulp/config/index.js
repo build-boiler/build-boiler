@@ -1,8 +1,7 @@
-import path, {join} from 'path';
+import {join} from 'path';
 import gutil, {PluginError} from 'gulp-util';
-import {sync as parentSync} from 'find-parent-dir';
 
-export default function(config) {
+export default function(config, rootDir) {
   const {ENV, browser, entry} = config;
   //if a "project" not a "module" turn on file reving
   const shouldRev = false;
@@ -23,10 +22,7 @@ export default function(config) {
   const devBranch = 'devel';
   const isMaster = TRAVIS_BRANCH === 'master';
   const isDevRoot = TRAVIS_BRANCH === devBranch;
-  const parentDist = parentSync(__dirname, 'dist');
-  const parentMod = parentSync(__dirname, 'node_modules');
-  const rootDir = parentMod || parentDist || path.resolve(__dirname, '..', '..');
-  //const isModule = !_.isUndefined(parentDist || parentMod);
+  const isModule = /\/node_modules\//.test(rootDir);
 
   const babelrc = `{
     "presets": ["react", "es2015", "stage-0"],
@@ -51,7 +47,7 @@ export default function(config) {
 
   const defaultEntry = {
     [mainBundleName]: [`./${scriptDir}/index.js`],
-    [globalBundleName]: [join(rootDir, 'global.js')]
+    [globalBundleName]: [join(rootDir, `global-${isModule ? 'prod' : 'dev'}.js`)]
   };
 
   const sources = {
@@ -66,6 +62,7 @@ export default function(config) {
     ],
     devUrl,
     prodUrl,
+    rootDir,
     scriptDir,
     srcDir: './src',
     statsFile: 'webpack-main-stats.json',

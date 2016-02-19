@@ -1,9 +1,11 @@
 {
   "name": "build-boiler",
-  "version": "0.1.3",
+  "version": "0.1.9",
   "description": "Build Boilerplate Repo",
   "main": "dist/index.js",
-  "scripts": {},
+  "scripts": {
+    "prepublish": "gulp"
+  },
   "repository": {},
   "keywords": [
     "gulp"

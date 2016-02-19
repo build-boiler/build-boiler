@@ -1,27 +1,30 @@
 import {readdirSync as read, statSync as stat, existsSync as exists} from 'fs';
 import _ from 'lodash';
 import path, {join} from 'path';
+import {sync as parentSync} from 'find-parent-dir';
 import makeConfig from './';
-import baseConfig from './make-cli-config';
-import '../utils/gulp-taskname';
+import makeCliConfig from './make-cli-config';
+import compile from '../utils/compile-module';
+import addTaskName from '../utils/gulp-taskname';
+import renameKey from '../utils/rename-key';
 
 export default function(gulp) {
-  const {cliConfig, plugins} = baseConfig;
-  const config = makeConfig(cliConfig);
+  const babel = require('babel-core');
+  const parentDist = parentSync(__dirname, 'dist');
+  const parentMod = parentSync(__dirname, 'node_modules');
+  const rootDir = parentMod || parentDist || path.resolve(__dirname, '..', '..');
+  const {cliConfig, plugins} = makeCliConfig(rootDir);
+  const config = makeConfig(cliConfig, rootDir);
   const {sources, utils} = config;
   const {taskDir} = sources;
-  const {addroot} = utils;
+  const {addbase, addroot} = utils;
 
-  gulp.Gulp.prototype.__runTask = gulp.Gulp.prototype._runTask;
-  gulp.Gulp.prototype._runTask = function(task) {
-    this.currentTask = task;
-    this.__runTask(task);
-  };
+  addTaskName(gulp);
 
   try {
-    const parentConfig = require(addroot('gulp', 'config'));
+    const parentConfig = require(addbase('gulp', 'config'));
 
-    _.assign(config, _.omit(parentConfig, ['ENV']));
+    _.merge(config, _.omit(parentConfig, ['ENV']));
   } catch (err) {
     console.log('No provided root config, using base config in [build-boiler]');
   }
@@ -43,10 +46,18 @@ export default function(gulp) {
     let parentMod;
 
     try {
-      const parentPath = taskPath.replace(__dirname, process.cwd());
-      parentMod = require(parentPath);
+      let parentPath = path.join(
+        process.cwd(),
+        taskPath.replace(rootDir, '')
+      );
+
+      if (!/\.js?$/.test(parentPath)) {
+        parentPath += '/index.js';
+      }
+      const {code} = babel.transformFileSync(parentPath);
+      parentMod = compile(code);
     } catch (err) {
-      console.log(`No parent task for ${taskPath}`);
+      console.log(`No parent task for ${renameKey(taskPath)}`);
     }
 
     return fn(gulp, plugins, config, parentMod);

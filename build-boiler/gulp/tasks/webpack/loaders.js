@@ -16,6 +16,7 @@ export default function(opts) {
   const {
     babelrc,
     includePaths,
+    rootDir,
     srcDir,
     entry,
     mainBundleName
@@ -107,18 +108,24 @@ export default function(opts) {
     //https://github.com/babel/babel-loader/issues/166
     if (babelKeys.includes(key)) {
       acc[key] = val.map(name => {
-        let fp;
+        let basename;
 
         switch (key) {
           case 'presets':
-            fp = addroot('node_modules', `babel-preset-${name}`);
+            basename = `babel-preset-${name}`;
             break;
           case 'plugins':
-            fp = addroot('node_modules', `babel-plugin-${name}`);
+            basename = `babel-plugin-${name}`;
             break;
         }
 
-        return fp;
+        try {
+          basename = require.resolve(basename);
+        } catch (err) {
+          basename = addroot('node_modules', `babel-plugin-${name}`);
+        }
+
+        return basename;
       });
     } else {
       acc[key] = val;
@@ -130,7 +137,9 @@ export default function(opts) {
   const loaders = [
     {
       test: /\.jsx?$/,
-      exclude: excludeRe,
+      exclude(fp) {
+        return excludeRe.test(fp) && fp.indexOf(rootDir) === -1;
+      },
       loader: 'babel',
       query: babelRootQuery
     },

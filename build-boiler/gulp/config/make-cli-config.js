@@ -1,10 +1,12 @@
 import _ from 'lodash';
+import path from 'path';
 import yargs from 'yargs';
-import pluginFn from 'gulp-load-plugins';
+import loadPlugins from 'gulp-load-plugins';
 
-const devKey = 'development';
-const prodKey = 'production';
-const {argv} = yargs
+export default function(root) {
+  const devKey = 'development';
+  const prodKey = 'production';
+  const {argv} = yargs
   .usage('Usage: $0 <gulp> $1 <gulp_task> [-e <environment> -f <file_to_test>]')
   .options({
     b: {
@@ -49,15 +51,15 @@ const {argv} = yargs
     }
   });
 
-if (argv._.indexOf('watch') !== -1) {
-  argv.ENV = devKey;
-}
+  if (argv._.indexOf('watch') !== -1) {
+    argv.ENV = devKey;
+  }
 
-/**
- * Filter out undefined and un-necessary keys
- */
-const keys = Object.keys(argv);
-const cliConfig = keys
+  /**
+   * Filter out undefined and un-necessary keys
+   */
+  const keys = Object.keys(argv);
+  const cliConfig = keys
   .filter(key => ['_', '$0', 'e'].indexOf(key) === -1 && argv[key])
   .reduce((acc, key) => {
     let val = argv[key];
@@ -93,26 +95,34 @@ const cliConfig = keys
     };
   }, {});
 
-/**
- * Load all of the gulp plugins
- */
-const plugins = _.assign({}, pluginFn({
-  lazy: false,
-  pattern: [
-    'gulp-*',
-    'gulp.*',
-    'del',
-    'run-sequence',
-    'browser-sync'
-  ],
-  rename: {
-    'gulp-util': 'gutil',
-    'run-sequence': 'sequence',
-    'gulp-if': 'gulpIf'
-  }
-}));
+  /**
+   * Load all of the gulp plugins
+   */
+  const pluginOpts = {
+    lazy: false,
+    pattern: [
+      'gulp-*',
+      'gulp.*',
+      'del',
+      'run-sequence',
+      'browser-sync'
+    ],
+    rename: {
+      'gulp-util': 'gutil',
+      'run-sequence': 'sequence',
+      'gulp-if': 'gulpIf'
+    }
+  };
 
-export default {
-  cliConfig,
-  plugins
-};
+  const modulePlugins = loadPlugins(
+    _.assign({}, pluginOpts, {config: path.join(root, 'package.json'), scope: ['dependencies']})
+  );
+  const rootPlugins = loadPlugins(
+    _.assign({}, pluginOpts, {config: path.join(process.cwd(), 'package.json')})
+  );
+
+  return {
+    cliConfig,
+    plugins: _.assign({}, modulePlugins, rootPlugins)
+  };
+}
