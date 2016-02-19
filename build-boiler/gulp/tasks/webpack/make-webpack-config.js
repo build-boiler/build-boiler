@@ -1,5 +1,4 @@
 import fs from 'fs';
-import {utils as pantSuitUtils} from '@hfa/pantsuit';
 import _ from 'lodash';
 import {join} from 'path';
 import webpack from 'webpack';
@@ -37,7 +36,6 @@ export default function(config) {
   } = webpackConfig;
   const {jsBundleName} = paths;
   const {isDev} = environment;
-  const apConfig = pantSuitUtils.autoprefixer(isDev);
   const {addbase, addroot} = utils;
   const externals = {
     jquery: 'jQuery'
@@ -151,7 +149,17 @@ export default function(config) {
         },
         plugins,
         postcss: [
-          autoprefixer(apConfig)
+          autoprefixer({
+            browsers: [
+              'last 2 versions',
+              'Explorer >= 9',
+              'Safari >= 7',
+              'Opera >= 12',
+              'iOS >= 5',
+              'Android >= 3'
+            ],
+            cascade: isDev
+          })
         ],
         devtool: 'source-map'
       };
