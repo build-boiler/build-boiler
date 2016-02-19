@@ -13,6 +13,7 @@ gulp.task('assemble', tasks.assemble);
 gulp.task('browser-sync', tasks.browserSync);
 gulp.task('clean', tasks.clean);
 gulp.task('copy', tasks.copy);
+gulp.task('custom', tasks.custom);
 gulp.task('lint:test', tasks.eslint);
 gulp.task('lint:build', tasks.eslint);
 gulp.task('lint', ['lint:test', 'lint:build']);
@@ -24,7 +25,7 @@ gulp.task('build', (cb) => {
   if (isDev) {
     //gulp watch
     sequence(
-      'clean',
+      ['clean', 'custom'],
       ['copy', 'lint'],
       'webpack',
       'assemble',

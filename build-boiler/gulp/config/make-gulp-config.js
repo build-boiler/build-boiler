@@ -26,7 +26,7 @@ export default function(gulp) {
   const config = makeConfig(cliConfig, rootDir, parentConfig);
   const {sources, utils} = config;
   const {taskDir} = sources;
-  const {addroot} = utils;
+  const {addbase, addroot} = utils;
 
   addTaskName(gulp);
 
@@ -42,56 +42,71 @@ export default function(gulp) {
    * @param {String} taskPath
    * @param {Function|Callback} supplied as `gulp.task`
    */
-  function getTask(taskPath) {
+  function getTask(taskPath, moduleTask) {
     const fn = require(taskPath);
     let parentMod;
 
-    try {
-      let parentPath = path.join(
-        process.cwd(),
-        taskPath.replace(rootDir, '')
-      );
+    if (moduleTask) {
+      try {
+        let parentPath = path.join(
+          process.cwd(),
+          taskPath.replace(rootDir, '')
+        );
 
-      if (!/\.js?$/.test(parentPath)) {
-        parentPath += '/index.js';
+        if (!/\.js?$/.test(parentPath)) {
+          parentPath += '/index.js';
+        }
+        const {code} = babel.transformFileSync(parentPath);
+        parentMod = compile(code);
+      } catch (err) {
+        console.log(`No parent task for ${renameKey(taskPath)}`);
       }
-      const {code} = babel.transformFileSync(parentPath);
-      parentMod = compile(code);
-    } catch (err) {
-      console.log(`No parent task for ${renameKey(taskPath)}`);
     }
 
     return fn(gulp, plugins, config, parentMod);
   }
 
-  const tasksDir = addroot(taskDir, 'tasks');
 
   /**
    * Creates an object with keys corresponding to the Gulp task name and
    * values corresponding to the callback function passed as the second
    * argument to `gulp.task`
-   * @param {Array} all fill and directory names in the `gulp/task` directory
+   * @param {String} basePath path to directory
+   * @param {Array} dirs array of filepaths/direcotries
+   * @param {Boolean} isModule flag of whether to look up at parent tasks
    * @return {Object} map of task names to callback functions to be used in `gulp.task`
    */
-  const tasks = read(tasksDir).reduce((acc, name) => {
-    const taskPath = join(tasksDir, name);
-    let isDir = stat(taskPath).isDirectory();
-    let taskName;
-    if (isDir) {
-      if ( !exists(join(taskPath, 'index.js')) ) {
-        throw new Error(`task ${name} directory must have filename index.js`);
+  function recurseTasks(basePath, dirs, isModule) {
+    return dirs.reduce((acc, name) => {
+      const taskPath = join(basePath, name);
+      let isDir = stat(taskPath).isDirectory();
+      let taskName;
+      if (isDir) {
+        if ( !exists(join(taskPath, 'index.js')) ) {
+          throw new Error(`task ${name} directory must have filename index.js`);
+        }
+        taskName = name;
+      } else {
+        taskName = path.basename(name, '.js');
       }
-      taskName = name;
-    } else {
-      taskName = path.basename(name, '.js');
-    }
 
 
-    return {
-      ...acc,
-      [ _.camelCase(taskName) ]: getTask(taskPath)
-    };
-  }, {});
+      return {
+        ...acc,
+        [ _.camelCase(taskName) ]: getTask(taskPath, isModule)
+      };
+    }, {});
+  }
+
+  const tasksDir = addroot(taskDir, 'tasks');
+  const internalDirs = read(tasksDir);
+  const parentDir = addbase(taskDir, 'tasks');
+  const parentPaths = read(parentDir).filter(fp => !internalDirs.includes(fp));
+
+  const tasks = {
+    ...recurseTasks(tasksDir, internalDirs, true),
+    ...recurseTasks(parentDir, parentPaths)
+  };
 
   return {
     tasks,
