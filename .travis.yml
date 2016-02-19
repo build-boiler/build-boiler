@@ -14,13 +14,13 @@ addons:
     - g++-4.8
 before_install:
 - npm config set progress=false
-- cd build-boiler
-install:
 - npm install -g npm@^3
 - npm i -g gulp
+- cd build-boiler && pwd && ls
+install:
 - npm i
 script:
 - gulp
 after_script:
-- cd dist && ls
+- cd dist && pwd && ls
 - npm publish
