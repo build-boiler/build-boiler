@@ -5,6 +5,7 @@ node_js:
 env:
   global:
   - CXX=g++-4.8
+  secure: lohFz15WbBuvMkjzXmWKNz3SBDS2O3L//nPXiIlo7VPkVNCZU18IvzB4u0jC6H/Qs1v3TxEKo0tr3O75k/BNEIXMHU7nUowE5phrRgk5E7NpapzNN1CWMyasbUopyFA5avSzvlW82sqlD6Y2UKFcLoPHSpPo+gZHjMYJqqI8ObrSm+cqUiOvH1LUNMoPKoLRSZ2XLNHHcIkh/vK9O5Q+mPl50QZSgf1VBoVpmiJhmdvrEKSY0hUcJi3pwxYusHKeDCevxVheGVyiRSJq5irRVphWtoNQmnZCr7yxYDK0rY2quorBLT7tWTdrkaa2jjS/0oPwujnpi2BFOLL4E46+DlxtHwYTBztyoQifSK0i/CMzlQUAkA8sp8QO88O4unwM9Whf88Mgi+yzrYYKJvUh9ppHyxRYSayNTxYRrkzzyiGtTLMh60WYv/bboPPFFT0+QxhHg903OOFSGHz5tB18o42njVilDQsCQcZD6FAK85gwiA4uQjIwMVKp+dOGUiZHDM8U1Q8G7uMIe3Dw6CfJsNCXm+v0vQb8yMzUME++gsi2ib15yRGpl8zDFgneSTlWFKA57WZ2pGlLI1gOubKHms5B9Q9/f/EvJSwdt9OO/Nev4DlZn9iC5dIOu5cVXexxQKzaeXaZkCw8uxqmE2TpfVx54/c/662nZOmiW0c/rlo=
 addons:
   apt:
     sources:
@@ -23,12 +24,3 @@ install:
 - npm i
 script:
 - gulp
-deploy:
-  provider: npm
-  local_dir: build-boiler/dist
-  email: dtothefp@gmail.com
-  api_key:
-    secure: lohFz15WbBuvMkjzXmWKNz3SBDS2O3L//nPXiIlo7VPkVNCZU18IvzB4u0jC6H/Qs1v3TxEKo0tr3O75k/BNEIXMHU7nUowE5phrRgk5E7NpapzNN1CWMyasbUopyFA5avSzvlW82sqlD6Y2UKFcLoPHSpPo+gZHjMYJqqI8ObrSm+cqUiOvH1LUNMoPKoLRSZ2XLNHHcIkh/vK9O5Q+mPl50QZSgf1VBoVpmiJhmdvrEKSY0hUcJi3pwxYusHKeDCevxVheGVyiRSJq5irRVphWtoNQmnZCr7yxYDK0rY2quorBLT7tWTdrkaa2jjS/0oPwujnpi2BFOLL4E46+DlxtHwYTBztyoQifSK0i/CMzlQUAkA8sp8QO88O4unwM9Whf88Mgi+yzrYYKJvUh9ppHyxRYSayNTxYRrkzzyiGtTLMh60WYv/bboPPFFT0+QxhHg903OOFSGHz5tB18o42njVilDQsCQcZD6FAK85gwiA4uQjIwMVKp+dOGUiZHDM8U1Q8G7uMIe3Dw6CfJsNCXm+v0vQb8yMzUME++gsi2ib15yRGpl8zDFgneSTlWFKA57WZ2pGlLI1gOubKHms5B9Q9/f/EvJSwdt9OO/Nev4DlZn9iC5dIOu5cVXexxQKzaeXaZkCw8uxqmE2TpfVx54/c/662nZOmiW0c/rlo=
-  on:
-    repo: dtothefp/build-boiler
-    branch: master
