@@ -102,10 +102,18 @@ export default function(gulp) {
   const internalDirs = read(tasksDir);
   const parentDir = addbase(taskDir, 'tasks');
   const parentPaths = read(parentDir).filter(fp => !internalDirs.includes(fp));
+  const moduleTasks = recurseTasks(tasksDir, internalDirs, true);
+  let parentTasks = {};
+
+  /*eslint no-empty:0*/
+  try {
+    parentTasks = recurseTasks(parentDir, parentPaths);
+    console.log(`Merging Gulp Tasks from ${parentDir}`);
+  } catch (err) {}
 
   const tasks = {
-    ...recurseTasks(tasksDir, internalDirs, true),
-    ...recurseTasks(parentDir, parentPaths)
+    ...parentTasks,
+    ...moduleTasks
   };
 
   return {
