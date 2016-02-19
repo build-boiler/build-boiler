@@ -15,6 +15,13 @@
     "node": ">=5.0.0"
   },
   "homepage": "",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "rename": "^1.0.3",
+    "run-sequence": "^1.1.5"
+  },
   "dependencies": {
     "assemble-core": "^0.12.0",
     "autoprefixer": "^6.3.2",
@@ -106,7 +113,6 @@
     "require-hacker": "^2.1.3",
     "run-sequence": "^1.0.2",
     "sass-loader": "^3.0.0",
-    "sinon": "git+ssh://git@github.com/uberVU/Sinon.JS.git",
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.0",
     "template-html-loader": "0.0.3",
@@ -117,12 +123,5 @@
     "webpack": "^1.12.13",
     "webpack-isomorphic-tools": "^2.2.14",
     "yargs": "^3.25.0 "
-  },
-  "devDependencies": {
-    "del": "^2.2.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "rename": "^1.0.3",
-    "run-sequence": "^1.1.5"
   }
 }
