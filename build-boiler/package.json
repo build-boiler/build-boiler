@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Build Boilerplate Repo",
   "main": "dist/index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
+    "npm": "^2.14.20",
     "rename": "^1.0.3",
     "run-sequence": "^1.1.5"
   },
