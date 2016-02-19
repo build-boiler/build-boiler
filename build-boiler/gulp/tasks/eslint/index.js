@@ -18,7 +18,8 @@ export default function(gulp, plugins, config) {
         addbase('gulp', '{config,tasks}', '**/*.js'),
         addroot('gulp', '**/*.js'),
         addroot('index.js'),
-        addbase('gulpfile.babel.js')
+        addbase('gulpfile.babel.js'),
+        '!' + addroot('dist', '**/*')
       ];
     }
 

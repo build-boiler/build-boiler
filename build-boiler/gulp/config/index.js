@@ -1,10 +1,9 @@
-import _ from 'lodash';
 import path, {join} from 'path';
 import gutil, {PluginError} from 'gulp-util';
-import pkgInfo from '../../package';
+import {sync as parentSync} from 'find-parent-dir';
 
 export default function(config) {
-  const {ENV, library, browser, entry} = config;
+  const {ENV, browser, entry} = config;
   //if a "project" not a "module" turn on file reving
   const shouldRev = false;
   //if want a "vendor" bundle turn on `multipleBundles` and specify your vendors in `webpackConfig.vendors`
@@ -24,8 +23,11 @@ export default function(config) {
   const devBranch = 'devel';
   const isMaster = TRAVIS_BRANCH === 'master';
   const isDevRoot = TRAVIS_BRANCH === devBranch;
-  const rootDir = path.resolve(__dirname, '..', '..');
-  const isModule = rootDir.split('/').splice(-1)[0] === 'node_modules';
+  const parentDist = parentSync(__dirname, 'dist');
+  const parentMod = parentSync(__dirname, 'node_modules');
+  const rootDir = parentDist || parentMod || path.resolve(__dirname, '..', '..');
+  //const isModule = !_.isUndefined(parentDist || parentMod);
+
   const babelrc = `{
     "presets": ["react", "es2015", "stage-0"],
     "env": {
@@ -47,17 +49,9 @@ export default function(config) {
     }
   }`;
 
-  const {
-    devDependencies = {},
-    dependencies = {},
-    main,
-    name,
-    version
-  } = pkgInfo;
-
   const defaultEntry = {
     [mainBundleName]: [`./${scriptDir}/index.js`],
-    [globalBundleName]: [join(rootDir, `global-${isModule ? 'prod' : 'dev'}.js`)]
+    [globalBundleName]: [join(rootDir, 'global.js')]
   };
 
   const sources = {
@@ -76,7 +70,6 @@ export default function(config) {
     srcDir: './src',
     statsFile: 'webpack-main-stats.json',
     globalStatsFile: 'webpack-global-stats.json',
-    libraryName: library ||  name.replace('@hfa/', '').split('-').map(_.capitalize).join(''),
     testDir: './test',
     taskDir: './gulp',
     buildDir: './dist',
@@ -157,14 +150,6 @@ export default function(config) {
     localIdentifier
   };
 
-  const pkg = {
-    devDependencies: Object.keys(devDependencies),
-    dependencies: Object.keys(dependencies),
-    name,
-    version,
-    main
-  };
-
   const webpackPaths = {
     fileLoader: [
       'file-loader?name=[path][name].[ext]',
@@ -217,7 +202,6 @@ export default function(config) {
     ...config,
     bsConfig,
     environment,
-    pkg,
     sources,
     utils,
     webpackConfig

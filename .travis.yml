@@ -1,0 +1,26 @@
+sudo: false
+language: node_js
+node_js:
+- 5.6.0
+env:
+  global:
+  - CXX=g++-4.8
+  - secure: t/eT6NkBVzE8l8CFIAXu+yVC8G/WmYkt3WrWD/4cTwhmp7rspLJ0MIBqakKic5gUce5WuKNi1X46f9dKWXPv0GrKcRT5sl4R9e5S7vhRp9DvcA1AnRDMsqTJbxxPWLm+hZZo3YplX/na3VT7ocJt2D4ADB0GsHSFMRaamLD5tirb3dcJeJUiqE8h+38UugRifMGegYFRBDcfU1IrJAYeRxSU7gomtaeiMQb9W4LrY/7CEWByAggfWRbuKu0r3GXi2YmPFeUI6ZsS+pIdFRi79sxLnpiHdQOtzytqGxFEqnzeJZb8dqJiJtT6Fn2+YGg6folc7uOg1bWvZEfZUaCq1agqX1hEHW67qYcMS+5tcsLRvm4qHgZ9ofR4gBNN7YACnsXX5O82GAD1VvWZOw1mLAfHpQhAWDEahnu+r+wZ1fu5Ttw/ytn8Ew/1CgK5fYo9fDQQ7U+cxg2CA2n12MWStwgqriyAo1HuSxg4/T+eRtmxYRVTYrvNYQLJs95gi/yCvH2IYvXotP/kfhJBuEj2MnYv06mZNog7EXKm74CSj/HA+6XA/TAWVz7PwXaSEnyBpJdD7FNXty3VGrKXQrqvs7xkws8A1V3ML0ip8cZ22xpsuvEH2ANXRr/dLS86ewu/BEHMo9CII0p34PbJ7Ynv2uBIQdVOs20wLmailWPtETY=
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+before_install:
+- npm config set progress=false
+- cd build-boiler
+install:
+- npm install -g npm@^3
+- npm i -g gulp
+- npm i
+script:
+- gulp
+after_script:
+- cd dist && ls
+- npm publish

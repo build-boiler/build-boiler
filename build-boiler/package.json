@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build Boilerplate Repo",
   "main": "dist/index.js",
   "scripts": {},
@@ -53,6 +53,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "fastly": "^1.2.1",
     "file-loader": "^0.8.4",
+    "find-parent-dir": "^0.3.0",
     "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
     "gulp": "^3.9.0",
@@ -116,5 +117,12 @@
     "webpack": "^1.12.13",
     "webpack-isomorphic-tools": "^2.2.14",
     "yargs": "^3.25.0 "
+  },
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "rename": "^1.0.3",
+    "run-sequence": "^1.1.5"
   }
 }
