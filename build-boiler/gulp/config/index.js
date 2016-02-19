@@ -1,18 +1,49 @@
+import _ from 'lodash';
 import {join} from 'path';
 import gutil, {PluginError} from 'gulp-util';
 
-export default function(config, rootDir) {
+export default function(config, rootDir, parentConfig = {}) {
   const {ENV, browser, entry} = config;
-  //if a "project" not a "module" turn on file reving
-  const shouldRev = false;
-  //if want a "vendor" bundle turn on `multipleBundles` and specify your vendors in `webpackConfig.vendors`
-  const multipleBundles = false;
+  const {log, colors} = gutil;
+  const {magenta, blue} = colors;
+
+  const hfaDefaults = {
+    shouldRev: true,
+    //if want a "vendor" bundle turn on `multipleBundles` and specify your vendors in `webpackConfig.vendors`
+    multipleBundles: false,
+    bucketBase: '',
+    devAssets: '//hrc-assets.hfa.io/',
+    prodAssets: '//a.hrc.onl/',
+    devPath: 'www.hfa.io', //ex => 'www.hfa.io'
+    prodPath: 'www.hillaryclinton.com', //ex => 'www.hillaryclinton.com'
+    internalHost: 'local.hfa.io'
+  };
+
+  if (parentConfig.isHfa) {
+    _.assign(parentConfig, hfaDefaults);
+  }
+
+  const {
+    isHfa = false,
+    //if a "project" not a "module" turn on file reving
+    shouldRev = false,
+    //if want a "vendor" bundle turn on `multipleBundles` and specify your vendors in `webpackConfig.vendors`
+    multipleBundles = false,
+    bucketBase = '',
+    devAssets = '/',
+    prodAssets = '/',
+    devPath = '', //ex => 'www.hfa.io'
+    prodPath = '', //ex => 'www.hillaryclinton.com'
+    internalHost = 'localhost',
+    webpack,
+    cb
+  } = parentConfig;
+
   //enable Assemble to build isomorphic application
-  const enableIsomorphic = true;
-  const bucketBase = 'frontend-boilerplate';
+  const enableIsomorphic = false;
   const globalBundleName = 'global';
-  const devUrl = join('www.hfa.io', bucketBase);
-  const prodUrl = join('www.hillaryclinton.com', bucketBase);
+  const devUrl = join(devPath, bucketBase);
+  const prodUrl = join(prodPath, bucketBase);
   const mainBundleName = 'main';
   const isDev = ENV === 'development';
   const isServer = ENV === 'server';
@@ -70,7 +101,7 @@ export default function(config, rootDir) {
     testDir: './test',
     taskDir: './gulp',
     buildDir: './dist',
-    internalHost: 'local.hfa.io',
+    internalHost,
     devHost: 'localhost',
     devPort: 8000,
     hotPort: 8080,
@@ -106,9 +137,10 @@ export default function(config, rootDir) {
     },
     logError({err, plugin}) {
       const pluginErr = new PluginError(plugin, err, {showStack: true});
-      gutil.log(gutil.colors.magenta(pluginErr.plugin));
-      gutil.log(gutil.colors.blue(pluginErr.message));
-      gutil.log(pluginErr.stack);
+
+      log(magenta(pluginErr.plugin));
+      log(blue(pluginErr.message));
+      log(pluginErr.stack);
       process.exit(1);
     }
   };
@@ -118,6 +150,7 @@ export default function(config, rootDir) {
     link_path: TRAVIS_BRANCH ? 'TRAVIS_BRANCH' : '',
     image_dir: 'img',
     template_env: ENV,
+    isHfa,
     isDev,
     isServer,
     isIE,
@@ -127,8 +160,8 @@ export default function(config, rootDir) {
   };
 
   if (!isDev && TRAVIS_BRANCH) {
-    let devAssetPath = `//hrc-assets.hfa.io/${bucketBase}`;
-    const prodAssetPath = `//a.hrc.onl/${bucketBase}`;
+    let devAssetPath = `${devAssets}${bucketBase || ''}`;
+    const prodAssetPath = `${prodAssets}${bucketBase || ''}`;
     // if branch is not `devel` or `master` add the branch name to the asset path
     if (!isDevRoot && !isMaster) {
       devAssetPath += `/${TRAVIS_BRANCH}`;
@@ -188,14 +221,17 @@ export default function(config, rootDir) {
     }, {}),
 
     vendors: [
-      'nuclear-js',
       'lodash',
       'react',
       'babel-polyfill'
     ]
   };
 
-  return {
+  if (webpack) {
+    _.merge(webpackConfig, webpack);
+  }
+
+  const baseConfig = {
     ...config,
     bsConfig,
     environment,
@@ -203,4 +239,12 @@ export default function(config, rootDir) {
     utils,
     webpackConfig
   };
+
+  const finalConfig = _.isFunction(cb) ? cb(baseConfig) : baseConfig;
+
+  if (_.isUndefined(finalConfig)) {
+    log(`[gulp-config]: Config values are undefined, ${magenta('did you forget to return an object from the cb?')}`);
+  }
+
+  return finalConfig || baseConfig;
 }

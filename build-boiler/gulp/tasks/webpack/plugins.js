@@ -3,6 +3,7 @@ import webpack from 'webpack';
 
 export default function(opts) {
   const {
+    provide = {},
     environment,
     toolsPlugin,
     webpackConfig
@@ -15,13 +16,15 @@ export default function(opts) {
     }
   };
 
-  const {OccurenceOrderPlugin, OccurrenceOrderPlugin} = webpack.optimize;
+  const {DefinePlugin, NoErrorsPlugin, ProvidePlugin, optimize} = webpack;
+  const {OccurenceOrderPlugin, OccurrenceOrderPlugin} = optimize;
   //prepare for Webpack 2
   const PluginFn = OccurenceOrderPlugin || OccurrenceOrderPlugin;
   const plugins = [
     new PluginFn(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin(define),
+    new DefinePlugin(define),
+    new NoErrorsPlugin(),
+    new ProvidePlugin(provide),
     new ExtractTextPlugin(cssBundleName, {
       allChunks: true
     }),

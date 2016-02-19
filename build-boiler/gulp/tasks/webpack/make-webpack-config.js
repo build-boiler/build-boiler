@@ -37,11 +37,9 @@ export default function(config) {
   const {jsBundleName} = paths;
   const {isDev} = environment;
   const {addbase, addroot} = utils;
-  const externals = {
-    jquery: 'jQuery'
-  };
 
   const {
+    externals,
     preLoaders,
     loaders,
     postLoaders,

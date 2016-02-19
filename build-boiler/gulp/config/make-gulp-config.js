@@ -1,5 +1,5 @@
-import {readdirSync as read, statSync as stat, existsSync as exists} from 'fs';
 import _ from 'lodash';
+import {readdirSync as read, statSync as stat, existsSync as exists} from 'fs';
 import path, {join} from 'path';
 import {sync as parentSync} from 'find-parent-dir';
 import makeConfig from './';
@@ -14,20 +14,21 @@ export default function(gulp) {
   const parentMod = parentSync(__dirname, 'node_modules');
   const rootDir = parentMod || parentDist || path.resolve(__dirname, '..', '..');
   const {cliConfig, plugins} = makeCliConfig(rootDir);
-  const config = makeConfig(cliConfig, rootDir);
-  const {sources, utils} = config;
-  const {taskDir} = sources;
-  const {addbase, addroot} = utils;
-
-  addTaskName(gulp);
+  let parentConfig;
 
   try {
-    const parentConfig = require(addbase('gulp', 'config'));
-
-    _.merge(config, _.omit(parentConfig, ['ENV']));
+    parentConfig = require(join(process.cwd(), 'gulp', 'config', 'index.js'));
+    console.log('Merging parent `gulp/config` with base config [build-boiler]');
   } catch (err) {
     console.log('No provided root config, using base config in [build-boiler]');
   }
+
+  const config = makeConfig(cliConfig, rootDir, parentConfig);
+  const {sources, utils} = config;
+  const {taskDir} = sources;
+  const {addroot} = utils;
+
+  addTaskName(gulp);
 
   process.env.NODE_ENV = config.ENV;
   //hack for karma, ternary was making `undefined` a string
