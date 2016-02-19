@@ -5,13 +5,15 @@ node_js:
 env:
   global:
   - CXX=g++-4.8
-  - secure: t/eT6NkBVzE8l8CFIAXu+yVC8G/WmYkt3WrWD/4cTwhmp7rspLJ0MIBqakKic5gUce5WuKNi1X46f9dKWXPv0GrKcRT5sl4R9e5S7vhRp9DvcA1AnRDMsqTJbxxPWLm+hZZo3YplX/na3VT7ocJt2D4ADB0GsHSFMRaamLD5tirb3dcJeJUiqE8h+38UugRifMGegYFRBDcfU1IrJAYeRxSU7gomtaeiMQb9W4LrY/7CEWByAggfWRbuKu0r3GXi2YmPFeUI6ZsS+pIdFRi79sxLnpiHdQOtzytqGxFEqnzeJZb8dqJiJtT6Fn2+YGg6folc7uOg1bWvZEfZUaCq1agqX1hEHW67qYcMS+5tcsLRvm4qHgZ9ofR4gBNN7YACnsXX5O82GAD1VvWZOw1mLAfHpQhAWDEahnu+r+wZ1fu5Ttw/ytn8Ew/1CgK5fYo9fDQQ7U+cxg2CA2n12MWStwgqriyAo1HuSxg4/T+eRtmxYRVTYrvNYQLJs95gi/yCvH2IYvXotP/kfhJBuEj2MnYv06mZNog7EXKm74CSj/HA+6XA/TAWVz7PwXaSEnyBpJdD7FNXty3VGrKXQrqvs7xkws8A1V3ML0ip8cZ22xpsuvEH2ANXRr/dLS86ewu/BEHMo9CII0p34PbJ7Ynv2uBIQdVOs20wLmailWPtETY=
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
+cache:
+  directories:
+  - node_modules
 before_install:
 - npm config set progress=false
 - npm install -g npm@^3
@@ -21,6 +23,13 @@ install:
 - npm i
 script:
 - gulp
-after_script:
-- cd dist && pwd && ls
-- npm publish
+- ls dist && cp -r ./dist/* ../
+- cd .. && ls
+deploy:
+  provider: npm
+  email: dtothefp@gmail.com
+  api_key:
+    secure: lohFz15WbBuvMkjzXmWKNz3SBDS2O3L//nPXiIlo7VPkVNCZU18IvzB4u0jC6H/Qs1v3TxEKo0tr3O75k/BNEIXMHU7nUowE5phrRgk5E7NpapzNN1CWMyasbUopyFA5avSzvlW82sqlD6Y2UKFcLoPHSpPo+gZHjMYJqqI8ObrSm+cqUiOvH1LUNMoPKoLRSZ2XLNHHcIkh/vK9O5Q+mPl50QZSgf1VBoVpmiJhmdvrEKSY0hUcJi3pwxYusHKeDCevxVheGVyiRSJq5irRVphWtoNQmnZCr7yxYDK0rY2quorBLT7tWTdrkaa2jjS/0oPwujnpi2BFOLL4E46+DlxtHwYTBztyoQifSK0i/CMzlQUAkA8sp8QO88O4unwM9Whf88Mgi+yzrYYKJvUh9ppHyxRYSayNTxYRrkzzyiGtTLMh60WYv/bboPPFFT0+QxhHg903OOFSGHz5tB18o42njVilDQsCQcZD6FAK85gwiA4uQjIwMVKp+dOGUiZHDM8U1Q8G7uMIe3Dw6CfJsNCXm+v0vQb8yMzUME++gsi2ib15yRGpl8zDFgneSTlWFKA57WZ2pGlLI1gOubKHms5B9Q9/f/EvJSwdt9OO/Nev4DlZn9iC5dIOu5cVXexxQKzaeXaZkCw8uxqmE2TpfVx54/c/662nZOmiW0c/rlo=
+  on:
+    repo: dtothefp/build-boiler
+    branch: master

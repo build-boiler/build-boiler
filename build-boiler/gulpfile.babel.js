@@ -20,7 +20,7 @@ gulp.task('babel', () => {
 
 gulp.task('copy', () => {
   const src = [
-    './global-*.js',
+    './global.js',
     './*.{md,json}',
     './.*'
   ];
