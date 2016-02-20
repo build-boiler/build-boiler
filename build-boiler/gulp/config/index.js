@@ -96,6 +96,7 @@ export default function(config, rootDir, parentConfig = {}) {
     rootDir,
     scriptDir,
     srcDir: './src',
+    templateDir: 'templates',
     statsFile: 'webpack-main-stats.json',
     globalStatsFile: 'webpack-global-stats.json',
     testDir: './test',

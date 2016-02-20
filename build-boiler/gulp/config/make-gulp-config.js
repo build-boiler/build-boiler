@@ -106,7 +106,11 @@ export default function(gulp) {
 
   /*eslint no-empty:0*/
   try {
-    const parentPaths = read(parentDir).filter(fp => !internalDirs.includes(fp));
+    const parentPaths = read(parentDir).filter(fp => {
+      const base = fp.replace(path.extname, '');
+
+      return !internalDirs.includes(base);
+    });
 
     parentTasks = recurseTasks(parentDir, parentPaths);
     console.log(`Merging Gulp Tasks from ${parentDir}`);

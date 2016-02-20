@@ -8,6 +8,8 @@ import {readFileSync} from 'fs';
 import path from 'path';
 import buildNunjucksConfig from './nunjucks-config';
 import Plasma from 'plasma';
+import addTags from './custom-tags';
+import addMiddleware from './middleware';
 import makeTools from '../webpack/isomorpic-tools';
 import renameKey from '../../utils/rename-key';
 import callParent from '../../utils/run-parent-fn';
@@ -17,7 +19,7 @@ export default function(gulp, plugins, config) {
   const {browserSync, gutil} = plugins;
   const {colors, log} = gutil;
   const {blue} = colors;
-  const {sources, utils, environment} = config;
+  const {sources, utils, environment, webpackConfig} = config;
   const {
     srcDir,
     buildDir,
@@ -52,6 +54,7 @@ export default function(gulp, plugins, config) {
     userName: process.cwd().split('/')[2],
     sources,
     environment,
+    webpackConfig,
     join: path.join,
     layouts(fp) {
       return `${addbase(srcDir, 'templates/layouts', fp)}.html`;
@@ -59,6 +62,9 @@ export default function(gulp, plugins, config) {
   });
 
   const nunj = buildNunjucksConfig(app);
+
+  addTags(nunj, app);
+  addMiddleware(app, config);
 
   app.engine('.html', consolidate.nunjucks);
 
