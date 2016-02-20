@@ -107,7 +107,7 @@ export default function(gulp) {
   /*eslint no-empty:0*/
   try {
     const parentPaths = read(parentDir).filter(fp => {
-      const base = fp.replace(path.extname, '');
+      const base = fp.replace(path.extname(fp), '');
 
       return !internalDirs.includes(base);
     });
