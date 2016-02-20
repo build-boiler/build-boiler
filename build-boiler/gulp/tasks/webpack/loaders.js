@@ -21,13 +21,18 @@ export default function(opts) {
     entry,
     mainBundleName
   } = sources;
-  const {isIE} = environment;
+  const {isDev, isIE} = environment;
   const {expose, paths} = webpackConfig;
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
   const excludeRe = /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/;
   const babelQuery = {};
   const babelBaseConfig = _.omit(babelrc, ['env']);
+  const imageLoader = 'img?' + [
+    'progressive=true',
+    'minimize'
+  ].join('&');
+
   let sassLoader, cssLoader;
 
   let jsonLoader = ['json-loader'];
@@ -145,7 +150,7 @@ export default function(opts) {
     },
     {
       test: toolsPlugin.regular_expression('images'),
-      loader: fileLoader
+      loader: isDev ? fileLoader : [fileLoader, imageLoader].join('!')
     },
     {
       test: /\.(ico|ttf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
