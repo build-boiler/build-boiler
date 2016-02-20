@@ -212,8 +212,8 @@ export default function(config, rootDir, parentConfig = {}) {
       const [devPath, prodPath] = webpackPaths[key];
       const revProd = !isDev && shouldRev;
 
-      if (isServer && key === 'fileLoader' && shouldRev) {
-        Object.assign(acc, {[key]: prodPath});
+      if (key === 'fileLoader') {
+        Object.assign(acc, {[key]: devPath});
       } else {
         Object.assign(acc, {[key]: revProd && !isServer ? prodPath : devPath});
       }

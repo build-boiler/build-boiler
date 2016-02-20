@@ -1,5 +1,5 @@
 export default {
-  shouldRev: false,
+  shouldRev: true,
   multipleBundles: false,
   bucketBase: undefined,
   devAssets: '/',
