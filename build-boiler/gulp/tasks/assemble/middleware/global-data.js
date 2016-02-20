@@ -1,3 +1,4 @@
+import {assign} from 'lodash';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import Plasma from 'plasma';
@@ -14,12 +15,14 @@ export default function(app, config) {
     return safeLoad(ymlStr);
   });
 
-  const globalData = plasma.load(
-    addbase(srcDir, 'config', '**/*.yml'),
-    {namespace: () => 'global_data'}
-  );
 
-  app.data(globalData);
+  app.preRender(/\.(?:md|html)$/, (file, next) => {
+    const globalData = plasma.load(
+      addbase(srcDir, 'config', '**/*.yml'),
+      {namespace: () => 'global_data'}
+    );
 
-  return globalData;
+    assign(file.data, globalData);
+    next(null, file);
+  });
 }

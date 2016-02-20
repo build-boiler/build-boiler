@@ -128,7 +128,9 @@ export default function(gulp, plugins, config) {
       });
 
       app.task('watch', ['build'], () => {
-        app.watch(data.watch || addbase(srcDir, 'templates/**/*.html'), ['build']);
+        const watchBase = data.watch || addbase(srcDir, '{templates,config}/**/*.{html,yml}');
+
+        app.watch(watchBase, ['build']);
         cb();
       });
 
