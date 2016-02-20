@@ -8,6 +8,7 @@ export default {
   devPath: undefined, //ex => 'www.hfa.io'
   prodPath: undefined, //ex => 'www.hillaryclinton.com'
   internalHost: 'localhost',
+  includePaths: [],
   webpack: {
     expose: {
       /*modules to expose globally ex. => js-cookie: 'Cookie'*/

@@ -35,6 +35,7 @@ export default function(config, rootDir, parentConfig = {}) {
     devPath = '', //ex => 'www.hfa.io'
     prodPath = '', //ex => 'www.hillaryclinton.com'
     internalHost = 'localhost',
+    includePaths = [],
     webpack,
     cb
   } = parentConfig;
@@ -106,7 +107,7 @@ export default function(config, rootDir, parentConfig = {}) {
     devHost: 'localhost',
     devPort: 8000,
     hotPort: 8080,
-    includePaths: [],
+    includePaths,
     globalBundleName,
     mainBundleName,
     entry: entry || defaultEntry

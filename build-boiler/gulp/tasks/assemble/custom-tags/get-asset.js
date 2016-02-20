@@ -26,7 +26,7 @@ export default class GetAsset {
     return multipleBundles ? `${v}\n${m}` : m;
   }
 
-  addLink(src) {
+  addLink({src}) {
     const rel = 'rel="stylesheet"';
     return `<link ${rel} href="${src}">`;
   }
@@ -35,13 +35,18 @@ export default class GetAsset {
     const {ctx} = context;
     const {assets, webpackConfig} = ctx;
     const {multipleBundles} = webpackConfig;
-    const {type} = args;
+    const {type, version = '1.0.0'} = args;
     let tag, src;
 
     switch (type) {
+      case 'pantsuit':
+        tag = this.addLink({
+          src: `https://a.hrc.onl/pantsuit/v${version}/css/pantsuit.css`
+        });
+        break;
       case 'css':
         src = assets.styles.global;
-        tag = this.addLink(src);
+        tag = this.addLink({src});
         break;
       case 'js':
         src = {

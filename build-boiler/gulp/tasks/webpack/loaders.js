@@ -41,11 +41,13 @@ export default function(opts) {
     `outputStyle=${DEBUG || quick ? 'expanded' : 'compressed'}`
   ];
 
-  if (includePaths && Array.isArray(includePaths)) {
+  if (Array.isArray(includePaths)) {
     includePaths.reduce((list, fp) => {
       list.push(`includePaths[]=${fp}`);
       return list;
     }, sassParams);
+  } else if (_.isString(includePaths)) {
+    sassParams.push(`includePaths[]=${includePaths}`);
   }
 
   sassParams.push('sourceMap', 'sourceMapContents=true');
