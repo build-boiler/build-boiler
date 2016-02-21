@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Publish";
-export NPM_V=`sed -n 's/.*"version":.*\([0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}\).*/\1/p' package.json`;
+export NPM_V=`sed -n 's/.*"version": "\(.*\)",/\1/p' package.json`;
 echo "Package Version: ${NPM_V}"
 echo "Tag: ${TRAVIS_TAG}"
 if [[ ${TRAVIS_TAG} == ${NPM_V} ]]
@@ -11,7 +11,7 @@ if [[ ${TRAVIS_TAG} == ${NPM_V} ]]
 		echo "//registry.npmjs.org/:username=dtothefp" >> ~/.npmrc
 		echo "//registry.npmjs.org/:email=dtothefp@gmail.com" >> ~/.npmrc
     ls -la
-		npm publish ./
+		npm publish ./ --tag plus
 		echo "Success"
 	else
 		echo "Publishing package ${TRAVIS_TAG} failed (versions not in alignment with ${NPM_V})"
