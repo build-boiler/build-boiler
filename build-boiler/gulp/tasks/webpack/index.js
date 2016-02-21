@@ -1,24 +1,35 @@
-import {assign, isFunction} from 'lodash';
+import {assign, isFunction, isUndefined} from 'lodash';
 import webpack from 'webpack';
 import makeConfig from './make-webpack-config';
 import callParent from '../../utils/run-parent-fn';
 import runFn from '../../utils/run-custom-task';
+import Express from 'express';
+import middleware from 'webpack-dev-middleware';
+import hotMiddleware from 'webpack-hot-middleware';
 
 export default function(gulp, plugins, config) {
-  const {sources, utils, environment} = config;
+  const {sources, utils, environment, webpackConfig} = config;
   const {mainBundleName} = sources;
-  const {isDev, asset_path: assetPath} = environment;
+  const {isDev, isIE, asset_path: assetPath, branch} = environment;
+  const {hot} = webpackConfig;
   const {getTaskName} = utils;
-  const {devPort, devHost} = sources;
+  const {buildDir, devPort, devHost, hotPort} = sources;
   const {gutil, app} = plugins;
   let publicPath;
 
   return (cb) => {
     const taskName = getTaskName(gulp.currentTask);
     const isMainTask = taskName === mainBundleName;
-    const bsPath = `http://${devHost}:${devPort}/`;
+    const runHot = isMainTask && !isIE && hot;
 
-    publicPath = isDev ?  bsPath : `${assetPath}/`;
+    const devPath = isDev ? `http://${devHost}:${hotPort}/` : '/';
+    const bsPath = isDev ? `http://${devHost}:${devPort}/` : '/';
+
+    if (runHot) {
+      publicPath = isUndefined(branch) ?  devPath : `${assetPath}/`;
+    } else {
+      publicPath = isUndefined(branch) ?  bsPath : `${assetPath}/`;
+    }
 
     const baseConfig = assign({}, config, {isMainTask, publicPath, app});
     const webpackConfig = makeConfig(baseConfig);
@@ -84,10 +95,43 @@ export default function(gulp, plugins, config) {
       });
 
       if (isDev) {
-        compiler.watch({
-          aggregateTimeout: 300,
-          poll: true
-        }, logger);
+        if (runHot) {
+          const app = new Express();
+          const serverOptions = {
+            contentBase: buildDir,
+            quiet: true,
+            noInfo: true,
+            hot: true,
+            inline: true,
+            lazy: false,
+            publicPath,
+            headers: {'Access-Control-Allow-Origin': '*'},
+            stats: {colors: true}
+          };
+          let hasRun = false;
+
+          app.use(middleware(compiler, serverOptions));
+          app.use(hotMiddleware(compiler));
+
+          compiler.plugin('done', (stats) => {
+            if (!hasRun) {
+              app.listen(hotPort, (err) => {
+                if (err) {
+                  console.error(err);
+                } else {
+                  console.info('==> 🚧  Webpack development server listening on port %s', hotPort);
+                }
+
+                hasRun = true;
+              });
+            }
+          });
+        } else {
+          compiler.watch({
+            aggregateTimeout: 300,
+            poll: true
+          }, logger);
+        }
       } else {
         compiler.run(logger);
       }

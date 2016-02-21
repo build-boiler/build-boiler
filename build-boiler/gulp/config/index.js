@@ -62,16 +62,24 @@ export default function(config, rootDir, parentConfig = {}) {
       "development": {
         "plugins": [
           "rewire",
-          "transform-runtime",
           "transform-decorators-legacy",
-          "typecheck"
+          "typecheck",
+          ["react-transform",
+            {
+            "transforms": [{
+              "transform": "react-transform-hmr",
+              "imports": ["react"],
+              "locals": ["module"]
+            }, {
+              "transform": "react-transform-catch-errors",
+              "imports": ["react", "redbox-react"]
+            }]
+          }]
         ]
       },
       "production": {
         "plugins": [
-          "transform-runtime",
-          "transform-decorators-legacy",
-          "typecheck"
+          "transform-decorators-legacy"
         ]
       }
     }
