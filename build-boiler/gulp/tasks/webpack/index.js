@@ -23,7 +23,7 @@ export default function(gulp, plugins, config) {
     const runHot = isMainTask && !isIE && hot;
 
     const devPath = isDev ? `http://${devHost}:${hotPort}/` : '/';
-    const bsPath = `http://${devHost}:${devPort}/`;
+    const bsPath = isDev ? `http://${devHost}:${devPort}/` : '/';
 
     if (runHot) {
       publicPath = isUndefined(branch) ?  devPath : `${assetPath}/`;

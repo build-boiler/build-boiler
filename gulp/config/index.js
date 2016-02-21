@@ -16,7 +16,7 @@ export default {
     alias: {
       /*alias modules ex. => underscore: 'lodash'*/
     },
-    //hot: true,
+    hot: true,
     externals: [ //declare external modules and pass then to the ProvidePlugin
       {
         name: {
