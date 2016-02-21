@@ -14,6 +14,7 @@ babelConfig.babelrc = false;
 gulp.task('babel', () => {
   const src = [
     './**/gulp/**/*.js',
+    './post-install.js',
     './index.js',
     '!./node_modules/**/*',
     '!./dist/**/*'
@@ -29,7 +30,8 @@ gulp.task('copy', () => {
     './global-*.js',
     './publish.sh',
     './*.{md,json}',
-    './.*'
+    './.*',
+    './**/test-config/**/*.js'
   ];
 
   return gulp.src(src)
@@ -49,7 +51,7 @@ gulp.task('default', (cb) => {
 gulp.task('watch', ['default'], () => {
   const allSrc = [
     './**/gulp/**/*.js',
-    './index.js',
+    './{index,post-install}.js',
     '!./node_modules/**/*',
     '!./dist/**/*',
     './global-*.js',
