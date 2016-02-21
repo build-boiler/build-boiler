@@ -20,6 +20,7 @@ export default function(gulp, plugins, config, parentMod) {
         addbase('gulp', '{config,tasks}', '**/*.js'),
         addroot('gulp', '**/*.js'),
         addroot('index.js'),
+        addroot('post-install.js'),
         addbase('gulpfile.babel.js'),
         '!' + addroot('dist', '**/*')
       ];
