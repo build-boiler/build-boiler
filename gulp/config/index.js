@@ -4,14 +4,6 @@ import {provideReactor} from 'nuclear-js-react-addons';
 import {dependencies, devDependencies} from '../../package';
 
 export default {
-  isHfa: true,
-  shouldRev: true,
-  bucketBase: 'bloop',
-  devAssets: '',
-  prodAssets: '',
-  devPath: undefined, //ex => 'www.hfa.io'
-  prodPath: undefined, //ex => 'www.hillaryclinton.com'
-  internalHost: 'localhost',
   includePaths: [],
   assemble: {
     data: {
@@ -101,8 +93,8 @@ export default {
     },
     expose: {
       /*modules to expose globally ex. => js-cookie: 'Cookie'*/
-      'js-cookie': 'Cookie',
-      'query-string': 'qs'
+      //'js-cookie': 'Cookie',
+      //'query-string': 'qs'
     },
     alias: {
       /*alias modules ex. => underscore: 'lodash'*/
@@ -168,11 +160,21 @@ export default {
     modules: {
       include: [],
       exclude: [
-        ...Object.keys(dependencies),
-        ...Object.keys(devDependencies)
+        ...Object.keys(dependencies || {}),
+        ...Object.keys(devDependencies || {})
       ],
       target: 'node'
     }
+  },
+  karma: {
+    browsers: {},
+    devices: {},
+    coverageRe: /^.+?\/src\/js\/(?:services|modules|component-utils|module-utils)\/.+?\.jsx?$/
+    //mocks: path.join(process.cwd(), 'build-boiler/gulp/tasks/karma/analytics-mocks.js')
+  },
+  webdriver: {
+    browsers: [],
+    devices: []
   },
   cb(config) {
     //you have access to the gulp config here for

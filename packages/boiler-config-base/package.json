@@ -1,0 +1,36 @@
+{
+  "name": "boiler-config-base",
+  "version": "0.4.0",
+  "description": "Build Boilerplate Base Config",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "boiler-utils": "^0.2.0",
+    "findup-sync": "^0.3.0",
+    "fs-extra": "^0.26.5",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "lodash": "^4.0.0",
+    "yargs": "^4.1.0"
+  }
+}

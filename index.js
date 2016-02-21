@@ -1,10 +1,9 @@
-var path = require('path');
+import path from 'path';
+import makeGulpConfig from './gulp/config/make-gulp-config.js';
+import requireDir from './gulp/utils/require-dir';
 
-var message = [
-  'This repo is only for testing, it is not intended to be installed. ',
-  'If you would like to consume this module please `npm i -D build-boiler@latest ',
-  'and to view the source code please go to ' + path.join(__dirname, 'build-boiler')
-].join('');
+const utilsDir = path.join(__dirname, 'gulp', 'utils');
 
-throw new Error(message);
+export const utils = requireDir(utilsDir, {dict: 'basename'});
 
+export default makeGulpConfig;
