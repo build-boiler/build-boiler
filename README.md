@@ -1,4 +1,5 @@
 ### Build Boilerplate
+*NOTE*: If you are looking to use the `build-boiler` NPM module to simplify your hipster 2016 builds, please `npm i build-boiler@latest` https://www.npmjs.com/package/build-boiler and then mimic the direcory structure and dependencies of this repo in the project where `buld-boiler` is installed.
 
 ![](http://i.imgur.com/hsQwU0a.gif)
 
