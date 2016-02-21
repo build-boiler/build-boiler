@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import gulp from 'gulp';
-import build from './build-boiler';
+import build from './build-boiler/index.js';
 import sequence from 'run-sequence';
 
 const {tasks, config, plugins: $} = build(gulp);

@@ -8,6 +8,10 @@ export default function(gulp, plugins, config) {
   const {internalHost, devPort, buildDir} = sources;
   const {addbase} = utils;
   const openPath = `http://${internalHost}:${devPort}`;
+  const expireHeaders = (req, res, next) => {
+    res.setHeader('cache-control', 'public, max-age=0');
+    next();
+  };
 
   const middleware = [
     (req, res, next) => {
@@ -20,7 +24,8 @@ export default function(gulp, plugins, config) {
       } else {
         next();
       }
-    }
+    },
+    expireHeaders
   ];
 
   return (cb) => {

@@ -29,13 +29,14 @@ export default function(config) {
   const {
     alias,
     hashFunction,
+    hot,
     expose,
     multipleBundles,
     paths,
     vendors
   } = webpackConfig;
   const {jsBundleName} = paths;
-  const {isDev} = environment;
+  const {isDev, isIE} = environment;
   const {addbase, addroot} = utils;
 
   const {
@@ -96,6 +97,17 @@ export default function(config) {
 
   const configFn = {
     development(isProd) {
+      const devPlugins = [
+        new webpack.HotModuleReplacementPlugin()
+      ];
+
+      const hmrOpts = [
+        `path=${publicPath}__webpack_hmr`,
+        'reload=true'
+      ];
+      const hotEntry = [
+        `webpack-hot-middleware/client?${hmrOpts.join('&')}`
+      ];
       let taskEntry;
 
       if (isMainTask) {
@@ -125,6 +137,18 @@ export default function(config) {
           //and the babel-polyfill to support async function, etc.
           taskEntry[mainBundleName].unshift(...['babel-polyfill', ...Object.keys(expose)]);
         }
+
+        /**
+         * Add the hot modules if not doing a prod build
+         */
+        if (!isProd) {
+          if (!isIE && hot) {
+            taskEntry[mainBundleName].unshift(...hotEntry);
+          }
+
+          plugins.push(...devPlugins);
+        }
+
       } else {
         taskEntry = _.omit(entry, mainBundleName);
       }

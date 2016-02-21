@@ -1,8 +1,15 @@
 import 'babel-polyfill';
+import path from 'path';
+import {readJsonSync} from 'fs-extra';
 import gulp from 'gulp';
 import babel from 'gulp-babel';
 import del from 'del';
 import sequence from 'run-sequence';
+
+const babelConfigPath = path.resolve(__dirname, '.babelrc');
+const babelConfig = readJsonSync(babelConfigPath);
+
+babelConfig.babelrc = false;
 
 gulp.task('babel', () => {
   const src = [
@@ -13,7 +20,7 @@ gulp.task('babel', () => {
   ];
 
   return gulp.src(src)
-    .pipe(babel())
+    .pipe(babel(babelConfig))
     .pipe(gulp.dest('dist'));
 });
 

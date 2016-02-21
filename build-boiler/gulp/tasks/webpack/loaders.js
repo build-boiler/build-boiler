@@ -22,7 +22,7 @@ export default function(opts) {
     mainBundleName
   } = sources;
   const {isDev, isIE} = environment;
-  const {expose, paths} = webpackConfig;
+  const {expose, paths, hot} = webpackConfig;
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
   const excludeRe = /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/;
@@ -32,6 +32,7 @@ export default function(opts) {
     'progressive=true',
     'minimize'
   ].join('&');
+  const runHot = isMainTask && hot && !isIE;
 
   let sassLoader, cssLoader;
 
@@ -59,11 +60,11 @@ export default function(opts) {
     if (TEST) {
       plugins = babelEnvConfig.plugins.filter(plugin => _.isString(plugin) && plugin !== 'transform-runtime');
       _.assign(babelEnvConfig, {plugins});
-    } else if (isIE) {
-      plugins = babelEnvConfig.plugins.filter(plugin => _.isString(plugin) && plugin !== 'rewire');
+    } else if (runHot) {
+      plugins = babelEnvConfig.plugins.filter(plugin => plugin !== 'rewire');
       _.assign(babelEnvConfig, {plugins});
     } else {
-      plugins = babelEnvConfig.plugins.filter(plugin => plugin !== 'rewire');
+      plugins = babelEnvConfig.plugins.filter(plugin => _.isString(plugin) && plugin !== 'rewire');
       _.assign(babelEnvConfig, {plugins});
     }
 
@@ -117,20 +118,54 @@ export default function(opts) {
       acc[key] = val.map(name => {
         let basename;
 
-        switch (key) {
-          case 'presets':
-            basename = `babel-preset-${name}`;
-            break;
-          case 'plugins':
-            basename = `babel-plugin-${name}`;
-            break;
+        if (Array.isArray(name)) {
+          const [pluginName, data] = name;
+          const modName = `babel-plugin-${pluginName}`;
+          let modPath;
+
+          try {
+            modPath = require.resolve(modName);
+          } catch (err) {
+            modPath = addroot('node_modules', modName);
+          }
+
+          const {transforms} = data;
+
+          const recursedData = transforms.reduce((acc, pluginData) => {
+            const {transform} = pluginData;
+            let pluginPath;
+
+            try {
+              pluginPath = require.resolve(transform);
+            } catch (err) {
+              pluginPath = addroot('node_modules', transform);
+            }
+
+            const transformData = Object.assign({}, pluginData, {transform: pluginPath});
+
+            acc.transforms.push(transformData);
+
+            return acc;
+          }, {transforms: []});
+
+          basename = [modPath, recursedData];
+        } else {
+          switch (key) {
+            case 'presets':
+              basename = `babel-preset-${name}`;
+              break;
+            case 'plugins':
+              basename = `babel-plugin-${name}`;
+              break;
+          }
+
+          try {
+            basename = require.resolve(basename);
+          } catch (err) {
+            basename = addroot('node_modules', `babel-plugin-${name}`);
+          }
         }
 
-        try {
-          basename = require.resolve(basename);
-        } catch (err) {
-          basename = addroot('node_modules', `babel-plugin-${name}`);
-        }
 
         return basename;
       });
