@@ -5,6 +5,7 @@ import webpack from 'webpack';
 
 export default function(opts) {
   const {
+    file,
     provide = {},
     isMainTask,
     environment,
@@ -58,6 +59,12 @@ export default function(opts) {
 
   if (isHfa) {
     Object.assign(define['process.env'], hfaEnv);
+  }
+
+  if (TEST) {
+    Object.assign(define['process.env'], {
+      TEST_FILE: file ? JSON.stringify(file) : null
+    });
   }
 
   const provideDefault = {
