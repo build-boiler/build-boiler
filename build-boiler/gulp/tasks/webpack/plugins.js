@@ -4,6 +4,7 @@ import webpack from 'webpack';
 
 export default function(opts) {
   const {
+    file,
     provide = {},
     environment,
     toolsPlugin,
@@ -27,6 +28,12 @@ export default function(opts) {
     define['process.env'].SERVER = JSON.stringify(true);
   } else if (!isDev && !TEST && enableIsomorphic) {
     define['process.env'].ISOMORPHIC = JSON.stringify(true);
+  }
+
+  if (TEST) {
+    Object.assign(define['process.env'], {
+      TEST_FILE: file ? JSON.stringify(file) : null
+    });
   }
 
   const provideDefault = {
