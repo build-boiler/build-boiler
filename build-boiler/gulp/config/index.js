@@ -36,7 +36,9 @@ export default function(config, rootDir, parentConfig = {}) {
     isomorphic = {},
     assemble = {},
     eslint = {},
+    karma = {},
     webpack = {},
+    webdriver = {},
     cb
   } = parentConfig;
 
@@ -283,6 +285,8 @@ export default function(config, rootDir, parentConfig = {}) {
     isomorphic,
     assemble,
     eslint,
+    karma,
+    webdriver,
     webpackConfig
   };
 
