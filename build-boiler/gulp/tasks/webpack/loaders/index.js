@@ -4,12 +4,14 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default function(opts) {
   const {
+    coverage,
     environment,
     sources,
     toolsPlugin,
     utils,
     quick,
     isMainTask,
+    karma,
     webpackConfig,
     DEBUG,
     SERVER,
@@ -33,6 +35,8 @@ export default function(opts) {
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
   const excludeRe = /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/;
+  const testCoverage = coverage && TEST;
+  const {coverageRe} = karma;
   const babelQuery = {};
   const babelBaseConfig = _.omit(babelrc, ['env']);
   const imageLoader = 'img?' + [
@@ -223,7 +227,9 @@ export default function(opts) {
       exclude(fp) {
         let ex = false;
 
-        if (fp.indexOf(rootDir) !== -1) {
+        if (testCoverage && !/\@hfa/.test(fp) && !/node_modules/.test(fp)) {
+          ex = coverageRe.test(fp);
+        } else if (fp.indexOf(rootDir) !== -1) {
           const root = fp.replace(rootDir, '');
           ex = excludeRe.test(root);
         } else {
@@ -263,6 +269,17 @@ export default function(opts) {
       exclude: excludeRe,
       loader: join(__dirname, 'mocks-loader')
     });
+  }
+
+  const isparta = {
+    test: /\.jsx?$/,
+    loader: 'isparta',
+    exclude: /\/(test|node_modules)\//,
+    include: coverageRe
+  };
+
+  if (testCoverage) {
+    preLoaders.unshift(isparta);
   }
 
   const postLoaders = [];
