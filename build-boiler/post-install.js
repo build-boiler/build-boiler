@@ -8,7 +8,9 @@ import thunk from './gulp/utils/thunk';
 import run from './gulp/utils/run-gen';
 
 const {magenta, blue} = colors;
-const parentMod = parentSync(__dirname, 'node_modules');
+const parentPath = parentSync(__dirname, 'node_modules');
+const split = parentPath && parentPath.split(path.sep);
+const parentMod = Array.isArray(split) && split.filter(dir => dir !== 'node_modules').join(path.sep);
 const internalMod = parentSync(__dirname, 'dist');
 const directParent = __dirname.split(path.sep).slice(-1)[0];
 const parentIsDist = directParent === 'dist';
