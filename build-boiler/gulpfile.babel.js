@@ -42,12 +42,24 @@ gulp.task('copy', () => {
     './global-*.js',
     './publish.sh',
     './*.{md,json}',
-    './.*',
-    './**/test-config/**/*.js'
+    './.*'
   ];
 
-  return gulp.src(src)
-    .pipe(gulp.dest('dist'));
+  const wrapProm = (src, dest = 'dist') => {
+    return new Promise((res) => {
+
+      gulp.src(src)
+        .pipe(gulp.dest(dest))
+        .on('end', res);
+    });
+  };
+
+  const tasks = [
+    wrapProm(src),
+    wrapProm('test-config/**/*', 'dist/test-config')
+  ];
+
+  Promise.all(tasks).then(() => cb()).catch((err) => cb());
 });
 
 gulp.task('clean', () => del('dist'));

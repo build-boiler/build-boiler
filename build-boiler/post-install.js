@@ -8,8 +8,9 @@ import run from './gulp/utils/run-gen';
 
 const {magenta, blue} = colors;
 const moduleDir = 'node_modules';
-const [directParent] = __dirname.split(path.sep).slice(-1);
-const [secondParent] = __dirname.split(path.sep).slice(-2);
+const splitPath = __dirname.split(path.sep);
+const [directParent] = splitPath.slice(-1);
+const [secondParent] = splitPath.slice(-2);
 const parentIsDist = directParent === 'dist';
 const parentIsMod = secondParent === moduleDir;
 const force = process.argv.indexOf('force') !== -1;
@@ -63,7 +64,7 @@ function* createTestConfig({src, dest, action}) {
 run(function *() {
 
   if (parentIsDist || force) {
-    const internalSrc = path.resolve(directParent, '..', '..', testDir);
+    const internalSrc = path.resolve(__dirname, '..', '..', testDir);
 
     yield* createTestConfig({
       dest: internalSrc,
@@ -77,7 +78,7 @@ run(function *() {
     });
 
   } else if (parentIsMod || force) {
-    const srcDir = path.join(process.cwd(), testDir);
+    const srcDir = path.resolve(__dirname, '..', '..', '..', testDir);
 
     yield* createTestConfig({
       dest: srcDir,
