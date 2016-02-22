@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import {omit} from 'lodash';
 import path from 'path';
 import {readJsonSync} from 'fs-extra';
 import gulp from 'gulp';
@@ -11,18 +12,29 @@ const babelConfig = readJsonSync(babelConfigPath);
 
 babelConfig.babelrc = false;
 
-gulp.task('babel', () => {
+gulp.task('babel', (cb) => {
   const src = [
     './**/gulp/**/*.js',
-    './post-install.js',
     './index.js',
     '!./node_modules/**/*',
     '!./dist/**/*'
   ];
 
-  return gulp.src(src)
-    .pipe(babel(babelConfig))
-    .pipe(gulp.dest('dist'));
+  const wrapProm = (src, config) => {
+    return new Promise((res) => {
+      gulp.src(src)
+        .pipe(babel(config))
+        .pipe(gulp.dest('dist'))
+        .on('end', res);
+    });
+  };
+
+  const tasks = [
+    wrapProm(src, babelConfig),
+    wrapProm('./post-install.js', omit(babelConfig, 'plugins'))
+  ];
+
+  Promise.all(tasks).then(() => cb()).catch((err) => cb());
 });
 
 gulp.task('copy', () => {

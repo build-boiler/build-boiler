@@ -4,7 +4,8 @@
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
-    "prepublish": "gulp"
+    "prepublish": "gulp",
+    "postinstall": "babel-node ./post-install.js -o post-install.js"
   },
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -36,6 +37,7 @@
   "dependencies": {
     "assemble-core": "^0.12.0",
     "autoprefixer": "^6.3.2",
+    "babel-cli": "^6.5.1",
     "babel-core": "^6.5.2",
     "babel-eslint": "^5.0.0-beta9",
     "babel-loader": "^6.2.0",

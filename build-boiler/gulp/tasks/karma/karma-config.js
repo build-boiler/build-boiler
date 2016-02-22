@@ -1,4 +1,3 @@
-import {join} from 'path';
 import _, {assign, merge} from 'lodash';
 import gutil from 'gulp-util';
 import makeWebpackConfig from '../webpack/make-webpack-config';
@@ -128,6 +127,5 @@ export default function(config) {
     karmaConfig.reporters.push('coverage');
   }
 
-  debugger;
   return karmaConfig;
 }

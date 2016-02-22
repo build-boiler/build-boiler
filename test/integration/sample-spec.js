@@ -3,7 +3,11 @@ import sinon from 'sinon';
 
 describe('a sample spec', () => {
   it('should work', () => {
-    console.log('***SINON***', sinon);
     expect(true).to.be.true;
   });
+
+  it('should get the global sinon', () => {
+    expect(sinon.spy).to.be.a('function');
+  });
 });
+

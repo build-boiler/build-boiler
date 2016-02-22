@@ -10,6 +10,6 @@ describe('setup => this could take a while :-P', () => {
     return client.url('/');
   });
 
-  it('starts the webdriver session', () => );
+  it('starts the webdriver session', () => {});
 });
 

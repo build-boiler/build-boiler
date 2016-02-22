@@ -1,53 +1,96 @@
+import 'babel-polyfill';
 import {sync as parentSync} from 'find-parent-dir';
 import ncp from 'ncp';
+import {ensureDir} from 'fs-extra';
 import path from 'path';
 import {log, colors} from 'gulp-util';
 import thunk from './gulp/utils/thunk';
 import run from './gulp/utils/run-gen';
 
-if (!global._babelPolyfill) {
-  require('babel-polyfill');
-}
-
 const {magenta, blue} = colors;
 const parentMod = parentSync(__dirname, 'node_modules');
 const internalMod = parentSync(__dirname, 'dist');
+const directParent = __dirname.split(path.sep).slice(-1)[0];
+const parentIsDist = directParent === 'dist';
 const force = process.argv.indexOf('force') !== -1;
 const copyDir = path.join(__dirname, 'test-config');
-const srcDir = path.join(parentMod, 'test', 'config');
+const srcDir = path.join(parentMod, 'test');
 const copy = thunk(ncp);
+const ensure = thunk(ensureDir);
+
+function* createTestConfig({src, dest, action}) {
+  let ret, dirs;
+
+  switch (action) {
+    case 'ensure':
+      dirs = [
+        '',
+        'integration',
+        path.join('e2e', 'desktop'),
+        path.join('e2e', 'mobile')
+      ];
+
+      ret = dirs.map(dir => {
+        log(`${blue('[build-boiler]')}: Ensuring that ${magenta(dir || 'test')} exists in ${blue(dest)}\n`);
+
+        return ensure(path.join(dest, dir));
+      });
+      break;
+    break;
+    case 'copy':
+      dirs = [
+        'config'
+      ];
+
+      ret = dirs.map(dir => {
+        log(`${blue('[build-boiler]')}: Trying to copy ${magenta(dir)} to ${blue(dest)}\n`);
+
+        return copy(path.join(src, dir), path.join(dest, dir), {clobber: true});
+      });
+      break;
+  }
+
+  for (const future of ret) {
+    try {
+      yield future;
+    } catch (err) {
+      log(`${blue('[build-boiler]')}: Error ${magenta(action)}ing to ${blue(dest)} directory\n`, err.stack);
+    }
+  }
+
+  return ret;
+}
 
 if (parentMod || force) {
   run(function *() {
-    try {
-      yield copy(copyDir, srcDir, {clobber: false});
-    } catch (err) {
-      log(`${blue('[build-boiler]')}: Error copying test config directory to ${srcDir}`, err.stack);
-    }
 
-    if (force) {
-      const split = internalMod.split(path.sep);
-      const [internalPath] = split.slice(-3);
-      let configDirs = ['test', 'config'];
-      let foundDir = false;
-      const internalSrc = split.reduce((list, dir) => {
-        if (foundDir && configDirs.length) {
-          list.push(configDirs.shift());
-        } else {
-          list.push(dir);
-        }
+    if (parentIsDist) {
+      const internalSrc = path.resolve(directParent, '..', '..', 'test');
 
-        if (dir === internalPath) foundDir = true;
+      yield* createTestConfig({
+        dest: internalSrc,
+        action: 'ensure'
+      });
 
-        return list;
-      }, []).join(path.sep);
+      yield* createTestConfig({
+        src: copyDir,
+        dest: internalSrc,
+        action: 'copy'
+      });
 
-      try {
-        log(`${blue('[build-boiler]')}: Retrying copy to ${internalSrc}`);
-        yield copy(copyDir, internalSrc, {clobber: true});
-      } catch (err) {
-        console.log(`${blue('[build-boiler]')}: Failed to copy ${internalSrc}`, err.stack);
-      }
+    } else {
+
+      yield* createTestConfig({
+        dest: srcDir,
+        action: 'ensure'
+      });
+
+      yield* createTestConfig({
+        src: copyDir,
+        dest: srcDir,
+        action: 'copy'
+      });
+
     }
   });
 }

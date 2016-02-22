@@ -41,9 +41,9 @@ export default class CustomDots extends Dots {
       let hasPassed = true;
 
       Object.keys(statsRunner).forEach((pid) => {
-        var runner = statsRunner[pid];
+        const runner = statsRunner[pid];
 
-        if(i > runner.tests.length - 1) {
+        if (i > runner.tests.length - 1) {
           return;
         }
 
@@ -53,13 +53,11 @@ export default class CustomDots extends Dots {
       return hasPassed;
     }
 
-
-
     let passed = 0;
     let pending = 0;
-    let failed = 0
+    let failed = 0;
 
-    for(let i = 0; i < tests; i += 1) {
+    for (let i = 0; i < tests; i += 1) {
       const hasTestPassed = checkIfTestHasPassed(i);
 
       //HACK: couldn't figure out a good way to report errors so just did a quick fix
@@ -86,5 +84,5 @@ export default class CustomDots extends Dots {
     }
 
     process.stdout.write(this.color('green', this.symbols.dot));
-  };
+  }
 }
