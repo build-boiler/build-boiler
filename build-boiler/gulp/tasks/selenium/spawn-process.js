@@ -17,7 +17,7 @@ export default function(opts, config, cb) {
   const {log, colors} = gutil;
   const {magenta} = colors;
   const {local, utils} = config;
-  const {logError} = utils;
+  const {addroot, logError} = utils;
   const {TRAVIS_BRANCH} = process.env;
 
   /**
@@ -38,7 +38,7 @@ export default function(opts, config, cb) {
     });
 
     const cp = spawn(
-      join(process.cwd(), 'node_modules/webdriverio/bin/wdio'),
+      addroot('node_modules/webdriverio/bin/wdio'),
       [
         join(__dirname, 'wdio-config'),
         '--harmony'

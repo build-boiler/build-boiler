@@ -24,7 +24,7 @@ export default function(map, config, forceTunnel) {
     local,
     sources,
     environment,
-    pkg,
+    pkg = {},
     utils
   } = config;
   const {name, version} = pkg;
