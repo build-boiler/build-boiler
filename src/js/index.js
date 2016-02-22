@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import sample from './component-utils/sample';
 
 if (process.env.NODE_ENV === 'development') {
   /*eslint-disable */
+  console.log('***SAMPLE***', sample);
   console.log('MAIN JS LOADED');
   /*eslint-enable */
 }

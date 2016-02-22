@@ -9,6 +9,10 @@ export default {
   prodPath: undefined, //ex => 'www.hillaryclinton.com'
   internalHost: 'localhost',
   includePaths: [],
+  eslint: {
+    basic: false,
+    react: true
+  },
   webpack: {
     expose: {
       /*modules to expose globally ex. => js-cookie: 'Cookie'*/

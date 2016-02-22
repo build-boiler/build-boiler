@@ -5,7 +5,7 @@ import runFn from '../../utils/run-custom-task';
 
 export default function(gulp, plugins, config, parentMod) {
   const {eslint} = plugins;
-  const {utils, environment} = config;
+  const {utils, environment, eslint: eslintParentConfig} = config;
   const {isDev} = environment;
   const {addbase, addroot, getTaskName} = utils;
   let src;
@@ -26,8 +26,16 @@ export default function(gulp, plugins, config, parentMod) {
         '!' + addbase('coverage/**')
       ];
     }
+    const defaultConfig = {
+      basic: true,
+      react: false,
+      isDev,
+      lintEnv
+    };
 
-    const pluginConfig = makeEslintConfig({isDev, lintEnv});
+    const pluginConfig = makeEslintConfig(
+      Object.assign({}, defaultConfig, eslintParentConfig)
+    );
     const parentConfig = callParent(arguments, {
       src,
       data: pluginConfig

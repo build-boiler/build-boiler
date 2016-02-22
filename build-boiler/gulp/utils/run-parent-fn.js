@@ -26,13 +26,8 @@ export default function(args, opts = {}) {
       const hasSrcData = !!src;
       const badSrc = !hasArrData && !hasSrcData;
 
-      if (badSrc) {
-        acc.src = opts.src;
-      }
-
-      if (!_.isPlainObject(data)) {
-        acc.data = opts.data;
-      }
+      acc.src = badSrc ? opts.src : src;
+      acc.data = _.isPlainObject(data) ? data : opts.data;
     }
 
     return acc;

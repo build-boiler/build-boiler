@@ -7,6 +7,7 @@ import makeExternals from './make-externals';
 
 export default function(config) {
   const {
+    eslint: eslintParentConfig,
     isMainTask,
     environment,
     sources,
@@ -38,12 +39,15 @@ export default function(config) {
   const pluginConfig = _.assign({}, config, sharedConfig, {provide});
   const loaders = makeLoaders(loaderConfig);
   const plugins = makePlugins(pluginConfig);
-  const eslintConfig = makeEslintConfig({
+  const defaultEslintConfig = {
     isDev,
     lintEnv: TEST ? 'test' : 'web',
     basic: true,
-    react: true
-  });
+    react: false
+  };
+  const eslintConfig = makeEslintConfig(
+    _.assign({}, defaultEslintConfig, eslintParentConfig)
+  );
 
   return _.assign({}, loaders, plugins, eslintConfig, {externals});
 }

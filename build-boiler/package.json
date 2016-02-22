@@ -3,12 +3,12 @@
   "version": "0.3.5-plus",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
-  "scripts": {
-    "postinstall": "if [ -z ${TRAVIS_BRANCH+x} ]; then node ./post-install.js -o post-install.js; fi"
-  },
   "author": "DtotheFP",
   "license": "Copyright 2016",
   "homepage": "https://github.com/dtothefp/build-boiler",
+  "scripts": {
+    "postinstall": "if [ -z ${TRAVIS_BRANCH+x} ]; then node ./post-install.js -o post-install.js; fi"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
