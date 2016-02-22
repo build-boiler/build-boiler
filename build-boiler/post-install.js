@@ -45,7 +45,7 @@ function* createTestConfig({src, dest, action}) {
       ret = dirs.map(dir => {
         log(`${blue('[build-boiler]')}: Trying to copy ${magenta(dir)} to ${blue(dest)}\n`);
 
-        return copy(path.join(src, dir), path.join(dest, dir), {clobber: true});
+        return copy(path.join(src, dir), path.join(dest, dir), {clobber: false});
       });
       break;
   }
