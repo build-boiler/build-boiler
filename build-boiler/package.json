@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "0.2.22",
+  "version": "0.2.23",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "homepage": "https://github.com/dtothefp/build-boiler",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dtothefp/build-boiler.git"
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
   },
   "bugs": {
     "url": "https://github.com/dtothefp/build-boiler/issues"
