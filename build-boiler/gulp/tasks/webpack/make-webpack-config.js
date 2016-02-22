@@ -28,6 +28,7 @@ export default function(config) {
   } = sources;
   const {
     alias,
+    babel: babelParentConfig,
     hashFunction,
     hot,
     expose,
@@ -144,9 +145,16 @@ export default function(config) {
           if (hasShims) {
             taskEntry[mainBundleName].unshift(shimFile);
           }
+
+          const {omitPolyfill} = babelParentConfig;
+          const additions = Object.keys(expose);
+
+          if (!omitPolyfill) {
+            additions.unshift('babel-polyfill');
+          }
           //otherwise load the modules we want to expose
           //and the babel-polyfill to support async function, etc.
-          taskEntry[mainBundleName].unshift(...['babel-polyfill', ...Object.keys(expose)]);
+          taskEntry[mainBundleName].unshift(...additions);
         }
 
         /**

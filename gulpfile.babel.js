@@ -52,6 +52,6 @@ gulp.task('watch', ['build'], () => {
   gulp.watch(addbase(buildDir, '{js,css}/**/*.{js,css}'), $.browserSync.reload);
   gulp.watch([
     addbase(testDir, '**/*.js'),
-    addbase(buildDir, '**/*.js')
+    addbase('./gulp', '**/*.js')
   ], ['lint']);
 });

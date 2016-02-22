@@ -24,7 +24,7 @@ export default function(opts) {
     mainBundleName
   } = sources;
   const {isDev, isIE} = environment;
-  const {expose, paths, hot} = webpackConfig;
+  const {expose, paths, hot, babel: babelParentConfig} = webpackConfig;
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
   const excludeRe = /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/;
@@ -112,6 +112,19 @@ export default function(opts) {
     }
   ];
 
+  const {omitPolyfill, transform} = babelParentConfig;
+  const transformPolly = ['transform-runtime', {polyfill: true}];
+  const baseTransform = ['transform-runtime', {polyfill: false}];
+  const babelPlugins = babelQuery.plugins;
+
+  if (_.isArray(transform)) {
+    babelPlugins.unshift(transform);
+  } else if (transform) {
+    babelPlugins.unshift(
+      omitPolyfill ? baseTransform : transformPolly
+    );
+  }
+
   const babelKeys = ['plugins', 'presets'];
   const babelRootQuery = Object.keys(babelQuery).reduce((acc, key) => {
     let val = babelQuery[key];
@@ -133,26 +146,30 @@ export default function(opts) {
             modPath = addroot('node_modules', modName);
           }
 
-          const {transforms} = data;
+          const {transforms} = data || {};
 
-          const recursedData = transforms.reduce((acc, pluginData) => {
-            const {transform} = pluginData;
-            let pluginPath;
+          if (transforms) {
+            const recursedData = transforms.reduce((acc, pluginData) => {
+              const {transform} = pluginData;
+              let pluginPath;
 
-            try {
-              pluginPath = require.resolve(transform);
-            } catch (err) {
-              pluginPath = addroot('node_modules', transform);
-            }
+              try {
+                pluginPath = require.resolve(transform);
+              } catch (err) {
+                pluginPath = addroot('node_modules', transform);
+              }
 
-            const transformData = Object.assign({}, pluginData, {transform: pluginPath});
+              const transformData = Object.assign({}, pluginData, {transform: pluginPath});
 
-            acc.transforms.push(transformData);
+              acc.transforms.push(transformData);
 
-            return acc;
-          }, {transforms: []});
+              return acc;
+            }, {transforms: []});
 
-          basename = [modPath, recursedData];
+            basename = [modPath, recursedData];
+          } else {
+            basename = data ? [modPath, data] : [modPath];
+          }
         } else {
           switch (key) {
             case 'presets':

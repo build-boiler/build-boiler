@@ -1,11 +1,11 @@
 import {assign, isFunction, isUndefined} from 'lodash';
 import webpack from 'webpack';
-import makeConfig from './make-webpack-config';
-import callParent from '../../utils/run-parent-fn';
-import runFn from '../../utils/run-custom-task';
 import Express from 'express';
 import middleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
+import makeConfig from './make-webpack-config';
+import callParent from '../../utils/run-parent-fn';
+import runFn from '../../utils/run-custom-task';
 
 export default function(gulp, plugins, config) {
   const {sources, utils, environment, webpackConfig} = config;

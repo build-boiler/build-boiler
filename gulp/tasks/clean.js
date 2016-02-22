@@ -1,8 +1,7 @@
 export default function(gulp, plugins, config, opts) {
-  /*eslint-disable*/
-  const {src} = opts;
+  //const {src} = opts;
 
-  return {
-    src: []
-  };
+  //return {
+    //src: []
+  //};
 }

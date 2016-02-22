@@ -1,4 +1,4 @@
-import formatter from 'eslint-friendly-formatter';
+//import formatter from 'eslint-friendly-formatter';
 
 export default function(gulp, plugins, config, opts) {
   //const {eslint} = plugins;

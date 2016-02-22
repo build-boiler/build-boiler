@@ -37,6 +37,10 @@ export default {
        * data passed as `process.env` for dependency injection with Webpack `DefinePlugin`
        * ex. SOME_VAR: JSON.stringify('something')
        */
+    },
+    babel: {
+      omitPolyfill: true,
+      transform: ['transform-runtime', {polyfill: true}]
     }
   },
   karma: {

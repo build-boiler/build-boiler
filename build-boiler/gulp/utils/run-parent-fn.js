@@ -22,7 +22,9 @@ export default function(args, opts = {}) {
       acc.fn = retVal;
     } else {
       const {src, data} = retVal;
-      const badSrc = Array.isArray(src) ? src.length === 0 : !!src;
+      const hasArrData = Array.isArray(src) && src.length > 0;
+      const hasSrcData = !!src;
+      const badSrc = !hasArrData && !hasSrcData;
 
       if (badSrc) {
         acc.src = opts.src;
