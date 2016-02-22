@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {join} from 'path';
+import path, {join} from 'path';
 import gutil from 'gulp-util';
 import {spawn} from 'child_process';
 import parseNames from  './make-config/parse-browser-names';
@@ -36,6 +36,21 @@ export default function(opts, config, cb) {
       WDIO_CONFIG: JSON.stringify(opt),
       TEST_ENV: JSON.stringify({local})
     });
+
+    const binPath = join('bin', 'wdio');
+    let binaryPath;
+
+    try {
+      const webdriverBase = path.dirname(
+        require.resolve('webdriverio')
+      );
+
+      binaryPath(
+        join(webdriverBase, binPath)
+      );
+    } catch (err) {
+      binaryPath = addroot('node_modules/webdriverio', 'binPath');
+    }
 
     const cp = spawn(
       addroot('node_modules/webdriverio/bin/wdio'),
