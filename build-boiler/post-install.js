@@ -16,6 +16,7 @@ const force = process.argv.indexOf('force') !== -1;
 const copyDir = path.join(__dirname, 'test-config');
 const copy = thunk(ncp);
 const ensure = thunk(ensureDir);
+const testDir = 'test';
 
 function* createTestConfig({src, dest, action}) {
   let ret, dirs;
@@ -30,7 +31,7 @@ function* createTestConfig({src, dest, action}) {
       ];
 
       ret = dirs.map(dir => {
-        log(`${blue('[build-boiler]')}: Ensuring that ${magenta(dir || 'test')} exists in ${blue(dest)}\n`);
+        log(`${blue('[build-boiler]')}: Ensuring that ${magenta(dir || testDir)} exists in ${blue(dest)}\n`);
 
         return ensure(path.join(dest, dir));
       });
@@ -62,7 +63,7 @@ function* createTestConfig({src, dest, action}) {
 run(function *() {
 
   if (parentIsDist || force) {
-    const internalSrc = path.resolve(directParent, '..', '..', 'test');
+    const internalSrc = path.resolve(directParent, '..', '..', testDir);
 
     yield* createTestConfig({
       dest: internalSrc,
@@ -76,7 +77,7 @@ run(function *() {
     });
 
   } else if (parentIsMod || force) {
-    const srcDir = path.join(process.cwd(), 'test');
+    const srcDir = path.join(process.cwd(), testDir);
 
     yield* createTestConfig({
       dest: srcDir,
