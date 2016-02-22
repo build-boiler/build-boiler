@@ -6,11 +6,14 @@ import path from 'path';
 import {log, colors} from 'gulp-util';
 import thunk from './gulp/utils/thunk';
 import run from './gulp/utils/run-gen';
+import {name} from './package';
 
 const {magenta, blue} = colors;
-const parentPath = parentSync(__dirname, 'node_modules');
+const moduleDir = 'node_modules';
+const excludeDirs = [name, moduleDir];
+const parentPath = parentSync(__dirname, moduleDir);
 const split = parentPath && parentPath.split(path.sep);
-const parentMod = Array.isArray(split) && split.filter(dir => dir !== 'node_modules').join(path.sep);
+const parentMod = Array.isArray(split) && split.filter(dir => !excludeDirs.includes(dir) && !!dir).join(path.sep);
 const internalMod = parentSync(__dirname, 'dist');
 const directParent = __dirname.split(path.sep).slice(-1)[0];
 const parentIsDist = directParent === 'dist';
