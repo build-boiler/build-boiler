@@ -8,7 +8,8 @@ export default function(gulp, plugins, config) {
   const {addbase} = utils;
 
   const src = [
-    addbase(buildDir)
+    addbase(buildDir),
+    addbase('coverage')
   ];
 
   return () => {
