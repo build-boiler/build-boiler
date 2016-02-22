@@ -5,7 +5,7 @@ const {blue: _blue, magenta: _magenta} = _colors;
 export const colors = _colors;
 export const blue = _blue;
 export const magenta = _magenta;
-export const prefix = `${magenta('[build-boiler]')}: `;
+export const prefix = `${magenta('[build-boiler]')}:`;
 
 export default function(...args) {
   if (args.length) {

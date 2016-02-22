@@ -45,8 +45,22 @@ export default {
     coverageRe: /^.+?\/src\/js\/(?:services|modules|component-utils|module-utils)\/.+?\.jsx?$/
   },
   webdriver: {
-    browsers: [],
-    devices: []
+    browsers: [
+      {
+        browserName: 'firefox',
+        browser_version: '44.0',
+        os: 'OS X',
+        os_version: 'Yosemite'
+      }
+    ],
+    devices: [
+      {
+        browserName: 'android',
+        platform: 'ANDROID',
+        device: 'Samsung Galaxy S4'
+      }
+    ],
+    force: false
   },
   cb(config) {
     //you have access to the gulp config here for

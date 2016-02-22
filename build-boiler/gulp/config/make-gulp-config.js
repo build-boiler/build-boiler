@@ -49,16 +49,22 @@ export default function(gulp) {
 
     if (moduleTask) {
       try {
-        let parentPath = path.join(
+        const parentPath = path.join(
           process.cwd(),
           taskPath.replace(rootDir, '')
         );
+        let data, finalPath;
 
-        if (!/\.js?$/.test(parentPath)) {
-          parentPath += '/index.js';
+        try {
+          finalPath = /\.js$/.test(parentPath) ? parentPath : `${parentPath}.js`;
+          data = babel.transformFileSync(finalPath);
+          parentMod = compile(data.code);
+        } catch (err) {
+          finalPath = join(parentPath, 'index.js');
+          data = babel.transformFileSync(finalPath);
+          parentMod = compile(data.code);
         }
-        const {code} = babel.transformFileSync(parentPath);
-        parentMod = compile(code);
+        log(`Parent task found at ${blue(finalPath)}`);
       } catch (err) {
         log(`No parent task for ${blue(renameKey(taskPath))}`);
       }

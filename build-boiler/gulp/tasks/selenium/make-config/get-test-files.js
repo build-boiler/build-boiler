@@ -15,7 +15,8 @@ import Immutable from 'immutable';
 export default function getTestFiles({types, fp, config}) {
   const {utils, force} = config;
   const {logError} = utils;
-  const specHook = hackRequire.init(/-spec\.js/, 'specs', types);
+  const {init, unmount} = hackRequire(config);
+  const specHook = init(/-spec\.js/, 'specs', types);
   const globs = globby.sync(fp, {cwd: process.cwd()});
   const filesLen = globs.length;
   const isSingleFile = filesLen === 1;
@@ -109,7 +110,7 @@ export default function getTestFiles({types, fp, config}) {
     });
   }
 
-  hackRequire.unmount(specHook);
+  unmount(specHook);
 
   const deviceMap = Object.keys(testFiles).reduce((map, fp) => {
     /**

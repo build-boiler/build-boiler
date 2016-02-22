@@ -92,6 +92,7 @@ export default function(gulp, plugins, config) {
     tools.development(isDev).server(statsDir).then(() => {
       const globalStats = readJsonSync(globalStatsPath);
       const assets = _.merge({}, tools.assets(), _.omit(globalStats, 'assets'), {images: globalStats.assets});
+
       app.data({assets});
 
       const parentConfig = callParent(arguments, {

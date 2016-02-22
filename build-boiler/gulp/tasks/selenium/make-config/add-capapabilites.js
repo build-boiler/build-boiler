@@ -25,7 +25,8 @@ export default function(map, config, forceTunnel) {
     sources,
     environment,
     pkg = {},
-    utils
+    utils,
+    webdriver = {}
   } = config;
   const {name, version} = pkg;
   const {
@@ -121,7 +122,55 @@ export default function(map, config, forceTunnel) {
     testEnv = 'ci';
   }
 
-  const allBsDevices = [...browsers, ...devices];
+  const {
+    browsers: customBrowsers,
+    devices: customDevices,
+    force
+  } = webdriver;
+
+  /**
+   * Merge data supplied from parent config
+   * @param {Array} customData data from `webdriver` config in parent gulp/config/index
+   * @param {Array} defaultData browser/device data from selenium/browser-stack
+   * @param {String} type
+   *
+   * @return {Array} browsers/devices
+   */
+  function mergeCustomDevices(customData, defaultData, type) {
+    const keyMap = {
+      browsers: 'browserName',
+      devices: 'device'
+    };
+    const key = keyMap[type];
+    const forceBool = _.isBoolean(force) && force;
+    const forceStr = _.isString(force) && force === type;
+    const forceArr = _.isArray(force) && force.indexOf(type) !== -1;
+    const forceType = forceBool || forceStr || forceArr;
+    let ret;
+
+    if (forceType) {
+      ret = customData;
+    } else if (_.isArray(customData) && customData.length) {
+      ret = defaultData.reduce((list, data) => {
+        const keyName = data[key];
+        const [found] = customData.filter(custom => custom[key] === keyName);
+
+        return [...list, found || data];
+      }, []);
+    } else {
+      ret = defaultData;
+    }
+
+    return ret;
+  }
+
+  const testBrowsers = mergeCustomDevices(customBrowsers, browsers, 'browsers');
+  const testDevices = mergeCustomDevices(customDevices, devices, 'devices');
+
+  const allBsDevices = [
+    ...testBrowsers,
+    ...testDevices
+  ];
   const testConfig = [];
 
   if (!isLocal) {
