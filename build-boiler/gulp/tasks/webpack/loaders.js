@@ -3,12 +3,14 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default function(opts) {
   const {
+    coverage,
     environment,
     sources,
     toolsPlugin,
     utils,
     quick,
     isMainTask,
+    karma,
     webpackConfig,
     DEBUG,
     TEST
@@ -26,6 +28,8 @@ export default function(opts) {
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
   const excludeRe = /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/;
+  const testCoverage = coverage && TEST;
+  const {coverageRe} = karma;
   const babelQuery = {};
   const babelBaseConfig = _.omit(babelrc, ['env']);
   const imageLoader = 'img?' + [
@@ -180,7 +184,15 @@ export default function(opts) {
     {
       test: /\.jsx?$/,
       exclude(fp) {
-        return excludeRe.test(fp) && fp.indexOf(rootDir) === -1;
+        let ex = false;
+
+        if (testCoverage && !/\@hfa/.test(fp) && !/node_modules/.test(fp)) {
+          ex = coverageRe.test(fp);
+        } else {
+          ex = excludeRe.test(fp) && fp.indexOf(rootDir) === -1;
+        }
+
+        return ex;
       },
       loader: 'babel',
       query: babelRootQuery
@@ -206,6 +218,17 @@ export default function(opts) {
       loader: sassLoader
     }
   ];
+
+  const isparta = {
+    test: /\.jsx?$/,
+    loader: 'isparta',
+    exclude: /\/(test|node_modules)\//,
+    include: coverageRe
+  };
+
+  if (testCoverage) {
+    preLoaders.unshift(isparta);
+  }
 
   const postLoaders = [];
 
@@ -233,5 +256,10 @@ export default function(opts) {
 
   }
 
-  return {preLoaders, loaders, postLoaders, babelQuery};
+  return {
+    preLoaders,
+    loaders,
+    postLoaders,
+    babelQuery: babelRootQuery
+  };
 }

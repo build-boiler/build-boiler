@@ -7,6 +7,7 @@ import makeCliConfig from './make-cli-config';
 import compile from '../utils/compile-module';
 import addTaskName from '../utils/gulp-taskname';
 import renameKey from '../utils/rename-key';
+import log, {blue} from '../utils/build-logger';
 
 export default function(gulp) {
   const babel = require('babel-core');
@@ -18,9 +19,9 @@ export default function(gulp) {
 
   try {
     parentConfig = require(join(process.cwd(), 'gulp', 'config', 'index.js'));
-    console.log('Merging parent `gulp/config` with base config [build-boiler]');
+    log(`Merging parent ${blue('gulp/config')} with base config`);
   } catch (err) {
-    console.log('No provided root config, using base config in [build-boiler]');
+    log(`No provided root config, using base config ${blue(join(__dirname, 'index.js'))}`);
   }
 
   const config = makeConfig(cliConfig, rootDir, parentConfig);
@@ -59,7 +60,7 @@ export default function(gulp) {
         const {code} = babel.transformFileSync(parentPath);
         parentMod = compile(code);
       } catch (err) {
-        console.log(`No parent task for ${renameKey(taskPath)}`);
+        log(`No parent task for ${blue(renameKey(taskPath))}`);
       }
     }
 
@@ -113,9 +114,9 @@ export default function(gulp) {
     });
 
     parentTasks = recurseTasks(parentDir, parentPaths);
-    console.log(`Merging Gulp Tasks from ${parentDir}`);
+    log(`Merging Gulp Tasks from ${blue(parentDir)}`);
   } catch (err) {
-    console.log(`No custom tasks in ${parentDir}`);
+    log(`No custom tasks in ${blue(parentDir)}`);
   }
 
   const tasks = {

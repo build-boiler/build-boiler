@@ -22,7 +22,8 @@ export default function(gulp, plugins, config, parentMod) {
         addroot('index.js'),
         addroot('post-install.js'),
         addbase('gulpfile.babel.js'),
-        '!' + addroot('dist', '**/*')
+        '!' + addroot('dist', '**/*'),
+        '!' + addbase('coverage/**')
       ];
     }
 
