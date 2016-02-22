@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import ncp from 'ncp';
+import {path as rootPath} from 'app-root-path';
 import {ensureDir} from 'fs-extra';
 import path from 'path';
 import {log, colors} from 'gulp-util';
@@ -61,10 +62,12 @@ function* createTestConfig({src, dest, action}) {
   return ret;
 }
 
-const shouldRun = parentIsMod || parentIsDist || force
+const shouldRun = parentIsMod || parentIsDist || force;
 
 if (shouldRun) {
-  const srcDir = path.resolve(__dirname, '..', '..', testDir);
+  const srcDir = parentIsMod ?
+    path.join(rootPath, testDir) :
+    path.resolve(__dirname, '..', '..', testDir);
 
   run(function *() {
     yield* createTestConfig({
