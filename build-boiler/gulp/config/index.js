@@ -39,7 +39,9 @@ export default function(config, rootDir, parentConfig = {}) {
     includePaths = [],
     assemble = {},
     eslint = {},
+    karma = {},
     webpack = {},
+    webdriver = {},
     cb
   } = parentConfig;
 
@@ -275,6 +277,8 @@ export default function(config, rootDir, parentConfig = {}) {
     utils,
     assemble,
     eslint,
+    karma,
+    webdriver,
     webpackConfig
   };
 
