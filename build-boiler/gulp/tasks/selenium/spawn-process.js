@@ -45,9 +45,7 @@ export default function(opts, config, cb) {
         require.resolve('webdriverio')
       );
 
-      binaryPath(
-        join(webdriverBase, binPath)
-      );
+      binaryPath = join(webdriverBase, binPath);
     } catch (err) {
       binaryPath = addroot('node_modules/webdriverio', binPath);
     }
@@ -56,7 +54,7 @@ export default function(opts, config, cb) {
       binaryPath,
       [
         join(__dirname, 'wdio-config'),
-        '--harmony'
+        '--es_staging'
       ],
       {
         stdio: 'inherit',
