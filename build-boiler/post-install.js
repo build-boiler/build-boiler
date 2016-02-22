@@ -61,25 +61,12 @@ function* createTestConfig({src, dest, action}) {
   return ret;
 }
 
-run(function *() {
+const shouldRun = parentIsMod || parentIsDist || force
 
-  if (parentIsDist || force) {
-    const internalSrc = path.resolve(__dirname, '..', '..', testDir);
+if (shouldRun) {
+  const srcDir = path.resolve(__dirname, '..', '..', testDir);
 
-    yield* createTestConfig({
-      dest: internalSrc,
-      action: 'ensure'
-    });
-
-    yield* createTestConfig({
-      src: copyDir,
-      dest: internalSrc,
-      action: 'copy'
-    });
-
-  } else if (parentIsMod || force) {
-    const srcDir = path.resolve(__dirname, '..', '..', '..', testDir);
-
+  run(function *() {
     yield* createTestConfig({
       dest: srcDir,
       action: 'ensure'
@@ -90,6 +77,5 @@ run(function *() {
       dest: srcDir,
       action: 'copy'
     });
-
-  }
-});
+  });
+}
