@@ -11,13 +11,21 @@ export default function(opts) {
     webpackConfig
   } = opts;
   const {isDev} = environment;
-  const {cssBundleName} = webpackConfig.paths;
+  const {env, paths} = webpackConfig;
+  const {cssBundleName} = webpackConfig;
   const define = {
     'process.env': {
       NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),
-      TEST_FILE: file ? JSON.stringify(file) : null
+      ...env
     }
   };
+
+  if (TEST) {
+    Object.assign(define['process.env'], {
+      TEST_FILE: file ? JSON.stringify(file) : null
+    });
+  }
+
   const provideDefault = {
     'global.sinon': 'sinon',
     'window.sinon': 'sinon',

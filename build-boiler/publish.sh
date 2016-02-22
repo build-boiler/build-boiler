@@ -11,7 +11,7 @@ if [[ ${TRAVIS_TAG} == ${NPM_V} ]]
 		echo "//registry.npmjs.org/:username=dtothefp" >> ~/.npmrc
 		echo "//registry.npmjs.org/:email=dtothefp@gmail.com" >> ~/.npmrc
     ls -la
-		npm publish ./
+		npm publish ./ --tag plus
 		echo "Success"
 	else
 		echo "Publishing package ${TRAVIS_TAG} failed (versions not in alignment with ${NPM_V})"
