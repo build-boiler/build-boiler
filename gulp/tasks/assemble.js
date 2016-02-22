@@ -4,12 +4,8 @@ export default function(gulp, plugins, config, opts) {
   const {app, nunj, assets} = data;
 
   app.onLoad(/\.html$/, (file, next) => {
-    console.log('ASSEMBLE', file.path);
+    //console.log('ASSEMBLE', file.path);
 
     next();
   });
-
-  return {
-    src: []
-  };
 }

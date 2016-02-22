@@ -1,5 +1,5 @@
 export default {
-  isHfa: true,
+  //isHfa: true,
   shouldRev: true,
   multipleBundles: false,
   bucketBase: undefined,
