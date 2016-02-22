@@ -1,25 +1,18 @@
 import 'babel-polyfill';
-import {sync as parentSync} from 'find-parent-dir';
 import ncp from 'ncp';
 import {ensureDir} from 'fs-extra';
 import path from 'path';
 import {log, colors} from 'gulp-util';
 import thunk from './gulp/utils/thunk';
 import run from './gulp/utils/run-gen';
-import {name} from './package';
 
 const {magenta, blue} = colors;
 const moduleDir = 'node_modules';
-const excludeDirs = [name, moduleDir];
-const parentPath = parentSync(__dirname, moduleDir);
-const split = parentPath && parentPath.split(path.sep);
-const parentMod = Array.isArray(split) && split.filter(dir => !excludeDirs.includes(dir) && !!dir).join(path.sep);
-const internalMod = parentSync(__dirname, 'dist');
 const directParent = __dirname.split(path.sep).slice(-1)[0];
 const parentIsDist = directParent === 'dist';
+const parentIsMod = directParent === moduleDir;
 const force = process.argv.indexOf('force') !== -1;
 const copyDir = path.join(__dirname, 'test-config');
-const srcDir = path.join(parentMod, 'test');
 const copy = thunk(ncp);
 const ensure = thunk(ensureDir);
 
@@ -41,7 +34,6 @@ function* createTestConfig({src, dest, action}) {
         return ensure(path.join(dest, dir));
       });
       break;
-    break;
     case 'copy':
       dirs = [
         'config'
@@ -66,36 +58,35 @@ function* createTestConfig({src, dest, action}) {
   return ret;
 }
 
-if (parentMod || force) {
-  run(function *() {
+run(function *() {
 
-    if (parentIsDist) {
-      const internalSrc = path.resolve(directParent, '..', '..', 'test');
+  if (parentIsDist || force) {
+    const internalSrc = path.resolve(directParent, '..', '..', 'test');
 
-      yield* createTestConfig({
-        dest: internalSrc,
-        action: 'ensure'
-      });
+    yield* createTestConfig({
+      dest: internalSrc,
+      action: 'ensure'
+    });
 
-      yield* createTestConfig({
-        src: copyDir,
-        dest: internalSrc,
-        action: 'copy'
-      });
+    yield* createTestConfig({
+      src: copyDir,
+      dest: internalSrc,
+      action: 'copy'
+    });
 
-    } else {
+  } else if (parentIsMod || force) {
+    const srcDir = path.join(process.cwd(), 'test');
 
-      yield* createTestConfig({
-        dest: srcDir,
-        action: 'ensure'
-      });
+    yield* createTestConfig({
+      dest: srcDir,
+      action: 'ensure'
+    });
 
-      yield* createTestConfig({
-        src: copyDir,
-        dest: srcDir,
-        action: 'copy'
-      });
+    yield* createTestConfig({
+      src: copyDir,
+      dest: srcDir,
+      action: 'copy'
+    });
 
-    }
-  });
-}
+  }
+});
