@@ -31,7 +31,14 @@ export default {
     ],
     vendors: [
       /*only use if using multiple bundles ex. => [react, reactdom, lodash]*/
-    ]
+    ],
+    env: {
+      SOME_ENV: 'something'
+      /**
+       * data passed as `process.env` for dependency injection with Webpack `DefinePlugin`
+       * ex. SOME_VAR: JSON.stringify('something')
+       */
+    }
   },
   cb(config) {
     //you have access to the gulp config here for

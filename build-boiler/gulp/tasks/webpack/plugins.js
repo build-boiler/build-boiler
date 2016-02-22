@@ -9,10 +9,12 @@ export default function(opts) {
     webpackConfig
   } = opts;
   const {isDev} = environment;
-  const {cssBundleName} = webpackConfig.paths;
+  const {env = {}, paths} = webpackConfig;
+  const {cssBundleName} = paths;
   const define = {
     'process.env': {
-      NODE_ENV: JSON.stringify(isDev ? 'development' : 'production')
+      NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),
+      ...env
     }
   };
 
