@@ -172,6 +172,15 @@ export default {
       target: 'node'
     }
   },
+  karma: {
+    browsers: {},
+    devices: {},
+    coverageRe: /^.+?\/src\/js\/(?:services|modules|component-utils|module-utils)\/.+?\.jsx?$/
+  },
+  webdriver: {
+    browsers: [],
+    devices: []
+  },
   cb(config) {
     //you have access to the gulp config here for
     //any extra customization => don't forget to return config
