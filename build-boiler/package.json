@@ -1,10 +1,9 @@
 {
   "name": "build-boiler",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
-    "prepublish": "gulp",
     "postinstall": "if [ -z ${TRAVIS_BRANCH+x} ]; then node ./post-install.js -o post-install.js; fi"
   },
   "author": "DtotheFP",
