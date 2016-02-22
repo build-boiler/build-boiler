@@ -8,9 +8,10 @@ import run from './gulp/utils/run-gen';
 
 const {magenta, blue} = colors;
 const moduleDir = 'node_modules';
-const directParent = __dirname.split(path.sep).slice(-1)[0];
+const [directParent] = __dirname.split(path.sep).slice(-1);
+const [secondParent] = __dirname.split(path.sep).slice(-2);
 const parentIsDist = directParent === 'dist';
-const parentIsMod = directParent === moduleDir;
+const parentIsMod = secondParent === moduleDir;
 const force = process.argv.indexOf('force') !== -1;
 const copyDir = path.join(__dirname, 'test-config');
 const copy = thunk(ncp);
