@@ -1,9 +1,9 @@
 import _, {assign, merge} from 'lodash';
 import gutil from 'gulp-util';
 import makeWebpackConfig from '../webpack/make-webpack-config';
-import filterDevices from './filter-devices';
-import bsBrowsers from './browser-stack/browsers';
-import bsDevices from './browser-stack/devices.js';
+import makeDeviceFilter from './filter-devices';
+import defaultBsBrowsers from './browser-stack/browsers';
+import defaultBsDevices from './browser-stack/devices.js';
 
 const {colors, log} = gutil;
 const {magenta} = colors;
@@ -16,6 +16,7 @@ export default function(config) {
     desktop,
     environment,
     file,
+    karma,
     mobile,
     pkg = {},
     sources,
@@ -23,7 +24,14 @@ export default function(config) {
   } = config;
   const {isDev, branch} = environment;
   const {addbase} = utils;
+  const {browsers: customBrowsers, devices: customDevices} = karma;
   const testPath = addbase(sources.testDir, `config/karma-${coverage ? 'coverage' : 'index'}.js`);
+  const bsBrowsers = _.isPlainObject(customBrowsers) ?
+    assign({}, defaultBsBrowsers, customBrowsers) :
+    defaultBsBrowsers;
+  const bsDevices = _.isPlainObject(customDevices) ?
+    assign({}, defaultBsDevices, customDevices) :
+    defaultBsDevices;
   const customLaunchers = assign({}, bsBrowsers, bsDevices);
   let preprocessors = {};
   let ENV, runnerData;
@@ -70,6 +78,7 @@ export default function(config) {
   if (ENV === 'ci' || multiDevice || nonLocalDevice.length > 0) {
     const {name, version} = pkg;
     const {BROWSERSTACK_API, BROWSERSTACK_USERNAME, localIdentifier} = bsConfig;
+    const filterDevices =  makeDeviceFilter({bsBrowsers, bsDevices});
     const browsers = filterDevices({desktop, mobile});
     const bsNames = browsers.map(key => {
       const {device, browser} = customLaunchers[key];
