@@ -16,6 +16,7 @@ addons:
 cache:
   directories:
   - node_modules
+  - build-boiler/node_modules
 notifications:
   email:
     on_success: 'never'
