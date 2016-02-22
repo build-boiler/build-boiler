@@ -49,11 +49,11 @@ export default function(opts, config, cb) {
         join(webdriverBase, binPath)
       );
     } catch (err) {
-      binaryPath = addroot('node_modules/webdriverio', 'binPath');
+      binaryPath = addroot('node_modules/webdriverio', binPath);
     }
 
     const cp = spawn(
-      addroot('node_modules/webdriverio/bin/wdio'),
+      binaryPath,
       [
         join(__dirname, 'wdio-config'),
         '--harmony'
