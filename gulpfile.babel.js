@@ -46,6 +46,14 @@ gulp.task('build', (cb) => {
   }
 });
 
+gulp.task('test:integration', (cb) => {
+  $.sequence(
+    ['clean', 'lint'],
+    'karma',
+    cb
+  );
+});
+
 gulp.task('default', ['build']);
 
 gulp.task('watch', ['build'], () => {
