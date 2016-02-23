@@ -49,5 +49,5 @@ export default function({bsBrowsers, bsDevices}) {
     }
 
     return [...browsers, ...devices];
-  }
+  };
 }
