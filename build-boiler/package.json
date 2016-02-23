@@ -1,10 +1,6 @@
 {
   "name": "build-boiler",
-<<<<<<< HEAD
-  "version": "0.3.2-plus",
-=======
-  "version": "0.3.9-plus",
->>>>>>> add abs path for tools file
+  "version": "0.3.10-plus",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
