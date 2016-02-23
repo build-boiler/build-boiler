@@ -37,6 +37,7 @@ export default function(config, rootDir, parentConfig = {}) {
     prodPath = '', //ex => 'www.hillaryclinton.com'
     internalHost = 'localhost',
     includePaths = [],
+    eslint = {},
     karma = {},
     webpack = {},
     webdriver = {},
