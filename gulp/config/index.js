@@ -1,3 +1,5 @@
+import registerTags from '@hfa/nunjucks-tags';
+
 export default {
   //isHfa: true,
   shouldRev: true,
@@ -9,6 +11,9 @@ export default {
   prodPath: undefined, //ex => 'www.hillaryclinton.com'
   internalHost: 'localhost',
   includePaths: [],
+  assemble: {
+    registerTags
+  },
   eslint: {
     basic: false,
     react: true,

@@ -19,7 +19,13 @@ export default function(gulp, plugins, config) {
   const {browserSync, gutil} = plugins;
   const {colors, log} = gutil;
   const {blue} = colors;
-  const {sources, utils, environment, webpackConfig} = config;
+  const {
+    assemble: assembleParentConfig,
+    sources,
+    utils,
+    environment,
+    webpackConfig
+  } = config;
   const {
     srcDir,
     buildDir,
@@ -62,9 +68,14 @@ export default function(gulp, plugins, config) {
   });
 
   const nunj = buildNunjucksConfig(app);
+  const {registerTags} = assembleParentConfig;
 
   addTags(nunj, app);
   addMiddleware(app, config);
+
+  if (_.isFunction(registerTags)) {
+    registerTags(nunj, app);
+  }
 
   app.engine('.html', consolidate.nunjucks);
 
