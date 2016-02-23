@@ -18,13 +18,15 @@ export default function(opts) {
   const {
     babelrc,
     includePaths,
-    rootDir,
-    srcDir,
-    entry,
-    mainBundleName
+    rootDir
   } = sources;
   const {isDev, isIE} = environment;
-  const {expose, paths, hot, babel: babelParentConfig} = webpackConfig;
+  const {
+    expose,
+    paths,
+    hot,
+    babel: babelParentConfig = {}
+  } = webpackConfig;
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
   const excludeRe = /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/;
@@ -250,27 +252,15 @@ export default function(opts) {
   const postLoaders = [];
 
   if (expose && isMainTask) {
-    const keys = Object.keys(expose);
-
-    keys.forEach((modName) => {
+    Object.keys(expose).forEach((modName) => {
       const exposeName = expose[modName];
-      let method = 'push';
-      let testPath;
+      const testPath = addbase('node_modules', modName);
 
-      if (modName === 'app') {
-        const [bundleName] = entry[mainBundleName];
-        testPath = addbase(srcDir, bundleName);
-        method = 'unshift';
-      } else {
-        testPath = require.resolve(modName);
-      }
-
-      postLoaders[method]({
+      postLoaders.push({
         test: testPath,
         loader: `expose?${exposeName}`
       });
     });
-
   }
 
   return {

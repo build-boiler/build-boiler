@@ -16,6 +16,8 @@ export default {
   webpack: {
     expose: {
       /*modules to expose globally ex. => js-cookie: 'Cookie'*/
+      'js-cookie': 'Cookie',
+      'query-string': 'qs'
     },
     alias: {
       /*alias modules ex. => underscore: 'lodash'*/
@@ -41,11 +43,11 @@ export default {
        * data passed as `process.env` for dependency injection with Webpack `DefinePlugin`
        * ex. SOME_VAR: JSON.stringify('something')
        */
-    },
-    babel: {
-      omitPolyfill: true,
-      transform: ['transform-runtime', {polyfill: true}]
     }
+    //babel: {
+      //omitPolyfill: true,
+      //transform: ['transform-runtime', {polyfill: true}]
+    //}
   },
   karma: {
     browsers: {},

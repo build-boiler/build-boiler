@@ -28,7 +28,7 @@ export default function(config) {
   } = sources;
   const {
     alias,
-    babel: babelParentConfig,
+    babel: babelParentConfig = {},
     hashFunction,
     hot,
     expose,

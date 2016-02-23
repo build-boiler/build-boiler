@@ -214,10 +214,7 @@ export default function(config, rootDir, parentConfig = {}) {
 
     hashFunction: 'sha256',
 
-    expose: {
-      'js-cookie': 'Cookie',
-      'query-string': 'qs'
-    },
+    expose: {},
 
     multipleBundles,
 
