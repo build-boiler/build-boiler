@@ -2,10 +2,16 @@ import {merge} from 'lodash';
 import path from 'path';
 import WebpackIsomorphicToolsPlugin from 'webpack-isomorphic-tools/plugin';
 
-export default function({isMainTask, environment, sources, debug}) {
-  //const {isDev} = environment;
+export default function(gulpConfig) {
+  const {
+    isMainTask,
+    sources,
+    utils,
+    debug
+  } = gulpConfig;
   const {statsFile, globalStatsFile, buildDir} = sources;
-  const toolsFile = `../${path.join(buildDir, isMainTask ? statsFile : globalStatsFile)}`;
+  const {addbase} = utils;
+  const toolsFile = addbase(buildDir, isMainTask ? statsFile : globalStatsFile);
   const defaultConfig = {
     debug,
     webpack_assets_file_path: toolsFile
