@@ -22,15 +22,16 @@ export default function(args, opts = {}) {
       acc.fn = retVal;
     } else {
       const {src, data} = retVal;
-      const badSrc = Array.isArray(src) ? src.length === 0 : !!src;
+      let badSrc;
 
-      if (badSrc) {
-        acc.src = opts.src;
+      if (Array.isArray(src) || _.isString(src)) {
+        badSrc = src.length === 0;
+      } else {
+        badSrc = true;
       }
 
-      if (!_.isPlainObject(data)) {
-        acc.data = opts.data;
-      }
+      acc.src = badSrc ? opts.src : src;
+      acc.data = _.isPlainObject(data) ? data : opts.data;
     }
 
     return acc;

@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Publish";
-export NPM_V=`sed -n 's/.*"version":.*\([0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}\).*/\1/p' package.json`;
+export NPM_V=`sed -n 's/.*"version": "\(.*\)",/\1/p' package.json`;
 echo "Package Version: ${NPM_V}"
 echo "Tag: ${TRAVIS_TAG}"
 if [[ ${TRAVIS_TAG} == ${NPM_V} ]]

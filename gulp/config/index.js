@@ -1,5 +1,5 @@
 export default {
-  isHfa: true,
+  //isHfa: true,
   shouldRev: true,
   multipleBundles: false,
   bucketBase: undefined,
@@ -9,9 +9,15 @@ export default {
   prodPath: undefined, //ex => 'www.hillaryclinton.com'
   internalHost: 'localhost',
   includePaths: [],
+  eslint: {
+    basic: false,
+    react: true
+  },
   webpack: {
     expose: {
       /*modules to expose globally ex. => js-cookie: 'Cookie'*/
+      'js-cookie': 'Cookie',
+      'query-string': 'qs'
     },
     alias: {
       /*alias modules ex. => underscore: 'lodash'*/
@@ -33,11 +39,14 @@ export default {
       /*only use if using multiple bundles ex. => [react, reactdom, lodash]*/
     ],
     env: {
-      SOME_ENV: 'something'
       /**
        * data passed as `process.env` for dependency injection with Webpack `DefinePlugin`
        * ex. SOME_VAR: JSON.stringify('something')
        */
+    },
+    babel: {
+      omitPolyfill: true,
+      transform: ['transform-runtime', {polyfill: true}]
     }
   },
   cb(config) {

@@ -18,6 +18,12 @@ export default function(opts) {
     }
   };
 
+  const provideDefault = {
+    'global.sinon': 'sinon',
+    'window.sinon': 'sinon',
+    'sinon': 'sinon'
+  };
+
   const {DefinePlugin, NoErrorsPlugin, ProvidePlugin, optimize} = webpack;
   const {OccurenceOrderPlugin, OccurrenceOrderPlugin} = optimize;
   //prepare for Webpack 2
@@ -26,7 +32,7 @@ export default function(opts) {
     new PluginFn(),
     new DefinePlugin(define),
     new NoErrorsPlugin(),
-    new ProvidePlugin(provide),
+    new ProvidePlugin(Object.assign({}, provideDefault, provide)),
     new ExtractTextPlugin(cssBundleName, {
       allChunks: true
     }),

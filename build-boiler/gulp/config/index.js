@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {join} from 'path';
 import gutil, {PluginError} from 'gulp-util';
+import {readJsonSync} from 'fs-extra';
 
 export default function(config, rootDir, parentConfig = {}) {
   const {ENV, browser, entry} = config;
@@ -36,7 +37,8 @@ export default function(config, rootDir, parentConfig = {}) {
     prodPath = '', //ex => 'www.hillaryclinton.com'
     internalHost = 'localhost',
     includePaths = [],
-    webpack,
+    eslint = {},
+    webpack = {},
     cb
   } = parentConfig;
 
@@ -210,10 +212,7 @@ export default function(config, rootDir, parentConfig = {}) {
 
     hashFunction: 'sha256',
 
-    expose: {
-      'js-cookie': 'Cookie',
-      'query-string': 'qs'
-    },
+    expose: {},
 
     multipleBundles,
 
@@ -241,12 +240,39 @@ export default function(config, rootDir, parentConfig = {}) {
     _.merge(webpackConfig, webpack);
   }
 
+  const packagePath = utils.addbase('package.json');
+  let pkgInfo = {};
+
+  try {
+    pkgInfo = readJsonSync(packagePath);
+  } catch (err) {
+    log(`${magenta('[build-boiler]')}: No package.json at ${blue(packagePath)}`);
+  }
+
+  const {
+    devDependencies = {},
+    dependencies = {},
+    main = '',
+    name = '',
+    version = ''
+  } = pkgInfo;
+
+  const pkg = {
+    devDependencies: Object.keys(devDependencies),
+    dependencies: Object.keys(dependencies),
+    name,
+    version,
+    main
+  };
+
   const baseConfig = {
     ...config,
     bsConfig,
     environment,
+    pkg,
     sources,
     utils,
+    eslint,
     webpackConfig
   };
 

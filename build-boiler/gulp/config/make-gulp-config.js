@@ -7,6 +7,7 @@ import makeCliConfig from './make-cli-config';
 import compile from '../utils/compile-module';
 import addTaskName from '../utils/gulp-taskname';
 import renameKey from '../utils/rename-key';
+import log, {blue} from '../utils/build-logger';
 
 export default function(gulp) {
   const babel = require('babel-core');
@@ -18,9 +19,9 @@ export default function(gulp) {
 
   try {
     parentConfig = require(join(process.cwd(), 'gulp', 'config', 'index.js'));
-    console.log('Merging parent `gulp/config` with base config [build-boiler]');
+    log(`Merging parent ${blue('gulp/config')} with base config`);
   } catch (err) {
-    console.log('No provided root config, using base config in [build-boiler]');
+    log(`No provided root config, using base config ${blue(join(__dirname, 'index.js'))}`);
   }
 
   const config = makeConfig(cliConfig, rootDir, parentConfig);
@@ -48,18 +49,24 @@ export default function(gulp) {
 
     if (moduleTask) {
       try {
-        let parentPath = path.join(
+        const parentPath = path.join(
           process.cwd(),
           taskPath.replace(rootDir, '')
         );
+        let data, finalPath;
 
-        if (!/\.js?$/.test(parentPath)) {
-          parentPath += '/index.js';
+        try {
+          finalPath = /\.js$/.test(parentPath) ? parentPath : `${parentPath}.js`;
+          data = babel.transformFileSync(finalPath);
+          parentMod = compile(data.code);
+        } catch (err) {
+          finalPath = join(parentPath, 'index.js');
+          data = babel.transformFileSync(finalPath);
+          parentMod = compile(data.code);
         }
-        const {code} = babel.transformFileSync(parentPath);
-        parentMod = compile(code);
+        log(`Parent task found at ${blue(finalPath)}`);
       } catch (err) {
-        console.log(`No parent task for ${renameKey(taskPath)}`);
+        log(`No parent task for ${blue(renameKey(taskPath))}`);
       }
     }
 
@@ -113,9 +120,9 @@ export default function(gulp) {
     });
 
     parentTasks = recurseTasks(parentDir, parentPaths);
-    console.log(`Merging Gulp Tasks from ${parentDir}`);
+    log(`Merging Gulp Tasks from ${blue(parentDir)}`);
   } catch (err) {
-    console.log(`No custom tasks in ${parentDir}`);
+    log(`No custom tasks in ${blue(parentDir)}`);
   }
 
   const tasks = {

@@ -51,7 +51,12 @@ export default function(root) {
     }
   });
 
-  if (argv._.indexOf('watch') !== -1) {
+  const devTasks = [
+    'watch',
+    'test:integration'
+  ];
+
+  if (_.intersection(argv._, devTasks).length) {
     argv.ENV = devKey;
   }
 
