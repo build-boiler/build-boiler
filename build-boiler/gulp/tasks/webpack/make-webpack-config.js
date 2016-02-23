@@ -49,9 +49,6 @@ export default function(config) {
     rules,
     configFile
   } = getLoaderPluginConfig(config);
-  const defaultExternals = {
-    'sinon': 'window.sinon'
-  };
 
   const defaultExternals = {
     'sinon': 'window.sinon'
