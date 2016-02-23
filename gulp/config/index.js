@@ -1,5 +1,3 @@
-import registerTags from '@hfa/nunjucks-tags';
-
 export default {
   //isHfa: true,
   shouldRev: true,
@@ -12,7 +10,9 @@ export default {
   internalHost: 'localhost',
   includePaths: [],
   assemble: {
-    registerTags
+    registerTags(nunj, app) {
+
+    }
   },
   eslint: {
     basic: false,
