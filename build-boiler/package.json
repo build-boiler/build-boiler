@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
@@ -56,7 +56,7 @@
     "css-loader": "^0.23.0",
     "del": "^2.2.0",
     "eslint": "^2.2.0",
-    "eslint-config": "^0.2.1",
+    "eslint-config": "^0.3.0",
     "eslint-friendly-formatter": "^1.1.0",
     "eslint-loader": "^1.0.0",
     "eslint-plugin-react": "^4.0.0",

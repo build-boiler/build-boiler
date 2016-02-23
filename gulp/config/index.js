@@ -11,7 +11,8 @@ export default {
   includePaths: [],
   eslint: {
     basic: false,
-    react: true
+    react: true,
+    generate: true
   },
   webpack: {
     expose: {
