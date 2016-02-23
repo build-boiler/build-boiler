@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "0.3.11-plus",
+  "version": "0.3.12-plus",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
@@ -70,7 +70,7 @@
     "find-parent-dir": "^0.3.0",
     "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
-    "gulp-eslint": "^1.0.0",
+    "gulp-eslint": "^1.1.1",
     "gulp-extname": "^0.2.0",
     "gulp-if": "^2.0.0",
     "gulp-load-plugins": "^1.0.0-rc.1",
