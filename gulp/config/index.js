@@ -1,4 +1,5 @@
 import path from 'path';
+import {dependencies, devDependencies} from '../../package';
 
 export default {
   //isHfa: true,
@@ -66,7 +67,14 @@ export default {
       'lib/components/**.{js,jsx}',
       'lib/bootstrap.js'
     ],
-    bootstrap: path.join('lib', 'bootstrap')
+    bootstrap: path.join('lib', 'bootstrap'),
+    modules: {
+      include: [],
+      exclude: [
+        ...Object.keys(dependencies),
+        ...Object.keys(devDependencies)
+      ]
+    }
   },
   cb(config) {
     //you have access to the gulp config here for

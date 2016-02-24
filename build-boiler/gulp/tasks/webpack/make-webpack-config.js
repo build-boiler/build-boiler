@@ -5,6 +5,7 @@ import webpack from 'webpack';
 import autoprefixer from 'autoprefixer';
 import formatter from 'eslint-friendly-formatter';
 import getLoaderPluginConfig from './get-loader-plugin-config';
+import getExcludes from './gather-commonjs-modules';
 
 export default function(config) {
   const {
@@ -235,8 +236,14 @@ export default function(config) {
       const {branch, asset_path: assetPath} = environment;
       const bsPath = `http://${devHost}:${devPort}/`;
       const publicPath = _.isUndefined(branch) ?  bsPath : `${assetPath}/`;
+      const serverExternals = Object.assign(
+        {},
+        defaultConfig.externals,
+        getExcludes(config)
+      );
 
       const serverConfig = {
+        externals: serverExternals,
         context,
         entry,
         output: {
