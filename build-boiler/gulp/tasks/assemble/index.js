@@ -30,6 +30,7 @@ export default function(gulp, plugins, config) {
   } = config;
   const {
     srcDir,
+    scriptDir,
     buildDir,
     templateDir,
     globalStatsFile,
@@ -66,11 +67,16 @@ export default function(gulp, plugins, config) {
     return (fp) => `${join(templatePath, dir, fp)}.html`;
   }
 
+  function makeJSPath(dir) {
+    return (fp) => `${join(srcDir, scriptDir, dir, fp)}.js`;
+  }
+
   app.data({
     sources,
     environment,
     webpackConfig,
     join,
+    headScripts: makeJSPath('head-scripts'),
     layouts: makeTemplatePath('layouts'),
     macros: makeTemplatePath('macros'),
     partials: makeTemplatePath('partials'),
