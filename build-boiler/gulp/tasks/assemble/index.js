@@ -28,6 +28,7 @@ export default function(gulp, plugins, config) {
   } = config;
   const {
     srcDir,
+    scriptDir,
     buildDir,
     globalStatsFile,
     templateDir
@@ -58,22 +59,23 @@ export default function(gulp, plugins, config) {
     return safeLoad(str);
   });
 
-  //app.data(plasma.load(addbase('config/**/*.yml'), {namespace: true}));
+  function makeTemplatePath(dir) {
+    return (fp) => `${join(templatePath, dir, fp)}.html`;
+  }
+
+  function makeJSPath(dir) {
+    return (fp) => `${join(srcDir, scriptDir, dir, fp)}.js`;
+  }
 
   app.data({
     sources,
     environment,
     webpackConfig,
     join,
-    layouts(fp) {
-      return `${join(templatePath, 'layouts', fp)}.html`;
-    },
-    macros(fp) {
-      return `${join(templatePath, 'macros', fp)}.js`;
-    },
-    partials(fp) {
-      return `${join(templatePath, 'partials', fp)}.html`;
-    },
+    headScripts: makeJSPath('head-scripts'),
+    layouts: makeTemplatePath('layouts'),
+    macros: makeTemplatePath('macros'),
+    partials: makeTemplatePath('partials'),
     ...parentData
   });
 
