@@ -1,3 +1,5 @@
+import path from 'path';
+
 export default {
   //isHfa: true,
   shouldRev: true,
@@ -57,6 +59,14 @@ export default {
       omitPolyfill: false
       //transform: ['transform-runtime', {polyfill: false}]
     }
+  },
+  isomorphic: {
+    context: process.cwd(),
+    entries: [
+      'lib/components/**.{js,jsx}',
+      'lib/bootstrap.js'
+    ],
+    bootstrap: path.join('lib', 'bootstrap')
   },
   cb(config) {
     //you have access to the gulp config here for

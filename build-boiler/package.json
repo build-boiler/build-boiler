@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
@@ -51,6 +51,7 @@
     "babel-runtime": "^6.3.19",
     "base-watch": "^0.1.2",
     "browser-sync": "^2.9.8",
+    "cheerio": "^0.20.0",
     "consolidate": "^0.14.0",
     "css-loader": "^0.23.0",
     "del": "^2.2.0",
@@ -74,6 +75,7 @@
     "img-loader": "^1.2.2",
     "imports-loader": "^0.6.4",
     "js-yaml": "^3.5.2",
+    "jsdom": "^8.0.4",
     "json-loader": "^0.5.2",
     "lodash": "^4.0.0",
     "node-sass": "^3.3.0",
@@ -93,6 +95,7 @@
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.0",
     "through2": "^2.0.0",
+    "uglify-js": "^2.6.2",
     "uglify-loader": "^1.2.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.13",

@@ -1,0 +1,3 @@
+{% macro iso(environment, props={}, selector='data-isomorphic', name='sample') %}
+  <div {{selector}}>{% if not environment.isDev %}{% get_snippet name=name, props=props %}{% endif %}</div>
+{% endmacro %}

@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Assemble from 'assemble-core';
-import matter from 'parser-front-matter';
 import {readJsonSync} from 'fs-extra';
 import consolidate from 'consolidate';
 import {safeLoad} from 'js-yaml';
@@ -10,6 +9,8 @@ import buildNunjucksConfig from './nunjucks-config';
 import Plasma from 'plasma';
 import addTags from './custom-tags';
 import addMiddleware from './middleware';
+import jsxLoader from './jsx-loader';
+import isoMerge from './isomorphic-merge-plugin';
 import makeTools from '../webpack/isomorpic-tools';
 import renameKey from '../../utils/rename-key';
 import callParent from '../../utils/run-parent-fn';
@@ -33,7 +34,7 @@ export default function(gulp, plugins, config) {
     templateDir
   } = sources;
   const {addbase, logError} = utils;
-  const {isDev} = environment;
+  const {isDev, enableIsomorphic} = environment;
   const plasma = new Plasma();
   const app = new Assemble();
   const templatePath = addbase(srcDir, templateDir);
@@ -86,17 +87,6 @@ export default function(gulp, plugins, config) {
 
   app.option('renameKey', renameKey);
 
-  app.onLoad(/\.(?:hbs|md|html)$/, (file, next) => {
-    matter.parse(file, (err, file) => {
-      if (err) return next(err);
-
-      next(null, file);
-    });
-  });
-
-  /**
-   * Create the isomorphic "snippets"
-   */
   return (cb) => {
 
     const statsDir = addbase(buildDir);
@@ -127,8 +117,34 @@ export default function(gulp, plugins, config) {
         fn
       } = parentConfig;
 
-      app.task('build', () => {
+      if (enableIsomorphic) {
+        const {isomorphic} = config;
+        const {context: cwd, entries: componentEntries} = isomorphic;
+
+        /**
+         * Create the isomorphic "snippets"
+         */
+        app.create('snippets', {viewType: 'partial', renameKey}).use(jsxLoader);
+
+        app.task('template', (done) => {
+          app.snippets.load(
+            componentEntries,
+            {cwd},
+            config,
+            (err) => {
+              if (err) {
+                logError({err, plugin: '[template-assemble]: error templating .jsx template'});
+              }
+
+              done(null);
+            }
+          );
+        });
+      }
+
+      app.task('build', enableIsomorphic && !isDev ? ['template'] : [], () => {
         let stream = app.src(newSrc)
+          .pipe(isoMerge(app, config))
           .pipe(app.renderFile())
           .pipe(app.dest(buildDir))
           .on('data', (file) => {
@@ -145,14 +161,14 @@ export default function(gulp, plugins, config) {
         return stream;
       });
 
-      app.task('watch', ['build'], () => {
-        const watchBase = data.watch || addbase(srcDir, '{templates,config}/**/*.{html,yml}');
-
-        app.watch(watchBase, ['build']);
-        cb();
-      });
-
       const task = (done) => {
+        app.task('watch', ['build'], () => {
+          const watchBase = data.watch || addbase(srcDir, '{templates,config}/**/*.{html,yml}');
+
+          app.watch(watchBase, ['build']);
+          done();
+        });
+
         app.build(isDev ? ['watch'] : ['build'], (err) => {
           if (err) {
             logError({err, plugin: '[assemble]: run'});

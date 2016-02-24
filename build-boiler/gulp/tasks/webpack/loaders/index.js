@@ -1,3 +1,4 @@
+import {join} from 'path';
 import _ from 'lodash';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
@@ -11,6 +12,7 @@ export default function(opts) {
     isMainTask,
     webpackConfig,
     DEBUG,
+    SERVER,
     TEST
   } = opts;
   const {
@@ -38,14 +40,10 @@ export default function(opts) {
     'minimize'
   ].join('&');
   const runHot = isMainTask && hot && !isIE;
-
-  let sassLoader, cssLoader;
-
-  let jsonLoader = ['json-loader'];
-
   let sassParams = [
     `outputStyle=${DEBUG || quick ? 'expanded' : 'compressed'}`
   ];
+  let sassLoader, cssLoader, staticAssetsLoader;
 
   if (Array.isArray(includePaths)) {
     includePaths.reduce((list, fp) => {
@@ -90,11 +88,23 @@ export default function(opts) {
   } else {
     const babelEnvConfig = babelrc.env.production;
 
-    cssLoader = [
-      'style-loader',
-      'css-loader?sourceMap&importLoaders=1&modules&localIdentName=[hash:base64:5]',
-      'postcss-loader'
-    ].join('!');
+    if (SERVER) {
+      const omit = ['typecheck', 'rewire'];
+      const plugins = babelEnvConfig.plugins.filter(plugin => !omit.includes(plugin)).concat('add-module-exports');
+
+      _.assign(babelEnvConfig, {plugins});
+
+      cssLoader = [
+        join(__dirname, 'iso-tools-stats-loader'),
+        'postcss-loader'
+      ].join('!');
+    } else {
+      cssLoader = [
+        'style-loader',
+        'css-loader?sourceMap&importLoaders=1&modules&localIdentName=[hash:base64:5]',
+        'postcss-loader'
+      ].join('!');
+    }
 
     sassLoader = ExtractTextPlugin.extract('style-loader', [
       'css-loader?sourceMap&importLoaders=2',
@@ -198,6 +208,15 @@ export default function(opts) {
     return acc;
   }, {});
 
+
+  if (SERVER) {
+    staticAssetsLoader = join(__dirname, 'iso-tools-stats-loader');
+  } else if (isDev) {
+    staticAssetsLoader = fileLoader;
+  } else {
+    staticAssetsLoader = [fileLoader, imageLoader].join('!');
+  }
+
   const loaders = [
     {
       test: /\.jsx?$/,
@@ -209,7 +228,7 @@ export default function(opts) {
     },
     {
       test: toolsPlugin.regular_expression('images'),
-      loader: isDev ? fileLoader : [fileLoader, imageLoader].join('!')
+      loader: staticAssetsLoader
     },
     {
       test: /\.(ico|ttf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
@@ -217,7 +236,7 @@ export default function(opts) {
     },
     {
       test: /\.json$/,
-      loaders: jsonLoader
+      loader: 'json'
     },
     {
       test: /\.css$/,
@@ -228,6 +247,14 @@ export default function(opts) {
       loader: sassLoader
     }
   ];
+
+  if (SERVER) {
+    loaders.unshift({
+      test: /\.jsx?$/,
+      exclude: excludeRe,
+      loader: join(__dirname, 'mocks-loader')
+    });
+  }
 
   const postLoaders = [];
 

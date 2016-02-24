@@ -1,9 +1,11 @@
 ---
 title: Main Page Title
+isomorphic_data: 'mock_data'
 ---
 
 {% extends layouts('default') %}
+{% from macros('isomorphic-comp') import iso %}
 
 {% block main %}
-  <div data-react></div>
+  {{ iso(environment, props) }}
 {% endblock %}

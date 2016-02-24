@@ -6,17 +6,25 @@ export default function(opts) {
     provide = {},
     environment,
     toolsPlugin,
-    webpackConfig
+    webpackConfig,
+    SERVER,
+    TEST
   } = opts;
-  const {isDev} = environment;
+  const {isDev, enableIsomorphic} = environment;
   const {env = {}, paths} = webpackConfig;
   const {cssBundleName} = paths;
   const define = {
     'process.env': {
-      NODE_ENV: JSON.stringify(isDev ? 'development' : 'production'),
+      NODE_ENV: JSON.stringify(isDev && !SERVER ? 'development' : 'production'),
       ...env
     }
   };
+
+  if (SERVER) {
+    define['process.env'].SERVER = JSON.stringify(true);
+  } else if (!isDev && !TEST && enableIsomorphic) {
+    define['process.env'].ISOMORPHIC = JSON.stringify(true);
+  }
 
   const provideDefault = {
     'global.sinon': 'sinon',
@@ -35,9 +43,12 @@ export default function(opts) {
     new ProvidePlugin(Object.assign({}, provideDefault, provide)),
     new ExtractTextPlugin(cssBundleName, {
       allChunks: true
-    }),
-    toolsPlugin
+    })
   ];
+
+  if (!TEST && !SERVER) {
+    plugins.push(toolsPlugin);
+  }
 
   return {plugins};
 }

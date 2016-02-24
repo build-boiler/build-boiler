@@ -36,6 +36,7 @@ export default function(config, rootDir, parentConfig = {}) {
     devPath = '', //ex => 'www.hfa.io'
     prodPath = '', //ex => 'www.hillaryclinton.com'
     internalHost = 'localhost',
+    isomorphic,
     includePaths = [],
     assemble = {},
     eslint = {},
@@ -44,7 +45,7 @@ export default function(config, rootDir, parentConfig = {}) {
   } = parentConfig;
 
   //enable Assemble to build isomorphic application
-  const enableIsomorphic = false;
+  const enableIsomorphic = _.isPlainObject(isomorphic) && Object.keys(isomorphic).length > 0;
   const globalBundleName = 'global';
   const devUrl = join(devPath, bucketBase);
   const prodUrl = join(prodPath, bucketBase);
@@ -234,7 +235,9 @@ export default function(config, rootDir, parentConfig = {}) {
       'lodash',
       'react',
       'babel-polyfill'
-    ]
+    ],
+
+    webpackPaths
   };
 
   if (webpack) {
@@ -273,6 +276,7 @@ export default function(config, rootDir, parentConfig = {}) {
     pkg,
     sources,
     utils,
+    isomorphic,
     assemble,
     eslint,
     webpackConfig

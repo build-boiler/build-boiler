@@ -1,0 +1,61 @@
+{
+  "event": "publish",
+  "type":"signup_form",
+  "id":15,
+  "url":"http://uniform.hfa.io/api/signup_forms/15",
+  "schema":{
+    "id":15,
+    "public_title":"Join the official campaign",
+    "committee": "hvf",
+    "status":"published",
+    "above_form_content":null,
+    "below_form_content":null,
+    "page_side_content":null,
+    "page_bottom_content":null,
+    "daisy_chain_url":"https://www.hillaryclinton.com/",
+    "success_message":null,
+    "button_text":"Count me in",
+    "autoresponder":null,
+    "form_position":"left",
+    "open_graph_title":null,
+    "open_graph_description":null,
+    "open_graph_image":null,
+    "twitter_title":null,
+    "twitter_description":null,
+    "twitter_image":null,
+    "slug":"join-hillary",
+    "background_image_url":"https://m.hrc.onl/original_images/crowdcroppedhifi.jpg",
+    "theme_slug":"legacy",
+    "created_at":"2015-10-25T16:34:50.063-04:00",
+    "updated_at":"2015-10-26T17:40:51.881-04:00",
+    "fieldsets":[
+      {
+        "id":14,
+        "rank":0,
+        "fields":[
+          {
+            "id":64,
+            "type":"text",
+            "label": "Email Address",
+            "name":"email",
+            "placeholder":"Email Address",
+            "required":true,
+            "html_attributes":[],
+            "rank":1,
+            "options":[]
+          },
+          {
+            "id":65,
+            "label": "Zip Code",
+            "type":"text",
+            "name":"postalCode",
+            "placeholder":"Zip Code",
+            "required":true,
+            "html_attributes":[],
+            "rank":2,
+            "options":[]
+          }]
+      }
+    ]
+  }
+}

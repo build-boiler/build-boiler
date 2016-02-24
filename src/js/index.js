@@ -1,21 +1,20 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
+import Sample from '../../lib/components/sample';
+import bootstrap from '../../lib/bootstrap';
+import data from './data/mock_data';
 
-if (process.env.NODE_ENV === 'development') {
-  /*eslint-disable */
-  console.log('MAIN JS LOADED');
-  /*eslint-enable */
-}
-
-const Hello = ({userName}) => <h1>Helloooooo {userName}!!!</h1>;
-
-Hello.propTypes = {
-  userName: PropTypes.string
-};
+const {
+  fluxStore,
+  ...props
+} = bootstrap(data);
 
 ReactDOM.render(
-  <Hello userName={global.userName} />,
-  document.querySelector('[data-react]')
+  <Sample
+    reactor={fluxStore}
+    {...props}
+  />,
+  document.querySelector('[data-isomorphic]')
 );
 
 

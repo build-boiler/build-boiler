@@ -22,23 +22,25 @@ export default function(config) {
   const {main} = entry;
   const DEBUG = isDev;
   const TEST = ENV === 'test' || ENV === 'ci';
-  const SERVER = isServer;
+  const SERVER = ENV === 'server' || isServer;
   const extract = !isMainTask;
   const [expose] = _.isArray(main) ? main.map( fp => addbase(srcDir, fp) ) : [];
   const {externals, provide} = makeExternals(externalConfig);
-  const toolsPlugin = makeTools(_.assign({}, config, {
-    isPlugin: true
-  }));
+  const toolsPlugin = makeTools(
+    _.assign({}, config, {isPlugin: true})
+  );
   const sharedConfig = {
     toolsPlugin,
     DEBUG,
     TEST,
     SERVER
   };
-  const loaderConfig = _.assign({}, config, sharedConfig, {extract, expose});
-  const pluginConfig = _.assign({}, config, sharedConfig, {provide});
-  const loaders = makeLoaders(loaderConfig);
-  const plugins = makePlugins(pluginConfig);
+  const loaders = makeLoaders(
+    _.assign({}, config, sharedConfig, {extract, expose})
+  );
+  const plugins = makePlugins(
+    _.assign({}, config, sharedConfig, {provide})
+  );
   const defaultEslintConfig = {
     isDev,
     lintEnv: TEST ? 'test' : 'web',
@@ -49,5 +51,11 @@ export default function(config) {
     _.assign({}, defaultEslintConfig, eslintParentConfig)
   );
 
-  return _.assign({}, loaders, plugins, eslintConfig, {externals});
+  return {
+    isServer: SERVER,
+    externals,
+    ...loaders,
+    ...plugins,
+    ...eslintConfig
+  };
 }
