@@ -22,7 +22,6 @@ export default function(config) {
     srcDir,
     scriptDir,
     buildDir,
-    libraryName,
     globalBundleName,
     mainBundleName
   } = sources;
@@ -83,6 +82,12 @@ export default function(config) {
         '.yml'
       ],
       modules: [
+        addbase(srcDir, scriptDir),
+        addroot('node_modules'),
+        'node_modules'
+      ],
+      //fallback for Webpack 1
+      modulesDirectories: [
         addbase(srcDir, scriptDir),
         addroot('node_modules'),
         'node_modules'
@@ -203,12 +208,7 @@ export default function(config) {
 
     production() {
       const makeDevConfig = this.development;
-      const prodConfig = _.merge({}, makeDevConfig(true), {
-        output: {
-          library: libraryName,
-          libraryTarget: 'umd'
-        }
-      });
+      const prodConfig = makeDevConfig(true);
 
       if (!quick) {
         prodConfig.plugins.push(

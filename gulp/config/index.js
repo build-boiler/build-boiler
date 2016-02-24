@@ -1,5 +1,3 @@
-import registerTags from '@hfa/nunjucks-tags';
-
 export default {
   //isHfa: true,
   shouldRev: true,
@@ -12,7 +10,12 @@ export default {
   internalHost: 'localhost',
   includePaths: [],
   assemble: {
-    registerTags
+    data: {
+      userName: process.cwd().split('/')[2]
+    },
+    registerTags(nunj, app) {
+
+    }
   },
   eslint: {
     basic: false,
@@ -51,8 +54,8 @@ export default {
        */
     },
     babel: {
-      omitPolyfill: true,
-      transform: ['transform-runtime', {polyfill: true}]
+      omitPolyfill: false
+      //transform: ['transform-runtime', {polyfill: false}]
     }
   },
   cb(config) {

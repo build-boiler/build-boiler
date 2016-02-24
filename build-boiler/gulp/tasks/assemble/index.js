@@ -5,7 +5,7 @@ import {readJsonSync} from 'fs-extra';
 import consolidate from 'consolidate';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
-import path from 'path';
+import {join} from 'path';
 import buildNunjucksConfig from './nunjucks-config';
 import Plasma from 'plasma';
 import addTags from './custom-tags';
@@ -29,15 +29,20 @@ export default function(gulp, plugins, config) {
   const {
     srcDir,
     buildDir,
-    libraryName,
-    globalStatsFile
+    globalStatsFile,
+    templateDir
   } = sources;
   const {addbase, logError} = utils;
   const {isDev} = environment;
   const plasma = new Plasma();
   const app = new Assemble();
-  const src = addbase(srcDir, 'templates/pages/**/*.html');
+  const templatePath = addbase(srcDir, templateDir);
+  const src = join(templatePath, 'pages/**/*.html');
   const globalStatsPath = addbase(buildDir, globalStatsFile);
+  const {
+    data: parentData,
+    registerTags
+  } = assembleParentConfig;
   const tools = makeTools(_.assign({}, config, {
     isPlugin: false,
     isMainTask: true
@@ -56,19 +61,23 @@ export default function(gulp, plugins, config) {
   //app.data(plasma.load(addbase('config/**/*.yml'), {namespace: true}));
 
   app.data({
-    libraryName,
-    userName: process.cwd().split('/')[2],
     sources,
     environment,
     webpackConfig,
-    join: path.join,
+    join,
     layouts(fp) {
-      return `${addbase(srcDir, 'templates/layouts', fp)}.html`;
-    }
+      return `${join(templatePath, 'layouts', fp)}.html`;
+    },
+    macros(fp) {
+      return `${join(templatePath, 'macros', fp)}.js`;
+    },
+    partials(fp) {
+      return `${join(templatePath, 'partials', fp)}.html`;
+    },
+    ...parentData
   });
 
   const nunj = buildNunjucksConfig(app);
-  const {registerTags} = assembleParentConfig;
 
   addTags(nunj, app);
   addMiddleware(app, config);
@@ -79,11 +88,7 @@ export default function(gulp, plugins, config) {
 
   app.engine('.html', consolidate.nunjucks);
 
-  app.option('renameKey', (fp) => {
-    const dirname = path.dirname(fp).split('/').slice(-1)[0];
-    const basename = path.basename(fp).split('.').slice(0)[0];
-    return `${dirname}/${basename}`;
-  });
+  app.option('renameKey', renameKey);
 
   app.onLoad(/\.(?:hbs|md|html)$/, (file, next) => {
     matter.parse(file, (err, file) => {
