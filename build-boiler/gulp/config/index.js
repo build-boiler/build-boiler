@@ -36,8 +36,8 @@ export default function(config, rootDir, parentConfig = {}) {
     devPath = '', //ex => 'www.hfa.io'
     prodPath = '', //ex => 'www.hillaryclinton.com'
     internalHost = 'localhost',
-    isomorphic,
     includePaths = [],
+    isomorphic = {},
     assemble = {},
     eslint = {},
     webpack = {},
