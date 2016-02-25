@@ -320,7 +320,6 @@ export default function(config) {
       };
 
       return _.merge({}, defaultConfig, ciConfig, coverageConfig);
->>>>>>> add testing to build-boiler
     }
   };
 
