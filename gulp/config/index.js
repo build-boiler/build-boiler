@@ -73,7 +73,8 @@ export default {
       exclude: [
         ...Object.keys(dependencies),
         ...Object.keys(devDependencies)
-      ]
+      ],
+      target: 'node'
     }
   },
   cb(config) {

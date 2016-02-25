@@ -230,17 +230,20 @@ export default function(config) {
     },
 
     server() {
-      const {isomorphic} = config;
+      const {isomorphic = {}} = config;
       const {context} = isomorphic;
       const {devPort, devHost} = sources;
       const {branch, asset_path: assetPath} = environment;
       const bsPath = `http://${devHost}:${devPort}/`;
       const publicPath = _.isUndefined(branch) ?  bsPath : `${assetPath}/`;
+      const {modules = {}} = isomorphic;
+      const {target} = modules;
       const serverExternals = Object.assign(
         {},
         defaultConfig.externals,
         getExcludes(config)
       );
+      console.log('****TARGE****', target)
 
       const serverConfig = {
         externals: serverExternals,
@@ -256,7 +259,7 @@ export default function(config) {
           loaders
         },
         plugins,
-        target: 'node'
+        target
       };
 
       return _.merge({}, defaultConfig, serverConfig);
