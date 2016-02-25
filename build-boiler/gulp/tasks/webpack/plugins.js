@@ -32,16 +32,6 @@ export default function(opts) {
     'sinon': 'sinon'
   };
   const provideConfig = Object.assign({}, provideDefault, provide);
-  //HACK: for issue with external jquery in commonjs
-  //http://stackoverflow.com/questions/22530254/webpack-and-external-libraries
-  const serverProvide = Object.keys(provideConfig).reduce((acc, key) => {
-    const val = provide[key];
-    if (!/jquery/i.test(val)) {
-      acc[key] = val;
-    }
-
-    return acc;
-  }, {});
 
   const {DefinePlugin, NoErrorsPlugin, ProvidePlugin, optimize} = webpack;
   const {OccurenceOrderPlugin, OccurrenceOrderPlugin} = optimize;
@@ -51,7 +41,7 @@ export default function(opts) {
     new PluginFn(),
     new DefinePlugin(define),
     new NoErrorsPlugin(),
-    new ProvidePlugin(SERVER ? serverProvide : provideConfig),
+    new ProvidePlugin(provideConfig),
     new ExtractTextPlugin(cssBundleName, {
       allChunks: true
     })

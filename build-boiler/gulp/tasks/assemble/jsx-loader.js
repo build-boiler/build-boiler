@@ -23,9 +23,9 @@ export default function(collection) {
   const doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
   const win = doc.defaultView;
 
-  global.document = doc;
-  global.window = win;
-  global.navigator = win.navigator;
+  if (!global.document) global.document = doc;
+  if (!global.window) global.window = win;
+  if (!global.navigator) global.navigator = win.navigator;
 
   /**
    * @param {String|Array} patterns glob patterns

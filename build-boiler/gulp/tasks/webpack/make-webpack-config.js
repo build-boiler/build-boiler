@@ -42,7 +42,7 @@ export default function(config) {
 
   const {
     isServer,
-    externals,
+    externals: parentExternals,
     preLoaders,
     loaders,
     postLoaders,
@@ -54,9 +54,10 @@ export default function(config) {
   const defaultExternals = {
     'sinon': 'window.sinon'
   };
+  const externals = Object.assign({}, defaultExternals, parentExternals);
 
   const defaultConfig = {
-    externals: Object.assign({}, defaultExternals, externals),
+    externals,
     eslint: {
       rules,
       configFile,
@@ -238,11 +239,15 @@ export default function(config) {
       const publicPath = _.isUndefined(branch) ?  bsPath : `${assetPath}/`;
       const {modules = {}} = isomorphic;
       const {target} = modules;
-      const serverExternals = Object.assign(
-        {},
-        defaultConfig.externals,
-        getExcludes(config)
-      );
+
+      //HACK: for issue with external jquery in commonjs
+      //http://stackoverflow.com/questions/22530254/webpack-and-external-libraries
+      const alias = Object.keys(externals || {}).reduce((acc, key) => ({
+        ...acc,
+        [key]: join(__dirname, 'mocks', 'noop')
+      }), {});
+
+      const serverExternals = getExcludes(config);
 
       const serverConfig = {
         externals: serverExternals,
@@ -257,11 +262,18 @@ export default function(config) {
         module: {
           loaders
         },
+        resolve: {
+          alias
+        },
         plugins,
         target
       };
 
-      return _.merge({}, defaultConfig, serverConfig);
+      return _.merge(
+        {},
+        _.omit(defaultConfig, ['externals']),
+        serverConfig
+      );
     }
   };
 
