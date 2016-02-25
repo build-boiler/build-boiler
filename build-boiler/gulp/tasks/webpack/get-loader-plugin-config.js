@@ -25,7 +25,7 @@ export default function(config) {
   const SERVER = ENV === 'server' || isServer;
   const extract = !isMainTask;
   const [expose] = _.isArray(main) ? main.map( fp => addbase(srcDir, fp) ) : [];
-  const {externals, provide} = makeExternals(externalConfig);
+  const {externals, provide} = makeExternals(externalConfig, SERVER);
   const toolsPlugin = makeTools(
     _.assign({}, config, {isPlugin: true})
   );

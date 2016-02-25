@@ -221,7 +221,8 @@ export default function(opts) {
     {
       test: /\.jsx?$/,
       exclude(fp) {
-        return excludeRe.test(fp) && fp.indexOf(rootDir) === -1;
+        const [root] = fp.replace(rootDir, '').split('/');
+        return excludeRe.test(fp) || root === 'node_modules';
       },
       loader: 'babel',
       query: babelRootQuery
