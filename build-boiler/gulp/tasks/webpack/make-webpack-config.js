@@ -243,7 +243,6 @@ export default function(config) {
         defaultConfig.externals,
         getExcludes(config)
       );
-      console.log('****TARGE****', target)
 
       const serverConfig = {
         externals: serverExternals,
