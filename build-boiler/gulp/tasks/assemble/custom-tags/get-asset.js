@@ -1,4 +1,5 @@
 import nunjucks from 'nunjucks';
+import renameKey from '../../../utils/rename-key';
 
 export default class GetAsset {
   constructor(app) {
@@ -18,12 +19,20 @@ export default class GetAsset {
     return new nodes.CallExtension(this, 'run', args);
   }
 
-  addScript({vendors, main, multipleBundles}) {
+  script(src) {
     const type = 'type="text/javascript"';
-    const v = `<script src="${vendors}" ${type}></script>`;
-    const m = `<script src="${main}" ${type}></script>`;
 
-    return multipleBundles ? `${v}\n${m}` : m;
+    return `<script src="${src}" ${type}></script>`;
+  }
+
+  addScript({vendors, main, page}) {
+    const list = [];
+
+    vendors && list.push(this.script(vendors));
+    main && list.push(this.script(main));
+    page && list.push(this.script(page));
+
+    return list.join('\n');
   }
 
   addLink({src}) {
@@ -33,9 +42,11 @@ export default class GetAsset {
 
   run(context, args) {
     const {ctx} = context;
-    const {assets, webpackConfig} = ctx;
-    const {multipleBundles} = webpackConfig;
+    const {assets, view} = ctx;
+    const {javascript, styles} = assets;
+    const {path: viewPath} = view;
     const {type, version = '1.0.0'} = args;
+    const pageBundle = javascript[renameKey(viewPath, 'main')];
     let tag, src;
 
     switch (type) {
@@ -45,14 +56,14 @@ export default class GetAsset {
         });
         break;
       case 'css':
-        src = assets.styles.global;
+        src = styles.global;
         tag = this.addLink({src});
         break;
       case 'js':
         src = {
-          vendors: assets.javascript.vendors,
-          main: assets.javascript.main,
-          multipleBundles
+          vendors: javascript.vendors,
+          main: javascript.main,
+          page: pageBundle
         };
 
         tag = this.addScript(src);

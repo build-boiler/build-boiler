@@ -6,6 +6,7 @@ import autoprefixer from 'autoprefixer';
 import formatter from 'eslint-friendly-formatter';
 import getLoaderPluginConfig from './get-loader-plugin-config';
 import getExcludes from './gather-commonjs-modules';
+import createMultipleEntries from './make-multiple-entries';
 
 export default function(config) {
   const {
@@ -107,6 +108,7 @@ export default function(config) {
   };
 
   const commons = {vendors};
+  const context = addbase(srcDir);
 
   const configFn = {
     development(isProd) {
@@ -131,50 +133,78 @@ export default function(config) {
          */
         const shimFile = addbase(srcDir, scriptDir, 'shims.js');
         const hasShims = fs.existsSync(shimFile);
+        let omitEntry, multiBase, glob, buildMultiBundles;
 
-        /**
-         * build a vendor bundle if specified in the top level config
-         */
-        if (multipleBundles) {
-          _.assign(taskEntry, commons);
-          taskEntry.vendors.push(...Object.keys(expose));
-
-          if (hasShims) {
-            taskEntry.vendors.push(shimFile);
-          }
+        if (_.isPlainObject(multipleBundles)) {
+          ({omitEntry, base: multiBase, glob} = multipleBundles);
+          buildMultiBundles = true;
         } else {
-          if (hasShims) {
-            taskEntry[mainBundleName].unshift(shimFile);
-          }
+          buildMultiBundles = multipleBundles;
+        }
 
+        /*eslint no-inner-declarations:0*/
+        function manageAdditions(mainBundle, method = 'unshift') {
           const {omitPolyfill} = babelParentConfig;
           const additions = Object.keys(expose);
 
-          if (!omitPolyfill) {
+          if (!omitPolyfill && mainBundle.indexOf('babel-polyfill') === -1) {
             additions.unshift('babel-polyfill');
           }
           //otherwise load the modules we want to expose
           //and the babel-polyfill to support async function, etc.
-          taskEntry[mainBundleName].unshift(...additions);
+          mainBundle[method](...additions);
+
+          if (hasShims) {
+            mainBundle[method](shimFile);
+          }
         }
+
+        /**
+         * build a vendor bundle if specified in the top level config
+         */
+        if (buildMultiBundles) {
+          _.assign(taskEntry, commons);
+
+          const bundle = taskEntry.vendors;
+
+          manageAdditions(bundle, 'push');
+
+          if (omitEntry) {
+            bundle.push(...taskEntry[mainBundleName]);
+            taskEntry = _.omit(taskEntry, mainBundleName);
+          }
+
+          const childEntries = createMultipleEntries(config, {
+            glob,
+            cwd: multiBase || context
+          });
+
+          _.assign(taskEntry, childEntries);
+        } else {
+          const bundle = taskEntry[mainBundleName];
+
+          manageAdditions(bundle, 'unshift');
+        }
+
 
         /**
          * Add the hot modules if not doing a prod build
          */
         if (!isProd) {
           if (!isIE && hot) {
-            taskEntry[mainBundleName].unshift(...hotEntry);
+            Object.keys(taskEntry).forEach((bundleName) => {
+              taskEntry[bundleName].unshift(...hotEntry);
+            });
           }
 
           plugins.push(...devPlugins);
         }
-
       } else {
         taskEntry = _.omit(entry, mainBundleName);
       }
 
       const devConfig = {
-        context: addbase(srcDir),
+        context,
         cache: isDev,
         debug: isDev,
         entry: taskEntry,

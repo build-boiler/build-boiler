@@ -4,7 +4,6 @@ import {dependencies, devDependencies} from '../../package';
 export default {
   //isHfa: true,
   shouldRev: true,
-  multipleBundles: false,
   bucketBase: undefined,
   devAssets: '/',
   prodAssets: '/',
@@ -26,6 +25,13 @@ export default {
     generate: true
   },
   webpack: {
+    //options = Boolean|Object
+    //multipleBundles: true,
+    multipleBundles: {
+      omitEntry: false,
+      glob: path.join('templates', 'pages', '**', '*.js'),
+      base: path.join(process.cwd(), 'src')//default to `templates/pages`
+    },
     expose: {
       /*modules to expose globally ex. => js-cookie: 'Cookie'*/
       'js-cookie': 'Cookie',
@@ -55,6 +61,9 @@ export default {
        * data passed as `process.env` for dependency injection with Webpack `DefinePlugin`
        * ex. SOME_VAR: JSON.stringify('something')
        */
+    },
+    plugins(config) {
+
     },
     babel: {
       omitPolyfill: false

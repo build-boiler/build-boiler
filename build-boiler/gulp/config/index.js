@@ -10,8 +10,6 @@ export default function(config, rootDir, parentConfig = {}) {
 
   const hfaDefaults = {
     shouldRev: true,
-    //if want a "vendor" bundle turn on `multipleBundles` and specify your vendors in `webpackConfig.vendors`
-    multipleBundles: false,
     bucketBase: '',
     devAssets: '//hrc-assets.hfa.io/',
     prodAssets: '//a.hrc.onl/',
@@ -28,8 +26,6 @@ export default function(config, rootDir, parentConfig = {}) {
     isHfa = false,
     //if a "project" not a "module" turn on file reving
     shouldRev = false,
-    //if want a "vendor" bundle turn on `multipleBundles` and specify your vendors in `webpackConfig.vendors`
-    multipleBundles = false,
     bucketBase = '',
     devAssets = '/',
     prodAssets = '/',
@@ -197,15 +193,15 @@ export default function(config, rootDir, parentConfig = {}) {
   const webpackPaths = {
     fileLoader: [
       'file-loader?name=[path][name].[ext]',
-      'file-loader?name=[path][sha256:hash]-[name].[ext]'
+      'file-loader?name=[path][name]-[sha256:hash].[ext]'
     ],
     cssBundleName: [
       'css/[name].css',
-      'css/[chunkhash]-[name].css'
+      'css/[name]-[chunkhash].css'
     ],
     jsBundleName: [
       '[name].js',
-      '[chunkhash]-[name].js'
+      '[name]-[chunkhash].js'
     ]
   };
 
@@ -216,7 +212,7 @@ export default function(config, rootDir, parentConfig = {}) {
 
     expose: {},
 
-    multipleBundles,
+    multipleBundles: false,
 
     paths: Object.keys(webpackPaths).reduce((acc, key) => {
       const [devPath, prodPath] = webpackPaths[key];

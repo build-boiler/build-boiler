@@ -32,7 +32,7 @@ export default function(opts) {
   const {isDev, isIE} = environment;
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
-  const excludeRe = /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/;
+  const excludeRe = /^(.*?\/)?node_modules\/(?!@hfa\/).+\.jsx?$/;
   const babelQuery = {};
   const babelBaseConfig = _.omit(babelrc, ['env']);
   const imageLoader = 'img?' + [
