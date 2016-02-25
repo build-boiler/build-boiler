@@ -221,8 +221,16 @@ export default function(opts) {
     {
       test: /\.jsx?$/,
       exclude(fp) {
-        const [root] = fp.replace(rootDir, '').split('/');
-        return excludeRe.test(fp) || root === 'node_modules';
+        let ex = false;
+
+        if (fp.indexOf(rootDir) !== -1) {
+          const root = fp.replace(rootDir, '');
+          ex = excludeRe.test(root);
+        } else {
+          ex = ex = excludeRe.test(fp);
+        }
+
+        return ex;
       },
       loader: 'babel',
       query: babelRootQuery
