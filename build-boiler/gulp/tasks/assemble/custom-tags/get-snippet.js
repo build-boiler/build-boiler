@@ -47,6 +47,7 @@ export default class GetSnippet {
     const {isomorphic_data: isoData, environment} = ctx;
     const snippetKeys = Object.keys(this.app.views.snippets);
     const snippetFn = this.getComponent(snippetKeys);
+    const {SafeString} = nunjucks.runtime;
     let props,
       name,
       wrapper,
@@ -58,7 +59,7 @@ export default class GetSnippet {
 
     if (environment && environment.isDev) {
       //return early if wrong environment
-      return new nunjucks.runtime.SafeString(template);
+      return new SafeString(template);
     }
 
     if (_.isPlainObject(isoData)) {
@@ -123,6 +124,6 @@ export default class GetSnippet {
       throw new Error(`Error compiling ${snippetName} on assemble context: ${err.message}`);
     }
 
-    return new nunjucks.runtime.SafeString(template);
+    return new SafeString(template);
   }
 }
