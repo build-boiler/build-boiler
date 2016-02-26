@@ -30,6 +30,8 @@ export default function(config) {
   const {
     alias,
     babel: babelParentConfig = {},
+    moduleRoot: parentModuleRoot = [],
+    node,
     hashFunction,
     hot,
     expose,
@@ -57,7 +59,16 @@ export default function(config) {
   };
   const externals = Object.assign({}, defaultExternals, parentExternals);
 
+  const defaultRoot = [
+    addbase(srcDir, scriptDir),
+    addroot('node_modules'),
+    'node_modules'
+  ];
+
+  const moduleRoot = _.union(defaultRoot, parentModuleRoot);
+
   const defaultConfig = {
+    alias,
     externals,
     eslint: {
       rules,
@@ -85,26 +96,11 @@ export default function(config) {
         '.yaml',
         '.yml'
       ],
-      modules: [
-        addbase(srcDir, scriptDir),
-        addroot('node_modules'),
-        'node_modules'
-      ],
+      modules: moduleRoot,
       //fallback for Webpack 1
-      modulesDirectories: [
-        addbase(srcDir, scriptDir),
-        addroot('node_modules'),
-        'node_modules'
-      ],
-      alias
+      modulesDirectories: moduleRoot
     },
-    node: {
-      dns: 'mock',
-      net: 'mock',
-      fs: 'empty',
-      __filename: true,
-      __dirname: true
-    }
+    node
   };
 
   const commons = {vendors};

@@ -98,11 +98,12 @@ export default function(collection) {
         const fp = addbase(buildDir, scriptDir, filename);
         log(`Finished Compiling ${blue(file)} component`);
         const contents = fs.readFileSync(fp);
+        const fn = compile(contents);
 
         collection.addView(file, {
           path: file,
           contents,
-          fn: compile(contents)
+          fn
         });
       });
       cb(null);

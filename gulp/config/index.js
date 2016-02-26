@@ -1,4 +1,6 @@
 import path from 'path';
+import {PropTypes} from 'react';
+import {provideReactor} from 'nuclear-js-react-addons';
 import {dependencies, devDependencies} from '../../package';
 
 export default {
@@ -13,7 +15,14 @@ export default {
   includePaths: [],
   assemble: {
     data: {
-      userName: process.cwd().split('/')[2]
+      userName: process.cwd().split('/')[2],
+      provider(comp) {
+        return provideReactor(comp, {
+          Actions: PropTypes.object,
+          Getters: PropTypes.object,
+          id: PropTypes.string
+        });
+      }
     },
     registerTags(nunj, app) {
 
@@ -25,10 +34,13 @@ export default {
     generate: true
   },
   webpack: {
+    moduleRoot: [
+      path.join(process.cwd(), 'lib')
+    ],
     //options = Boolean|Object
     //multipleBundles: true,
     multipleBundles: {
-      omitEntry: false,
+      omitEntry: true,
       glob: path.join('templates', 'pages', '**', '*.js'),
       base: path.join(process.cwd(), 'src')//default to `templates/pages`
     },

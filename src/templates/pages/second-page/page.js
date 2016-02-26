@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import Wrapper from 'components/wrapper';
+import {provideReactor} from 'nuclear-js-react-addons';
 import Sample from 'components/sample';
-import AnotherSample from 'components/another-sample';
 import bootstrap from 'bootstrap';
 import data from 'data/mock_data';
 
@@ -11,14 +10,17 @@ const {
   ...props
 } = bootstrap(data);
 
+const Comp = provideReactor(Sample, {
+  Actions: PropTypes.object,
+  Getters: PropTypes.object,
+  id: PropTypes.string
+});
+
 const comp = (
-  <Wrapper
+  <Comp
     reactor={fluxStore}
     {...props}
-  >
-  <Sample />
-  <AnotherSample />
-  </Wrapper>
+  />
 );
 
 ReactDOM.render(

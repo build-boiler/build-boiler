@@ -1,5 +1,5 @@
 ---
-title: Main Page Title
+title: Second Page Title
 isomorphic_data: 'mock_data'
 ---
 
@@ -7,5 +7,5 @@ isomorphic_data: 'mock_data'
 {% import macros('isomorphic-comp') as ext %}
 
 {% block main %}
-  {{ ext.iso(environment, props, 'data-isomorphic', ['sample','another-sample'], 'wrapper') }}
+  {{ ext.iso(environment, props, 'data-isomorphic', 'sample', provider) }}
 {% endblock %}

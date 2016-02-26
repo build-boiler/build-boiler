@@ -42,6 +42,7 @@
     "eslint-config": "^0.2.0",
     "express": "^4.13.4",
     "gulp": "^3.9.0",
+    "hoist-non-react-statics": "^1.0.5",
     "img-loader": "^1.2.2",
     "js-cookie": "^2.0.3",
     "key-mirror": "^1.0.1",

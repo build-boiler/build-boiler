@@ -212,7 +212,15 @@ export default function(config, rootDir, parentConfig = {}) {
 
     expose: {},
 
+    moduleRoot: [],
+
     multipleBundles: false,
+
+    node: {
+      fs: 'empty',
+      __filename: true,
+      __dirname: true
+    },
 
     paths: Object.keys(webpackPaths).reduce((acc, key) => {
       const [devPath, prodPath] = webpackPaths[key];
@@ -230,7 +238,7 @@ export default function(config, rootDir, parentConfig = {}) {
     vendors: [
       'lodash',
       'react',
-      'babel-polyfill'
+      'react-dom'
     ],
 
     webpackPaths
