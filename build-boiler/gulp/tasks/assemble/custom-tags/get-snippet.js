@@ -12,8 +12,13 @@ export default class GetSnippet {
   }
 
   parse(parser, nodes, lexer) {
-    let tok = parser.nextToken();
-    let args = parser.parseSignature(null, true);
+    const tok = parser.nextToken();
+    const args = parser.parseSignature(null, true);
+
+    if (args.children.length === 0) {
+      args.addChild(new nodes.Literal(0, 0, ''));
+    }
+
     parser.advanceAfterBlockEnd(tok.value);
     return new nodes.CallExtension(this, 'run', args);
   }
@@ -38,11 +43,34 @@ export default class GetSnippet {
   }
 
   run(context, args) {
-    const {name, props, wrapper} = args;
+    const {ctx} = context;
+    const {isomorphic_data: isoData, environment} = ctx;
     const snippetKeys = Object.keys(this.app.views.snippets);
-    const {fluxStore: reactor, ...rest} = props;
     const snippetFn = this.getComponent(snippetKeys);
-    let children, Component, Wrapper, snippetName, template;
+    let props,
+      name,
+      wrapper,
+      children,
+      Component,
+      Wrapper,
+      snippetName,
+      template;
+
+    if (environment && environment.isDev) {
+      //return early if wrong environment
+      return new nunjucks.runtime.SafeString(template);
+    }
+
+    if (_.isPlainObject(isoData)) {
+      //use this if using an `include` or global context is available
+      ({props} = ctx);
+      ({name, wrapper} = isoData);
+    } else {
+      //use this if using a `macro` where global scope is not available
+      ({name, props, wrapper} = args);
+    }
+
+    const {fluxStore: reactor, ...rest} = props;
 
     try {
       if (Array.isArray(name)) {
@@ -56,7 +84,13 @@ export default class GetSnippet {
         Component = snippetFn(name);
       }
 
-      Wrapper = _.isString(wrapper) && snippetFn(wrapper);
+      if (_.isString(wrapper)) {
+        try {
+          Wrapper = snippetFn(wrapper);
+        } catch (err) {
+          wrapper = ctx[wrapper];
+        }
+      }
     } catch (err) {
       const [lastSnippet] = this.snippets.slice(-1);
       throw new Error(`No React snippet ${lastSnippet} on assemble context: ${err.message}`);
