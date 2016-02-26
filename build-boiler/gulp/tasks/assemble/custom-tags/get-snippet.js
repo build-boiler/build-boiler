@@ -19,8 +19,17 @@ export default class GetSnippet {
   }
 
   getComponent(keys) {
-    return (name, init) => {
-      const [snippetName] = keys.filter(key => path.basename(key) === name);
+    return (name) => {
+      const replacement = /-?entry/;
+      const replace = (str) => str.replace(replacement, '');
+      const [snippetName] = keys.filter(key => {
+        const dir = key.split('/')[0] || '';
+        const base = path.basename(key) || '';
+        const isDir = dir === name || replace(dir) === name;
+        const isFile = base === name || replace(dir) === name;
+
+        return isDir || isFile;
+      });
 
       this.snippets.push(snippetName);
 
@@ -43,10 +52,11 @@ export default class GetSnippet {
           return <Snippet />;
         });
 
-        Wrapper = _.isString(wrapper) && snippetFn(wrapper);
       } else {
         Component = snippetFn(name);
       }
+
+      Wrapper = _.isString(wrapper) && snippetFn(wrapper);
     } catch (err) {
       const [lastSnippet] = this.snippets.slice(-1);
       throw new Error(`No React snippet ${lastSnippet} on assemble context: ${err.message}`);
