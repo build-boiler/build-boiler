@@ -62,8 +62,9 @@ export default {
        * ex. SOME_VAR: JSON.stringify('something')
        */
     },
-    plugins(config) {
-
+    //p => plugins Array
+    plugins(config, p) {
+      return p;
     },
     babel: {
       omitPolyfill: false

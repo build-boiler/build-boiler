@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import webpack from 'webpack';
 
@@ -6,12 +7,14 @@ export default function(opts) {
     provide = {},
     environment,
     toolsPlugin,
+    utils,
     webpackConfig,
     SERVER,
     TEST
   } = opts;
   const {isDev, enableIsomorphic} = environment;
-  const {env = {}, paths} = webpackConfig;
+  const {env = {}, paths, plugins: parentPluginFn} = webpackConfig;
+  const {logError} = utils;
   const {cssBundleName} = paths;
   const define = {
     'process.env': {
@@ -47,9 +50,20 @@ export default function(opts) {
     })
   ];
 
-  if (!TEST && !SERVER) {
-    plugins.push(toolsPlugin);
+  const processedPlugins = _.isFunction(parentPluginFn) ? parentPluginFn(opts, plugins) : plugins;
+
+  if (!_.isArray(processedPlugins)) {
+    logError({
+      err: new Error('You forgot to return a plugins array from the custom plugins function'),
+      plugin: '[webpack: plugins]'
+    });
   }
 
-  return {plugins};
+  if (!TEST && !SERVER) {
+    processedPlugins.push(toolsPlugin);
+  }
+
+  return {
+    plugins: processedPlugins
+  };
 }
