@@ -59,7 +59,7 @@ export default class GetSnippet {
 
     if (environment && environment.isDev) {
       //return early if wrong environment
-      return new SafeString(template);
+      return new SafeString('');
     }
 
     if (_.isPlainObject(isoData)) {
