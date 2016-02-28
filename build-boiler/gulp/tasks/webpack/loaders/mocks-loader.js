@@ -9,48 +9,20 @@ export default function(content) {
   const mocks = [
     {
       re: /(?:global|window)?\.?ga\(/,
-      sub: 'global.ga = () => {}'
+      sub: 'global.ga = function() {};'
     },
-
     {
       re: /(?:global|window)?\.?Raven\.captureException\(/,
-      sub: 'global.Raven = {captureException: () => {}}'
+      sub: 'global.Raven = {captureException: function() {}};'
     },
 
     {
       re: /(?:global|window)?\.?optimizely\./,
-      sub: 'global.optimizely = {push: () => {}}'
+      sub: 'global.optimizely = {push: function() {}};'
     },
-
-    {
-      re: /navigator\..+$/,
-      sub: `navigator = {
-        userAgent: '',
-        geolocation: {
-          getCurrentPosition() {}
-        }
-      }`
-    },
-
     {
       re: /(?:global|window)?\.?silverpop\./,
-      sub: 'global.silverpop = {trackEvent: () => {}, flush: () => {}}'
-    },
-
-    {
-      re: /document\.?(?:cookie|documentElement)?/,
-      sub: `global.document = {
-        get cookie() {
-          return '';
-        },
-        set cookie(val) {},
-        cookie: {
-          split() {}
-        },
-        documentElement: {
-          style: {}
-        }
-      }`
+      sub: 'global.silverpop = {trackEvent: function() {}, flush: function() {}};'
     }
   ];
 
