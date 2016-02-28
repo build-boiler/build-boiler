@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {readdirSync as read, statSync as stat, existsSync as exists} from 'fs';
 import path, {join} from 'path';
 import {sync as parentSync} from 'find-parent-dir';
+import hacker from 'require-hacker';
 import makeConfig from './';
 import makeCliConfig from './make-cli-config';
 import compile from '../utils/compile-module';
@@ -9,16 +10,29 @@ import addTaskName from '../utils/gulp-taskname';
 import renameKey from '../utils/rename-key';
 import log, {blue} from '../utils/build-logger';
 
-export default function(gulp) {
+export default function(gulp, opts = {}) {
   const babel = require('babel-core');
+  const hfaRe = /^(.*?\/)?node_modules\/@hfa\/.+\.jsx?$/;
+  const {include = hfaRe} = opts;
   const parentDist = parentSync(__dirname, 'dist');
   const parentMod = parentSync(__dirname, 'node_modules');
   const rootDir = parentMod || parentDist || path.resolve(__dirname, '..', '..');
   const {cliConfig, plugins} = makeCliConfig(rootDir);
+  const hook = hacker.hook('js', hackedPath => {
+    let compiled;
+
+    if (include.test(hackedPath)) {
+      compiled = babel.transformFileSync(hackedPath).code;
+    }
+
+    return compiled;
+  });
   let parentConfig;
 
   try {
-    parentConfig = require(join(process.cwd(), 'gulp', 'config', 'index.js'));
+    const fp = join(process.cwd(), 'gulp', 'config', 'index.js');
+
+    parentConfig = require(fp);
     log(`Merging parent ${blue('gulp/config')} with base config`);
   } catch (err) {
     log(`No provided root config, using base config ${blue(join(__dirname, 'index.js'))}`);
@@ -129,6 +143,8 @@ export default function(gulp) {
     ...parentTasks,
     ...moduleTasks
   };
+
+  hook.unmount();
 
   return {
     tasks,
