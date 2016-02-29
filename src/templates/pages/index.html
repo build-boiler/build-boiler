@@ -7,5 +7,7 @@ isomorphic_data: 'mock_data'
 {% import macros('isomorphic-comp') as ext %}
 
 {% block main %}
-  {{ ext.iso(environment, props, 'data-isomorphic', ['sample','another-sample'], 'wrapper') }}
+  <div class="container">
+    {{ ext.iso(environment, props, 'data-isomorphic', ['sample','another-sample'], 'wrapper') }}
+  </div>
 {% endblock %}

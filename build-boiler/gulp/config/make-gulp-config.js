@@ -12,16 +12,17 @@ import log, {blue} from '../utils/build-logger';
 
 export default function(gulp, opts = {}) {
   const babel = require('babel-core');
-  const hfaRe = /^(.*?\/)?node_modules\/@hfa\/.+\.jsx?$/;
-  const {include = hfaRe} = opts;
+  const excludeRe = /^(.*?\/)?node_modules\/(?!@hfa\/).+\.jsx?$/;
+  const {include} = opts;
   const parentDist = parentSync(__dirname, 'dist');
   const parentMod = parentSync(__dirname, 'node_modules');
   const rootDir = parentMod || parentDist || path.resolve(__dirname, '..', '..');
   const {cliConfig, plugins} = makeCliConfig(rootDir);
   const hook = hacker.hook('js', hackedPath => {
+    const shouldInclude = include ? include.test(hackedPath) : !excludeRe.test(hackedPath);
     let compiled;
 
-    if (include.test(hackedPath)) {
+    if (shouldInclude) {
       compiled = babel.transformFileSync(hackedPath).code;
     }
 

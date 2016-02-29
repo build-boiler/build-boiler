@@ -74,11 +74,20 @@ export default function(opts) {
     _.assign(babelEnvConfig, {plugins});
     _.assign(babelQuery, babelBaseConfig, babelEnvConfig);
 
-    sassLoader = ExtractTextPlugin.extract('style-loader', [
-      'css-loader?sourceMap&importLoaders=2',
-      'postcss-loader',
-      `sass-loader?${sassParams.join('&')}`
-    ].join('!'));
+    if (isMainTask) {
+      sassLoader = [
+        'style-loader',
+        'css-loader?sourceMap&importLoaders=2',
+        'postcss-loader',
+        `sass-loader?${sassParams.join('&')}`
+      ].join('!');
+    } else {
+      sassLoader = ExtractTextPlugin.extract('style-loader', [
+        'css-loader?sourceMap&importLoaders=2',
+        'postcss-loader',
+        `sass-loader?${sassParams.join('&')}`
+      ].join('!'));
+    }
 
     cssLoader = [
       'style-loader',

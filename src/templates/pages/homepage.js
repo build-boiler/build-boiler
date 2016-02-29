@@ -5,6 +5,8 @@ import Sample from 'components/sample';
 import AnotherSample from 'components/another-sample';
 import bootstrap from 'bootstrap';
 import data from 'data/mock_data';
+import './local.css';
+import './local.scss';
 
 const {
   fluxStore,

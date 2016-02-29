@@ -1,3 +1,4 @@
+import path from 'path';
 import nunjucks from 'nunjucks';
 import renameKey from '../../../utils/rename-key';
 
@@ -35,19 +36,49 @@ export default class GetAsset {
     return list.join('\n');
   }
 
-  addLink({src}) {
+  addLink({main, global, isDev, src}) {
     const rel = 'rel="stylesheet"';
-    return `<link ${rel} href="${src}">`;
+    const makeLink = (src) => `<link ${rel} href="${src}">\n`;
+    const linkTag = makeLink(src || global);
+    let styles = '';
+
+    if (!src) {
+      if (isDev) {
+        styles = main ? Object.keys(main).reduce((str, fp) => {
+          const ext = path.extname(fp);
+
+          if (ext === '.css' || ext === '.scss') {
+            const val = main[fp]._style;
+
+            str += val;
+          }
+
+          return str;
+        }, '') : '';
+
+        styles = `\n<style>\n${styles}\n</style>\n`;
+      } else {
+        styles =  Object.keys(main).reduce((str, key) => {
+          const src = main[key];
+
+          return str + makeLink(src);
+        }, '');
+      }
+    }
+
+    return linkTag + styles;
   }
 
   run(context, args) {
     const {ctx} = context;
-    const {assets, view} = ctx;
+    const {assets, environment, view} = ctx;
+    const {isDev} = environment;
     const {javascript, styles} = assets;
     const {path: viewPath} = view;
     const {type, version = '1.0.0'} = args;
-    const pageBundle = javascript[renameKey(viewPath, 'main')];
-    let tag, src;
+    const pageKey = renameKey(viewPath, 'main');
+    const pageBundle = javascript[pageKey];
+    let tag;
 
     switch (type) {
       case 'pantsuit':
@@ -56,17 +87,26 @@ export default class GetAsset {
         });
         break;
       case 'css':
-        src = styles.global;
-        tag = this.addLink({src});
+        const main = !isDev ? Object.keys(styles).reduce((acc, key) => {
+          if (key === 'main' || key === 'vendors' || key === pageKey) {
+            acc[key] = styles[key];
+          }
+
+          return acc;
+        }, {}) : assets.assets;
+
+        tag = this.addLink({
+          main,
+          global: styles.global,
+          isDev
+        });
         break;
       case 'js':
-        src = {
+        tag = this.addScript({
           vendors: javascript.vendors,
           main: javascript.main,
           page: pageBundle
-        };
-
-        tag = this.addScript(src);
+        });
         break;
     }
 
