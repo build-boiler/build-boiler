@@ -1,6 +1,6 @@
 {
   "name": "build-boiler-plus",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
