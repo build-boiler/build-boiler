@@ -4,11 +4,11 @@ import {provideReactor} from 'nuclear-js-react-addons';
 import {dependencies, devDependencies} from '../../package';
 
 export default {
-  //isHfa: true,
+  isHfa: true,
   shouldRev: true,
-  bucketBase: undefined,
-  devAssets: '/',
-  prodAssets: '/',
+  bucketBase: 'bloop',
+  devAssets: '',
+  prodAssets: '',
   devPath: undefined, //ex => 'www.hfa.io'
   prodPath: undefined, //ex => 'www.hillaryclinton.com'
   internalHost: 'localhost',

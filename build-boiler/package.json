@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
@@ -100,7 +100,7 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.13",
     "webpack-dev-middleware": "^1.5.1",
-    "webpack-hot-middleware": "^2.7.1",
+    "webpack-hot-middleware": "2.7.1",
     "webpack-isomorphic-tools": "^2.2.14",
     "yargs": "^4.1.0"
   }

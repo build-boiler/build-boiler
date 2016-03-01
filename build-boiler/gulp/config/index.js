@@ -10,7 +10,6 @@ export default function(config, rootDir, parentConfig = {}) {
 
   const hfaDefaults = {
     shouldRev: true,
-    bucketBase: '',
     devAssets: '//hrc-assets.hfa.io/',
     prodAssets: '//a.hrc.onl/',
     devPath: 'www.hfa.io', //ex => 'www.hfa.io'
@@ -19,7 +18,14 @@ export default function(config, rootDir, parentConfig = {}) {
   };
 
   if (parentConfig.isHfa) {
-    _.assign(parentConfig, hfaDefaults);
+    Object.keys(hfaDefaults).forEach(key => {
+      const parentVal = parentConfig[key];
+      const hfaVal = hfaDefaults[key];
+
+      if (!parentVal) {
+        parentConfig[key] = hfaVal;
+      }
+    });
   }
 
   const {
@@ -121,6 +127,8 @@ export default function(config, rootDir, parentConfig = {}) {
     entry: entry || defaultEntry
   };
 
+  const trim = (fp) => fp.lastIndexOf('/') === fp.length - 1 ? fp.slice(0, -1) : fp;
+
   const utils = {
     addbase(...args) {
       const base = [process.cwd()];
@@ -152,11 +160,12 @@ export default function(config, rootDir, parentConfig = {}) {
       log(blue(pluginErr.message));
       log(pluginErr.stack);
       process.exit(1);
-    }
+    },
+    trim
   };
 
   const environment = {
-    asset_path: '', // path for assets => local_dev: '', dev: hrc-assets.hfa.io/contribute, prod: a.hrc.onl/contribute
+    asset_path: '/', // path for assets => local_dev: '', dev: hrc-assets.hfa.io/contribute, prod: a.hrc.onl/contribute
     link_path: TRAVIS_BRANCH ? 'TRAVIS_BRANCH' : '',
     image_dir: 'img',
     template_env: ENV,
@@ -170,11 +179,12 @@ export default function(config, rootDir, parentConfig = {}) {
   };
 
   if (!isDev && TRAVIS_BRANCH) {
-    let devAssetPath = `${devAssets}${bucketBase || ''}`;
-    const prodAssetPath = `${prodAssets}${bucketBase || ''}`;
+    const bucketPath = !!bucketBase ? bucketBase + '/' : '';
+    let devAssetPath = `${trim(devAssets)}/${bucketPath}`;
+    const prodAssetPath = `${trim(prodAssets)}/${bucketPath}`;
     // if branch is not `devel` or `master` add the branch name to the asset path
     if (!isDevRoot && !isMaster) {
-      devAssetPath += `/${TRAVIS_BRANCH}`;
+      devAssetPath += `${TRAVIS_BRANCH}/`;
     }
 
     Object.assign(environment, {

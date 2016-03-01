@@ -26,9 +26,9 @@ export default function(gulp, plugins, config) {
     const bsPath = isDev ? `http://${devHost}:${devPort}/` : '/';
 
     if (runHot) {
-      publicPath = isUndefined(branch) ?  devPath : `${assetPath}/`;
+      publicPath = isUndefined(branch) ?  devPath : assetPath;
     } else {
-      publicPath = isUndefined(branch) ?  bsPath : `${assetPath}/`;
+      publicPath = isUndefined(branch) ?  bsPath : assetPath;
     }
 
     const baseConfig = assign({}, config, {isMainTask, publicPath, app});
