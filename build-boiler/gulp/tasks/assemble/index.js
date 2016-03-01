@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import Assemble from 'assemble-core';
-import {readJsonSync} from 'fs-extra';
+import fsX, {readJsonSync} from 'fs-extra';
 import consolidate from 'consolidate';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import {join} from 'path';
+import async from 'async';
 import buildNunjucksConfig from './nunjucks-config';
 import Plasma from 'plasma';
 import addTags from './custom-tags';
@@ -30,8 +31,9 @@ export default function(gulp, plugins, config) {
   const {
     srcDir,
     buildDir,
+    templateDir,
     globalStatsFile,
-    templateDir
+    statsFile
   } = sources;
   const {addbase, logError} = utils;
   const {isDev, enableIsomorphic} = environment;
@@ -39,7 +41,8 @@ export default function(gulp, plugins, config) {
   const app = new Assemble();
   const templatePath = addbase(srcDir, templateDir);
   const src = join(templatePath, 'pages/**/*.html');
-  const globalStatsPath = addbase(buildDir, globalStatsFile);
+  const statsDir = addbase(buildDir);
+  const globalStatsPath = join(statsDir, globalStatsFile);
   const {
     data: parentData,
     registerTags
@@ -87,19 +90,40 @@ export default function(gulp, plugins, config) {
 
   app.option('renameKey', renameKey);
 
+  function makeStats(main, global) {
+    const {assets: images, ...rest} = global;
+
+    return _.merge({}, main, rest, {images});
+  }
+
   return (cb) => {
+    let prom;
 
-    const statsDir = addbase(buildDir);
+    if (enableIsomorphic) {
+      prom = tools.development(isDev).server(statsDir).then(() => {
+        return Promise.resolve(
+          makeStats(tools.assets(), readJsonSync(globalStatsPath))
+        );
+      });
+    } else {
+      prom = new Promise((res, rej) => {
+        const statsPaths = [
+          join(statsDir, statsFile),
+          globalStatsPath
+        ];
 
-    tools.development(isDev).server(statsDir).then(() => {
-      let assets;
-      try {
-        const globalStats = readJsonSync(globalStatsPath);
-        assets = _.merge({}, tools.assets(), _.omit(globalStats, 'assets'), {images: globalStats.assets});
-      } catch (err) {
-        assets = tools.assets();
-      }
+        async.map(statsPaths, fsX.readJson, (err, results) => {
+          if (err) return res({});
+          const [main, global] = results;
 
+          res(
+            makeStats(main, global)
+          );
+        });
+      });
+    }
+
+    prom.then((assets) => {
       app.data({assets});
 
       const parentConfig = callParent(arguments, {
