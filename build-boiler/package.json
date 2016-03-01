@@ -1,6 +1,6 @@
 {
   "name": "build-boiler-plus",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
@@ -107,6 +107,8 @@
     "postcss": "^5.0.0",
     "postcss-loader": "^0.8.0",
     "postcss-reporter": "^1.0.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
     "redbox-react": "^1.2.0",
