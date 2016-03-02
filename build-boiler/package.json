@@ -1,6 +1,6 @@
 {
   "name": "build-boiler",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Build Boilerplate using Webpack, Eslint, Assemble, Nunjucks, and BrowserSync",
   "main": "dist/index.js",
   "scripts": {
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "assemble-core": "^0.12.0",
+    "async": "^1.5.2",
     "autoprefixer": "^6.3.2",
     "babel-core": "^6.5.2",
     "babel-loader": "^6.2.0",
