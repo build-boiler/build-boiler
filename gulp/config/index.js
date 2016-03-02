@@ -28,6 +28,12 @@ export default {
 
     }
   },
+  browserSync: {
+    middleware(config, m) {
+
+      return m;
+    }
+  },
   eslint: {
     basic: false,
     react: true,
@@ -37,6 +43,9 @@ export default {
     moduleRoot: [
       path.join(process.cwd(), 'lib')
     ],
+    middleware(config, app) {
+
+    },
     //options = Boolean|Object
     //multipleBundles: true,
     multipleBundles: {

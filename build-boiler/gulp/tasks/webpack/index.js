@@ -11,7 +11,7 @@ export default function(gulp, plugins, config) {
   const {sources, utils, environment, webpackConfig} = config;
   const {mainBundleName} = sources;
   const {isDev, isIE, asset_path: assetPath, branch} = environment;
-  const {hot} = webpackConfig;
+  const {middleware: parentMiddleware, hot} = webpackConfig;
   const {getTaskName} = utils;
   const {buildDir, devPort, devHost, hotPort} = sources;
   const {gutil, app} = plugins;
@@ -109,6 +109,8 @@ export default function(gulp, plugins, config) {
             stats: {colors: true}
           };
           let hasRun = false;
+
+          isFunction(parentMiddleware) && parentMiddleware(config, app);
 
           app.use(middleware(compiler, serverOptions));
           app.use(hotMiddleware(compiler));

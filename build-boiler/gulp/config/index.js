@@ -41,6 +41,7 @@ export default function(config, rootDir, parentConfig = {}) {
     includePaths = [],
     isomorphic = {},
     assemble = {},
+    browserSync = {},
     eslint = {},
     webpack = {},
     cb
@@ -292,6 +293,7 @@ export default function(config, rootDir, parentConfig = {}) {
     utils,
     isomorphic,
     assemble,
+    browserSync,
     eslint,
     webpackConfig
   };
