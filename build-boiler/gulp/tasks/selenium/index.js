@@ -3,12 +3,19 @@ import spawn from './spawn-process';
 import makeConfig from './make-config';
 import thunk from '../../utils/thunk';
 import run from '../../utils/run-gen';
+import callParent from '../../utils/run-parent-fn';
 
 export default function(gulp, plugins, config) {
   const {utils} = config;
   const {logError} = utils;
 
   return (gulpCb) => {
+    const testData = makeConfig({config, gulp});
+    const parentConfig = callParent(arguments, {data: testData});
+    const {
+      data = testData,
+      fn
+    } = parentConfig;
     const {
       testEnv,
       installOpts,
@@ -17,10 +24,13 @@ export default function(gulp, plugins, config) {
       testConfig,
       task,
       tunnelOnly
-    } = makeConfig({config, gulp});
+    } = data;
 
     function runWebdriver(cb) {
-      return spawn(testConfig, config, cb);
+      return spawn(testConfig, {
+        ...config,
+        fn
+      }, cb);
     }
 
     function logStatus(code) {
