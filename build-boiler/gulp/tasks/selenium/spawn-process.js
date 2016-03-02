@@ -16,7 +16,7 @@ import run from '../../utils/run-gen';
 export default function(opts, config, cb) {
   const {log, colors} = gutil;
   const {magenta} = colors;
-  const {local, utils} = config;
+  const {fn: parentFn, local, utils} = config;
   const {addroot, logError} = utils;
   const {TRAVIS_BRANCH} = process.env;
 
@@ -50,7 +50,7 @@ export default function(opts, config, cb) {
       binaryPath = addroot('node_modules/webdriverio', binPath);
     }
 
-    const cp = spawn(
+    const cp = _.isFunction(parentFn) ? parentFn.apply(null, arguments) : spawn(
       binaryPath,
       [
         join(__dirname, 'wdio-config'),
