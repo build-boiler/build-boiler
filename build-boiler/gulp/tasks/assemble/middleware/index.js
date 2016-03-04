@@ -1,14 +1,22 @@
+import _ from 'lodash';
 import path from 'path';
+import createArray from '../../../utils/transorm-array';
 import requireDir from '../../../utils/require-dir';
 
-export default function(app, config) {
+export default function(app, config, {preRender = [], onload = []}) {
   const onloadFns = requireDir(
     path.join(__dirname, 'onload')
   );
 
-  const prerenderFns = requireDir(
+  const preRenderFns = requireDir(
     path.join(__dirname, 'pre-render')
   );
+
+  onload = createArray(onload, _.isFunction);
+  preRender = createArray(preRender, _.isFunction);
+
+  onloadFns.push(...onload);
+  preRenderFns.push(...preRender);
 
   function callFns(fn, ...rest) {
     fn.length === 1 ? fn(config).apply(null, rest) : fn.apply(null, rest);
@@ -20,7 +28,7 @@ export default function(app, config) {
   });
 
   app.preRender(/\.(?:md|html)$/, (file, next) => {
-    prerenderFns.forEach(fn => callFns(fn, file, next));
+    preRenderFns.forEach(fn => callFns(fn, file, next));
     next(null, file);
   });
 }

@@ -38,7 +38,7 @@ export default function(dirPath, opts = {}) {
         } else {
           data = require(fullPath);
 
-          if (_.isString(dict) && dict === 'dirname') {
+          if (_.isString(dict) && dict === 'basename') {
             const key = path.basename(
               fullPath,
               path.extname(fullPath)

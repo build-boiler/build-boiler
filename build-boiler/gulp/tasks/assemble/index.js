@@ -45,7 +45,8 @@ export default function(gulp, plugins, config) {
   const globalStatsPath = join(statsDir, globalStatsFile);
   const {
     data: parentData,
-    registerTags
+    registerTags,
+    middleware: parentMiddlware = {}
   } = assembleParentConfig;
   const tools = makeTools(_.assign({}, config, {
     isPlugin: false,
@@ -83,13 +84,11 @@ export default function(gulp, plugins, config) {
   });
 
   addTags(nunj, app, {
-    isomorphic: enableIsomorphic
+    isomorphic: enableIsomorphic,
+    fn: registerTags
   });
-  addMiddleware(app, config);
 
-  if (_.isFunction(registerTags)) {
-    registerTags(nunj, app);
-  }
+  addMiddleware(app, config, parentMiddlware);
 
   app.engine('.html', consolidate.nunjucks);
 

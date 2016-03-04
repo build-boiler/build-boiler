@@ -4,6 +4,6 @@ import requireDir from './gulp/utils/require-dir';
 
 const utilsDir = path.join(__dirname, 'gulp', 'utils');
 
-export const utils = requireDir(utilsDir, {dict: 'dirname'});
+export const utils = requireDir(utilsDir, {dict: 'basename'});
 
 export default makeGulpConfig;

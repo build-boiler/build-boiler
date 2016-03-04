@@ -24,8 +24,42 @@ export default {
         });
       }
     },
-    registerTags(nunj, app) {
+    /**
+     * Add and omit custom tags
+     * @param {Object} nunj Nunjucks instance
+     * @param {Object} app Assemble instance
+     * @param {Object} tags tag names => tag fn from BuildBoiler
+     *
+     * @return {Array|Object|undefined} filter tags to ignore them or return `undefined` to not ignore
+     */
+    registerTags(nunj, app, tags) {
 
+      //return _.omit(tags, 'getSnippet');
+      //return Object.keys(tags).reduce((list, fp) => {
+        //return fp === 'getSnippet' ? list : [...list, tags[fp]];
+      //}, []);
+    },
+    middleware: {
+      /**
+       * Pass a function or array of functions
+       * ex. (file, next) =>
+       * ex. (config) => (file, next) =>
+       */
+      preRender: [
+        (file, next) => {
+
+        },
+        (config) => {
+          return (file, next) => {
+
+          };
+        }
+      ],
+      onload(config) {
+        return (file, next) => {
+
+        };
+      }
     }
   },
   browserSync: {
