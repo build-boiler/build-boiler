@@ -5,7 +5,6 @@ import {sync as parentSync} from 'find-parent-dir';
 import hacker from 'require-hacker';
 import makeConfig from './';
 import makeCliConfig from './make-cli-config';
-import compile from '../utils/compile-module';
 import addTaskName from '../utils/gulp-taskname';
 import renameKey from '../utils/rename-key';
 import log, {blue} from '../utils/build-logger';
@@ -22,8 +21,10 @@ export default function(gulp, opts = {}) {
     const shouldInclude = include ? include.test(hackedPath) : !excludeRe.test(hackedPath);
     let compiled;
 
-    if (shouldInclude) {
-      compiled = babel.transformFileSync(hackedPath).code;
+    if (shouldInclude && hackedPath.indexOf(rootDir) === -1) {
+      compiled = babel.transformFileSync(hackedPath, {
+        sourceRoot: path.dirname(hackedPath)
+      }).code;
     }
 
     return compiled;
@@ -38,9 +39,7 @@ export default function(gulp, opts = {}) {
     log(`Merging parent ${blue('gulp/config')} with base config`);
   } catch (err) {
     if (hasParentConfig) {
-      throw new Error(err);
-    } else {
-      log(`No provided root config, using base config ${blue(join(__dirname, 'index.js'))}`);
+      throw err;
     }
   }
 
@@ -68,7 +67,7 @@ export default function(gulp, opts = {}) {
     let parentMod;
 
     if (moduleTask) {
-      let data, finalPath;
+      let foundPath;
 
       try {
         const parentPath = path.join(
@@ -76,20 +75,25 @@ export default function(gulp, opts = {}) {
           taskPath.replace(rootDir, '')
         );
 
-        try {
-          finalPath = /\.js$/.test(parentPath) ? parentPath : `${parentPath}.js`;
-          data = babel.transformFileSync(finalPath);
-        } catch (err) {
-          finalPath = join(parentPath, 'index.js');
-          data = babel.transformFileSync(finalPath);
+        const filePath = /\.js$/.test(parentPath) ? parentPath : `${parentPath}.js`;
+        const dirPath = join(parentPath, 'index.js');
+
+        if (exists(filePath)) {
+          foundPath = filePath;
+        } else if (exists(dirPath)) {
+          foundPath = dirPath;
         }
 
-        log(`Parent task found at ${blue(renameKey(finalPath))}`);
+        if (foundPath) {
+          parentMod = require(foundPath);
+          log(`Parent task found at ${blue(renameKey(foundPath))}`);
+        }
       } catch (err) {
-        //eslint-disable-line no-empty:0
-      } finally {
-        if (data && data.code) {
-          parentMod = compile(data.code);
+        /**
+         * If the file exists but couldn't be compiled then show the error
+         */
+        if (foundPath) {
+          throw err;
         }
       }
     }
@@ -148,12 +152,12 @@ export default function(gulp, opts = {}) {
     //eslint-disable-line no-empty:0
   }
 
+  hook.unmount();
+
   const tasks = {
     ...parentTasks,
     ...moduleTasks
   };
-
-  hook.unmount();
 
   return {
     tasks,

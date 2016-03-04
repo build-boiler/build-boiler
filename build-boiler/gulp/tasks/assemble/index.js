@@ -145,51 +145,51 @@ export default function(gulp, plugins, config) {
         fn
       } = parentConfig;
 
-      if (enableIsomorphic) {
-        const {isomorphic} = config;
-        const {context: cwd, entries: componentEntries} = isomorphic;
+      const task = (done) => {
+        if (enableIsomorphic) {
+          const {isomorphic} = config;
+          const {context: cwd, entries: componentEntries} = isomorphic;
 
-        /**
-         * Create the isomorphic "snippets"
-         */
-        app.create('snippets', {viewType: 'partial', renameKey}).use(jsxLoader);
+          /**
+           * Create the isomorphic "snippets"
+           */
+          app.create('snippets', {viewType: 'partial', renameKey}).use(jsxLoader);
 
-        app.task('template', (done) => {
-          app.snippets.load(
-            componentEntries,
-            {cwd},
-            config,
-            (err) => {
-              if (err) {
-                logError({err, plugin: '[template-assemble]: error templating .jsx template'});
+          app.task('template', (done) => {
+            app.snippets.load(
+              componentEntries,
+              {cwd},
+              config,
+              (err) => {
+                if (err) {
+                  logError({err, plugin: '[template-assemble]: error templating .jsx template'});
+                }
+
+                done(null);
               }
-
-              done(null);
-            }
-          );
-        });
-      }
-
-      app.task('build', enableIsomorphic && !isDev ? ['template'] : [], () => {
-        let stream = app.src(newSrc)
-          .pipe(isoMerge(app, config))
-          .pipe(app.renderFile())
-          .pipe(app.dest(buildDir))
-          .on('data', (file) => {
-            log(`Rendered ${blue(renameKey(file.path))}`);
-          })
-          .on('error', (err) => {
-            logError({err, plugin: '[assemble]: build'});
+            );
           });
-
-        if (isDev) {
-          stream = stream.pipe(browserSync.stream());
         }
 
-        return stream;
-      });
+        app.task('build', enableIsomorphic && !isDev ? ['template'] : [], () => {
+          let stream = app.src(newSrc)
+            .pipe(isoMerge(app, config))
+            .pipe(app.renderFile())
+            .pipe(app.dest(buildDir))
+            .on('data', (file) => {
+              log(`Rendered ${blue(renameKey(file.path))}`);
+            })
+            .on('error', (err) => {
+              logError({err, plugin: '[assemble]: build'});
+            });
 
-      const task = (done) => {
+          if (isDev) {
+            stream = stream.pipe(browserSync.stream());
+          }
+
+          return stream;
+        });
+
         app.task('watch', ['build'], () => {
           const watchBase = data.watch || addbase(srcDir, '{templates,config}/**/*.{html,yml}');
 
