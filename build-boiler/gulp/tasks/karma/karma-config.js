@@ -77,7 +77,7 @@ export default function(config) {
 
   if (ENV === 'ci' || multiDevice || nonLocalDevice.length > 0) {
     const {name, version} = pkg;
-    const {BROWSERSTACK_API, BROWSERSTACK_USERNAME, localIdentifier} = bsConfig;
+    const {BROWSERSTACK_API, BROWSERSTACK_USERNAME} = bsConfig;
     const filterDevices =  makeDeviceFilter({bsBrowsers, bsDevices});
     const browsers = filterDevices({desktop, mobile});
     const bsNames = browsers.map(key => {
@@ -95,7 +95,6 @@ export default function(config) {
       browserStack: {
         username: BROWSERSTACK_USERNAME,
         accessKey: BROWSERSTACK_API,
-        localIdentifier,
         project: `v${version} [${branch || 'local'}:integration]`,
         build: name,
         name: bsNames
