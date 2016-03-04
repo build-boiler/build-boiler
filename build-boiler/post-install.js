@@ -28,8 +28,7 @@ function* createTestConfig({src, dest, action}) {
       dirs = [
         '',
         'integration',
-        path.join('e2e', 'desktop'),
-        path.join('e2e', 'mobile')
+        'e2e'
       ];
 
       ret = dirs.map(dir => {
@@ -40,7 +39,8 @@ function* createTestConfig({src, dest, action}) {
       break;
     case 'copy':
       dirs = [
-        'config'
+        'config',
+        'README.md'
       ];
 
       ret = dirs.map(dir => {
