@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import {isArray, assign} from 'lodash';
+import _ from 'lodash';
 
 /**
  * Require all files in a directory and place them in an obect
@@ -17,7 +17,7 @@ export default function(dirPath, opts = {}) {
   const ignore = [];
 
   if (ogIgnore) {
-    isArray(ogIgnore) ? ignore.push(...ogIgnore) : ignore.push(ogIgnore);
+    Array.isArray(ogIgnore) ? ignore.push(...ogIgnore) : ignore.push(ogIgnore);
   }
 
   return (function recurseDirs(passedPath) {
@@ -34,10 +34,22 @@ export default function(dirPath, opts = {}) {
 
         if (isDir && recurse) {
           data = recurseDirs(fp);
-          dict ? assign(acc, data) : acc.push(...data);
+          dict ? _.assign(acc, data) : acc.push(...data);
         } else {
           data = require(fullPath);
-          dict ? assign(acc, {[fullPath]: data}) : acc.push(data);
+
+          if (_.isString(dict) && dict === 'dirname') {
+            const key = path.basename(
+              fullPath,
+              path.extname(fullPath)
+            );
+            _.assign(acc, {[_.camelCase(key)]: data});
+          } else if (dict) {
+            _.assign(acc, {[fullPath]: data});
+          } else {
+            acc.push(data);
+          }
+
         }
       }
 

@@ -1,9 +1,9 @@
-import {assign} from 'lodash';
+import _ from 'lodash';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import Plasma from 'plasma';
 
-export default function(app, config) {
+export default function(config) {
   const {sources, utils} = config;
   const {srcDir} = sources;
   const {addbase} = utils;
@@ -16,13 +16,16 @@ export default function(app, config) {
   });
 
 
-  app.preRender(/\.(?:md|html)$/, (file, next) => {
+  return (file, next) => {
     const globalData = plasma.load(
       addbase(srcDir, 'config', '**/*.yml'),
       {namespace: () => 'global_data'}
     );
 
-    assign(file.data, globalData);
+    if (_.isPlainObject(globalData)) {
+      _.assign(file.data, globalData);
+    }
+
     next(null, file);
-  });
+  };
 }

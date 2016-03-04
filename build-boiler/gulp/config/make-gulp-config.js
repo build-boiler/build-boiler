@@ -63,25 +63,29 @@ export default function(gulp, opts = {}) {
     let parentMod;
 
     if (moduleTask) {
+      let data, finalPath;
+
       try {
         const parentPath = path.join(
           process.cwd(),
           taskPath.replace(rootDir, '')
         );
-        let data, finalPath;
 
         try {
           finalPath = /\.js$/.test(parentPath) ? parentPath : `${parentPath}.js`;
           data = babel.transformFileSync(finalPath);
-          parentMod = compile(data.code);
         } catch (err) {
           finalPath = join(parentPath, 'index.js');
           data = babel.transformFileSync(finalPath);
+        }
+
+        log(`Parent task found at ${blue(renameKey(finalPath))}`);
+      } catch (err) {
+        //eslint-disable-line no-empty:0
+      } finally {
+        if (data && data.code) {
           parentMod = compile(data.code);
         }
-        log(`Parent task found at ${blue(finalPath)}`);
-      } catch (err) {
-        log(`No parent task for ${blue(renameKey(taskPath))}`);
       }
     }
 
@@ -126,7 +130,6 @@ export default function(gulp, opts = {}) {
   const parentDir = addbase(taskDir, 'tasks');
   let parentTasks = {};
 
-  /*eslint no-empty:0*/
   try {
     const parentPaths = read(parentDir).filter(fp => {
       const base = fp.replace(path.extname(fp), '');
@@ -135,9 +138,9 @@ export default function(gulp, opts = {}) {
     });
 
     parentTasks = recurseTasks(parentDir, parentPaths);
-    log(`Merging Gulp Tasks from ${blue(parentDir)}`);
+    log(`Merging Gulp Tasks from ${blue(renameKey(parentDir))}`);
   } catch (err) {
-    log(`No custom tasks in ${blue(parentDir)}`);
+    //eslint-disable-line no-empty:0
   }
 
   const tasks = {

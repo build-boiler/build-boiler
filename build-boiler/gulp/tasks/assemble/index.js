@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import Assemble from 'assemble-core';
+import nunjucks from 'nunjucks';
 import fsX, {readJsonSync} from 'fs-extra';
 import consolidate from 'consolidate';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import {join} from 'path';
 import async from 'async';
-import buildNunjucksConfig from './nunjucks-config';
 import Plasma from 'plasma';
 import addTags from './custom-tags';
 import addMiddleware from './middleware';
@@ -77,9 +77,14 @@ export default function(gulp, plugins, config) {
     ...parentData
   });
 
-  const nunj = buildNunjucksConfig(app);
+  const nunj = nunjucks.configure({
+    watch: false,
+    noCache: true
+  });
 
-  addTags(nunj, app);
+  addTags(nunj, app, {
+    isomorphic: enableIsomorphic
+  });
   addMiddleware(app, config);
 
   if (_.isFunction(registerTags)) {
