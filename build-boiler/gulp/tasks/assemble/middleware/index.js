@@ -16,10 +16,12 @@ export default function(app, config) {
 
   app.onLoad(/\.(?:md|html)$/, (file, next) => {
     onloadFns.forEach(fn => callFns(fn, file, next));
+    next(null, file);
   });
 
   app.preRender(/\.(?:md|html)$/, (file, next) => {
     prerenderFns.forEach(fn => callFns(fn, file, next));
+    next(null, file);
   });
 }
 

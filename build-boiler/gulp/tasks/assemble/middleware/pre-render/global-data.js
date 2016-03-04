@@ -17,15 +17,17 @@ export default function(config) {
 
 
   return (file, next) => {
-    const globalData = plasma.load(
-      addbase(srcDir, 'config', '**/*.yml'),
-      {namespace: () => 'global_data'}
-    );
+    try {
+      const globalData = plasma.load(
+        addbase(srcDir, 'config', '**/*.yml'),
+        {namespace: () => 'global_data'}
+      );
 
-    if (_.isPlainObject(globalData)) {
-      _.assign(file.data, globalData);
+      if (_.isPlainObject(globalData)) {
+        _.assign(file.data, globalData);
+      }
+    } catch (err) {
+      next(err);
     }
-
-    next(null, file);
   };
 }

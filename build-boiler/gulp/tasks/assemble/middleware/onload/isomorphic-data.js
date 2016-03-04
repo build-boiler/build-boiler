@@ -14,15 +14,17 @@ export default function(config) {
   plasma.dataLoader('json', (fp) => readJsonSync(fp));
 
   return (file, next) => {
-    const jsonData = plasma.load(
-      addbase(srcDir, scriptDir, '**/*.json'), {namespace: true}
-    );
+    try {
+      const jsonData = plasma.load(
+        addbase(srcDir, scriptDir, '**/*.json'), {namespace: true}
+      );
 
-    if (_.isPlainObject(jsonData)) {
-      _.assign(file.data, jsonData);
+      if (_.isPlainObject(jsonData)) {
+        _.assign(file.data, jsonData);
+      }
+    } catch (err) {
+      next(err);
     }
-
-    next(null, file);
   };
 }
 

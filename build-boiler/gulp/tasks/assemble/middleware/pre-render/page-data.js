@@ -50,17 +50,19 @@ export default function(config) {
   });
 
   return (file, next) => {
-    const pageData = plasma.load(
-      addbase(srcDir, templateDir, '**/*.{json,yml}'),
-      {namespace: false}
-    );
+    try {
+      const pageData = plasma.load(
+        addbase(srcDir, templateDir, '**/*.{json,yml}'),
+        {namespace: false}
+      );
 
-    if (_.isPlainObject(pageData)) {
-      const currentPageData = pageData[file.key];
+      if (_.isPlainObject(pageData)) {
+        const currentPageData = pageData[file.key];
 
-      currentPageData && _.merge(file.data, currentPageData);
+        currentPageData && _.merge(file.data, currentPageData);
+      }
+    } catch (err) {
+      next(err);
     }
-
-    next(null, file);
   };
 }
