@@ -121,9 +121,29 @@ export default {
     plugins(config, p) {
       return p;
     },
+    loaders(config, l) {
+      const {preLoaders, loaders, postLoaders} = l;
+
+      return {
+        preLoaders,
+        loaders,
+        postLoaders
+      };
+    },
     babel: {
-      omitPolyfill: false
+      omitPolyfill: false,
       //transform: ['transform-runtime', {polyfill: false}]
+      query(config, q) {
+
+      },
+      babelrc(config, rc) {
+
+      },
+      exclude(config, fp) {
+        //return /node_modules/.test(fp)
+      }
+      //exclude: /node_modules/,
+      //exclude: [/node_modules/, /something/]
     }
   },
   isomorphic: {

@@ -1,6 +1,7 @@
 import {join} from 'path';
 import _ from 'lodash';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import initParentFn from '../../../utils/call-and-return';
 
 export default function(opts) {
   const {
@@ -16,7 +17,7 @@ export default function(opts) {
     TEST
   } = opts;
   const {
-    babelrc,
+    babelrc: baseBabelrc,
     includePaths,
     rootDir,
     srcDir,
@@ -27,6 +28,7 @@ export default function(opts) {
     expose,
     paths,
     hot,
+    loaders: loaderParentConfig = {},
     babel: babelParentConfig = {}
   } = webpackConfig;
   const {isDev, isIE} = environment;
@@ -34,7 +36,7 @@ export default function(opts) {
   const {addbase, addroot} = utils;
   const excludeRe = /^(.*?\/)?node_modules\/(?!@hfa\/).+\.jsx?$/;
   const babelQuery = {};
-  const babelBaseConfig = _.omit(babelrc, ['env']);
+  const babelBaseConfig = _.omit(baseBabelrc, ['env']);
   const imageLoader = 'img?' + [
     'progressive=true',
     'minimize'
@@ -55,6 +57,20 @@ export default function(opts) {
   }
 
   sassParams.push('sourceMap', 'sourceMapContents=true');
+
+  /**
+   * Various parent config mutation functions
+   */
+  const {
+    omitPolyfill,
+    transform,
+    query: parentBabelQuery,
+    exclude: parentBabelExclude,
+    babelrc: parentBabelrc
+  } = babelParentConfig;
+  const callParentFn = initParentFn(opts);
+
+  const babelrc = callParentFn(parentBabelrc, baseBabelrc);
 
   if (DEBUG || TEST) {
     const babelEnvConfig = _.cloneDeep(babelrc.env.development);
@@ -132,7 +148,6 @@ export default function(opts) {
     }
   ];
 
-  const {omitPolyfill, transform} = babelParentConfig;
   const transformPolly = ['transform-runtime', {polyfill: true}];
   const baseTransform = ['transform-runtime', {polyfill: false}];
   const babelPlugins = babelQuery.plugins;
@@ -226,23 +241,30 @@ export default function(opts) {
     staticAssetsLoader = [fileLoader, imageLoader].join('!');
   }
 
+  const finalBabelQuery = callParentFn(parentBabelQuery, babelRootQuery);
+
   const loaders = [
     {
       test: /\.jsx?$/,
       exclude(fp) {
+        const parentEx = callParentFn(parentBabelExclude, fp);
         let ex = false;
 
-        if (fp.indexOf(rootDir) !== -1) {
-          const root = fp.replace(rootDir, '');
-          ex = excludeRe.test(root);
+        if (_.isBoolean(parentEx)) {
+          ex = parentEx;
         } else {
-          ex = ex = excludeRe.test(fp);
+          if (fp.indexOf(rootDir) !== -1) {
+            const root = fp.replace(rootDir, '');
+            ex = excludeRe.test(root);
+          } else {
+            ex = ex = excludeRe.test(fp);
+          }
         }
 
         return ex;
       },
       loader: 'babel',
-      query: babelRootQuery
+      query: finalBabelQuery
     },
     {
       test: toolsPlugin.regular_expression('images'),
@@ -301,9 +323,7 @@ export default function(opts) {
   }
 
   return {
-    preLoaders,
-    loaders,
-    postLoaders,
-    babelQuery: babelRootQuery
+    ...callParentFn(loaderParentConfig, {preLoaders, loaders, postLoaders}),
+    babelQuery: finalBabelQuery
   };
 }

@@ -28,15 +28,20 @@ export default function(gulp, opts = {}) {
 
     return compiled;
   });
-  let parentConfig;
+  let hasParentConfig, parentConfig;
 
   try {
     const fp = join(process.cwd(), 'gulp', 'config', 'index.js');
+    hasParentConfig = stat(fp).isFile();
 
     parentConfig = require(fp);
     log(`Merging parent ${blue('gulp/config')} with base config`);
   } catch (err) {
-    log(`No provided root config, using base config ${blue(join(__dirname, 'index.js'))}`);
+    if (hasParentConfig) {
+      throw new Error(err);
+    } else {
+      log(`No provided root config, using base config ${blue(join(__dirname, 'index.js'))}`);
+    }
   }
 
   const config = makeConfig(cliConfig, rootDir, parentConfig);
