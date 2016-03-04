@@ -1,13 +1,13 @@
 import path from 'path';
-import {merge} from 'lodash';
+import _ from 'lodash';
 import {sync as globSync} from 'globby';
 import {readJsonSync} from 'fs-extra';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import Plasma from 'plasma';
-import renameKey from '../../../utils/rename-key';
+import renameKey from '../../../../utils/rename-key';
 
-export default function(app, config) {
+export default function(config) {
   const {sources, utils} = config;
   const {
     srcDir,
@@ -49,10 +49,20 @@ export default function(app, config) {
     return addNamespaceData(fp, data);
   });
 
-  app.preRender(/\.(?:md|html)$/, (file, next) => {
-    const pageData = plasma.load(addbase(srcDir, templateDir, '**/*.{json,yml}'), {namespace: false});
+  return (file, next) => {
+    try {
+      const pageData = plasma.load(
+        addbase(srcDir, templateDir, '**/*.{json,yml}'),
+        {namespace: false}
+      );
 
-    merge(file.data, pageData[file.key]);
-    next(null, file);
-  });
+      if (_.isPlainObject(pageData)) {
+        const currentPageData = pageData[file.key];
+
+        currentPageData && _.merge(file.data, currentPageData);
+      }
+    } catch (err) {
+      next(err);
+    }
+  };
 }

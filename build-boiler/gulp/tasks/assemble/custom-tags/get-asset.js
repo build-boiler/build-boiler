@@ -71,9 +71,16 @@ export default class GetAsset {
 
   run(context, args) {
     const {ctx} = context;
-    const {assets, environment, view} = ctx;
+    const {
+      assets = {},
+      environment,
+      view
+    } = ctx;
+    const {
+      javascript = {},
+      styles = {}
+    } = assets;
     const {isDev} = environment;
-    const {javascript, styles} = assets;
     const {path: viewPath} = view;
     const {type, version = '1.0.0'} = args;
     const pageKey = renameKey(viewPath, 'main');
