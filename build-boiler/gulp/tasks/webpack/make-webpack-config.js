@@ -29,6 +29,7 @@ export default function(config) {
   } = sources;
   const {
     alias,
+    base: baseConfig = {},
     babel: babelParentConfig = {},
     moduleRoot: parentModuleRoot = [],
     node,
@@ -104,7 +105,8 @@ export default function(config) {
       modulesDirectories: moduleRoot,
       modules: moduleRoot
     },
-    node
+    node,
+    ...baseConfig
   };
 
   const commons = {vendors};

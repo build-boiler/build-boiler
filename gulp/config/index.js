@@ -77,6 +77,13 @@ export default {
     generate: true
   },
   webpack: {
+    base: {
+      //node: {
+        //dns: 'mock',
+        //net: 'mock',
+        //fs: 'empty'
+      //}
+    },
     moduleRoot: [
       path.join(process.cwd(), 'lib')
     ],
