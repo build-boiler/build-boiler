@@ -66,6 +66,10 @@ export default function(config) {
   ];
 
   const moduleRoot = _.union(defaultRoot, parentModuleRoot);
+  const loaderRoot = [
+    addroot('node_modules'),
+    addbase('node_modules')
+  ];
 
   const defaultConfig = {
     alias,
@@ -80,9 +84,9 @@ export default function(config) {
       failOnError: !isDev
     },
     resolveLoader: {
-      modules: [addroot('node_modules')],
       //fallback for Webpack 1
-      root: addroot('node_modules')
+      modulesDirectories: loaderRoot,
+      modules: loaderRoot
     },
     resolve: {
       extensions: [
@@ -96,9 +100,9 @@ export default function(config) {
         '.yaml',
         '.yml'
       ],
-      modules: moduleRoot,
       //fallback for Webpack 1
-      modulesDirectories: moduleRoot
+      modulesDirectories: moduleRoot,
+      modules: moduleRoot
     },
     node
   };
