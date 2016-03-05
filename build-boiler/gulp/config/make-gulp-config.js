@@ -98,7 +98,9 @@ export default function(gulp, opts = {}) {
       }
     }
 
-    return fn(gulp, plugins, config, parentMod);
+    return moduleTask ?
+      fn(gulp, plugins, config, parentMod) :
+      fn.bind(fn, gulp, plugins, config);
   }
 
 

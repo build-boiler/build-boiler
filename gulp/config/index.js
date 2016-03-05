@@ -66,6 +66,9 @@ export default {
     middleware(config, m) {
 
       return m;
+    },
+    open: (config, fp) => {
+
     }
   },
   eslint: {

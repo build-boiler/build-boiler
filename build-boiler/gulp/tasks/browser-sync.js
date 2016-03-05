@@ -2,14 +2,18 @@ import _ from 'lodash';
 import open from 'open';
 import callParent from '../utils/run-parent-fn';
 import runFn from '../utils/run-custom-task';
+import callReturn from '../utils/call-and-return';
 
 export default function(gulp, plugins, config) {
   const {browserSync} = plugins;
   const {browserSync: bsParent, sources, utils} = config;
-  const {middleware: parentMiddleware} = bsParent;
+  const {middleware: parentMiddleware, open: parentOpenFn} = bsParent;
   const {internalHost, devPort, buildDir} = sources;
   const {addbase, logError} = utils;
-  const openPath = `http://${internalHost}:${devPort}`;
+  const baseOpen = `http://${internalHost}:${devPort}`;
+  const openPath = _.isFunction(parentOpenFn) ?
+    callReturn(config)(parentOpenFn, baseOpen) :
+    baseOpen;
   const expireHeaders = (req, res, next) => {
     res.setHeader('cache-control', 'public, max-age=0');
     next();
@@ -51,16 +55,28 @@ export default function(gulp, plugins, config) {
       }
     };
 
-    const parentConfig = callParent(arguments, {data: bsConfig});
+    const parentConfig = callParent(arguments, {
+      data: {
+        ...bsConfig,
+        open: openPath
+      }
+    });
 
     const {
-      data,
+      data = {},
       fn
     } = parentConfig;
 
+    const {
+      open: parentOpen,
+      ...restConfig
+    } = data;
+
     const task = (done) => {
-      browserSync(data, () => {
-        open(openPath);
+      const bsProcessedConfig = _.isEmpty(restConfig) ? bsConfig : restConfig;
+
+      browserSync(bsProcessedConfig, () => {
+        open(parentOpen || openPath);
         done();
       });
     };
