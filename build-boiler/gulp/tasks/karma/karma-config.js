@@ -1,9 +1,11 @@
+import path from 'path';
 import _, {assign, merge} from 'lodash';
 import gutil from 'gulp-util';
 import makeWebpackConfig from '../webpack/make-webpack-config';
 import makeDeviceFilter from './filter-devices';
 import defaultBsBrowsers from './browser-stack/browsers';
 import defaultBsDevices from './browser-stack/devices.js';
+import transformArray from '../../utils/transorm-array';
 
 const {colors, log} = gutil;
 const {magenta} = colors;
@@ -22,9 +24,13 @@ export default function(config) {
     sources,
     utils
   } = config;
-  const {isDev, branch} = environment;
+  const {isDev, isHfa, branch} = environment;
   const {addbase} = utils;
-  const {browsers: customBrowsers, devices: customDevices} = karma;
+  const {
+    browsers: customBrowsers,
+    devices: customDevices,
+    mocks: parentMocks
+  } = karma;
   const testPath = addbase(sources.testDir, `config/karma-${coverage ? 'coverage' : 'index'}.js`);
   const bsBrowsers = _.isPlainObject(customBrowsers) ?
     assign({}, defaultBsBrowsers, customBrowsers) :
@@ -91,6 +97,10 @@ export default function(config) {
     runnerData = {
       autoWatch: false,
       singleRun: true,
+      captureTimeout: 3e5,
+      browserNoActivityTimeout: 3e5,
+      browserDisconnectTimeout: 3e5,
+      browserDisconnectTolerance: 3,
       // global config of your BrowserStack account
       browserStack: {
         username: BROWSERSTACK_USERNAME,
@@ -133,6 +143,18 @@ export default function(config) {
 
   if (coverage) {
     karmaConfig.reporters.push('coverage');
+  }
+
+  const baseMocks = path.join(__dirname, 'analytics-mocks.js');
+  const normalizedMocks = transformArray(parentMocks, _.isString);
+  const mocks = _.union(baseMocks, normalizedMocks);
+
+  karmaConfig.files.unshift(...transformArray(parentMocks));
+
+  if (isHfa) {
+    karmaConfig.files.unshift(...mocks);
+  } else {
+    karmaConfig.files.unshift(...normalizedMocks);
   }
 
   return karmaConfig;
