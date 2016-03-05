@@ -175,7 +175,8 @@ export default {
   karma: {
     browsers: {},
     devices: {},
-    coverageRe: /^.+?\/src\/js\/(?:services|modules|component-utils|module-utils)\/.+?\.jsx?$/
+    coverageRe: /^.+?\/src\/js\/(?:services|modules|component-utils|module-utils)\/.+?\.jsx?$/,
+    mocks: path.join(process.cwd(), 'build-boiler/gulp/tasks/karma/analytics-mocks.js')
   },
   webdriver: {
     browsers: [],
