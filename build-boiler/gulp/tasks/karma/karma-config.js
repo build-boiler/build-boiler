@@ -145,7 +145,7 @@ export default function(config) {
     karmaConfig.reporters.push('coverage');
   }
 
-  const baseMocks = path.join(__dirname, 'analytics-mocks.js');
+  const baseMocks = [path.join(__dirname, 'analytics-mocks.js')];
   const normalizedMocks = transformArray(parentMocks, _.isString);
   const mocks = _.union(baseMocks, normalizedMocks);
 
