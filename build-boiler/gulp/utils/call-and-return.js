@@ -10,36 +10,39 @@ import _ from 'lodash';
  * @return {Any}
  */
 export default function(...args) {
-  let config;
+  const hasConfig = args.length === 1;
 
-  if (args.length === 1) {
-    ([config] = args);
-  }
-
-  function compareVals(check, ...rest) {
-    const [opts] = rest.slice(-1);
+  /**
+   * @param {Function} check
+   * @param {String,Regexp,Array,Object} opts
+   *
+   * @return {Boolean,Any} boolean or original options
+   */
+  function compareVals(check, opts) {
+    const fnArgs = [opts];
     let ret;
 
-    if (_.isFunction(check)) {
-      let fnArgs = config ? [config, ...rest] : [...rest];
+    if (hasConfig) {
+      fnArgs.unshift(args[0]);
+    }
 
+    if (_.isFunction(check)) {
       ret = check.apply(check, fnArgs);
     } else if (_.isRegExp(check)) {
       ret = check.test(opts);
+    } else if (_.isString(check)) {
+      ret = check === opts;
     } else if (Array.isArray(check)) {
       check.forEach(tester => {
         if (ret) return;
-        ret = _.isString(tester) && tester === opts;
-        ret = _.isRegExp(tester) && tester.test(opts);
+        ret = compareVals(tester, opts);
       });
-    } else if (_.isString(check)) {
-      ret = check;
     } else if (_.isPlainObject(check) && _.isPlainObject(opts)) {
-      ret = _.assign(opts, check);
+      ret = _.assign({}, opts, check);
     }
 
     return _.isUndefined(ret) ? opts : ret;
   }
 
-  return args.length === 1 ? compareVals : compareVals.apply(null, args);
+  return hasConfig ? compareVals : compareVals.apply(null, args);
 }

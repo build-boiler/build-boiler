@@ -135,7 +135,8 @@ export default function(gulp, plugins, config) {
         data: {
           app,
           assets,
-          nunj
+          nunj,
+          jsxLoader
         }
       });
 
