@@ -8,6 +8,8 @@ import makeCliConfig from './make-cli-config';
 import addTaskName from '../utils/gulp-taskname';
 import renameKey from '../utils/rename-key';
 import log, {blue} from '../utils/build-logger';
+import removeExt from '../utils/remove-extension';
+
 
 export default function(gulp, opts = {}) {
   const babel = require('babel-core');
@@ -70,12 +72,17 @@ export default function(gulp, opts = {}) {
       let foundPath;
 
       try {
-        const parentPath = path.join(
-          process.cwd(),
+        const normalizedPath = removeExt(
           taskPath.replace(rootDir, '')
         );
+        const parentPath = path.join(
+          process.cwd(),
+          'gulp',
+          'tasks',
+          normalizedPath
+        );
 
-        const filePath = /\.js$/.test(parentPath) ? parentPath : `${parentPath}.js`;
+        const filePath = `${parentPath}.js`;
         const dirPath = join(parentPath, 'index.js');
 
         if (exists(filePath)) {
@@ -96,6 +103,8 @@ export default function(gulp, opts = {}) {
           throw err;
         }
       }
+    } else {
+      log(`Custom task found at ${blue(renameKey(taskPath))}`);
     }
 
     return moduleTask ?
@@ -124,7 +133,7 @@ export default function(gulp, opts = {}) {
         }
         taskName = name;
       } else {
-        taskName = path.basename(name, '.js');
+        taskName = removeExt(name);
       }
 
 
@@ -137,7 +146,7 @@ export default function(gulp, opts = {}) {
 
   const tasksDir = addroot(taskDir, 'tasks');
   const internalDirs = read(tasksDir);
-  const normalizedDirs = internalDirs.map(fp => path.basename(fp, path.extname(fp)));
+  const normalizedDirs = internalDirs.map(removeExt);
   const moduleTasks = recurseTasks(tasksDir, internalDirs, true);
   const parentDir = addbase(taskDir, 'tasks');
   let parentTasks = {};
@@ -150,7 +159,6 @@ export default function(gulp, opts = {}) {
     });
 
     parentTasks = recurseTasks(parentDir, parentPaths);
-    log(`Merging Gulp Tasks from ${blue(renameKey(parentDir))}`);
   } catch (err) {
     //eslint-disable-line no-empty:0
   }
