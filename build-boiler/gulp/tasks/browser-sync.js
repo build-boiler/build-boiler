@@ -62,10 +62,7 @@ export default function(gulp, plugins, config) {
     };
 
     const parentConfig = callParent(arguments, {
-      data: {
-        ...bsConfig,
-        open: openPath
-      }
+      data: bsConfig
     });
 
     const {
@@ -73,17 +70,10 @@ export default function(gulp, plugins, config) {
       fn
     } = parentConfig;
 
-    const {
-      open: parentOpen,
-      ...restConfig
-    } = data;
-
     const task = (done) => {
-      const bsProcessedConfig = _.isEmpty(restConfig) ? bsConfig : restConfig;
-
-      browserSync(bsProcessedConfig, () => {
+      browserSync(data, () => {
         if (shouldOpen) {
-          open(parentOpen || openPath);
+          open(openPath);
         }
 
         done();
