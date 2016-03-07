@@ -67,8 +67,10 @@ export default {
 
       return m;
     },
+    //open: true
     open: (config, fp) => {
 
+      //return => path to open
     }
   },
   eslint: {

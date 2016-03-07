@@ -11,9 +11,15 @@ export default function(gulp, plugins, config) {
   const {internalHost, devPort, buildDir} = sources;
   const {addbase, logError} = utils;
   const baseOpen = `http://${internalHost}:${devPort}`;
-  const openPath = _.isFunction(parentOpenFn) ?
-    callReturn(config)(parentOpenFn, baseOpen) :
-    baseOpen;
+  let openPath = baseOpen;
+  let shouldOpen = true;
+
+  if (_.isFunction(parentOpenFn)) {
+    openPath = callReturn(config)(parentOpenFn, baseOpen);
+  } else if (_.isBoolean(parentOpenFn)) {
+    shouldOpen = parentOpenFn;
+  }
+
   const expireHeaders = (req, res, next) => {
     res.setHeader('cache-control', 'public, max-age=0');
     next();
@@ -76,7 +82,10 @@ export default function(gulp, plugins, config) {
       const bsProcessedConfig = _.isEmpty(restConfig) ? bsConfig : restConfig;
 
       browserSync(bsProcessedConfig, () => {
-        open(parentOpen || openPath);
+        if (shouldOpen) {
+          open(parentOpen || openPath);
+        }
+
         done();
       });
     };

@@ -100,7 +100,7 @@ export default function(gulp, opts = {}) {
 
     return moduleTask ?
       fn(gulp, plugins, config, parentMod) :
-      fn.bind(fn, gulp, plugins, config);
+      fn(gulp, plugins, config);
   }
 
 
@@ -137,6 +137,7 @@ export default function(gulp, opts = {}) {
 
   const tasksDir = addroot(taskDir, 'tasks');
   const internalDirs = read(tasksDir);
+  const normalizedDirs = internalDirs.map(fp => path.basename(fp, path.extname(fp)));
   const moduleTasks = recurseTasks(tasksDir, internalDirs, true);
   const parentDir = addbase(taskDir, 'tasks');
   let parentTasks = {};
@@ -145,7 +146,7 @@ export default function(gulp, opts = {}) {
     const parentPaths = read(parentDir).filter(fp => {
       const base = fp.replace(path.extname(fp), '');
 
-      return !internalDirs.includes(base);
+      return !normalizedDirs.includes(base);
     });
 
     parentTasks = recurseTasks(parentDir, parentPaths);
