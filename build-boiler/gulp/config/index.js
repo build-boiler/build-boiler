@@ -43,7 +43,9 @@ export default function(config, rootDir, parentConfig = {}) {
     assemble = {},
     browserSync = {},
     eslint = {},
+    karma = {},
     webpack = {},
+    webdriver = {},
     cb
   } = parentConfig;
 
@@ -295,6 +297,8 @@ export default function(config, rootDir, parentConfig = {}) {
     assemble,
     browserSync,
     eslint,
+    karma,
+    webdriver,
     webpackConfig
   };
 

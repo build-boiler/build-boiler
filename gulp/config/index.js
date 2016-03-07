@@ -174,6 +174,16 @@ export default {
       target: 'node'
     }
   },
+  karma: {
+    browsers: {},
+    devices: {},
+    coverageRe: /^.+?\/src\/js\/(?:services|modules|component-utils|module-utils)\/.+?\.jsx?$/,
+    mocks: path.join(process.cwd(), 'build-boiler/gulp/tasks/karma/analytics-mocks.js')
+  },
+  webdriver: {
+    browsers: [],
+    devices: []
+  },
   cb(config) {
     //you have access to the gulp config here for
     //any extra customization => don't forget to return config
