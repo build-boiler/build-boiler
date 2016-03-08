@@ -1,0 +1,44 @@
+{
+  "name": "boiler-task-karma",
+  "version": "0.1.0",
+  "description": "Build Boilerplate Static Templating",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "istanbul-cobertura-badger": "^1.2.1",
+    "karma": "^0.13.21",
+    "karma-browserstack-launcher": "^0.1.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-coverage": "^0.5.3",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-mocha": "^0.2.0",
+    "karma-safari-launcher": "^0.1.1",
+    "karma-sinon": "^1.0.4",
+    "karma-sourcemap-loader": "^0.3.5",
+    "karma-spec-reporter": "0.0.24",
+    "karma-webpack": "^1.5.1",
+    "lodash": "^4.0.0",
+    "sinon": "^1.17.3"
+  }
+}

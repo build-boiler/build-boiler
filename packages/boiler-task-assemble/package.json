@@ -1,0 +1,46 @@
+{
+  "name": "boiler-task-assemble",
+  "version": "0.1.0",
+  "description": "Build Boilerplate Static Templating",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "assemble-core": "^0.12.0",
+    "fs-extra": "^0.26.4",
+    "globby": "^4.0.0",
+    "async": "^1.5.2",
+    "base-watch": "^0.1.2",
+    "cheerio": "^0.20.0",
+    "consolidate": "^0.14.0",
+    "fs-extra": "^0.26.4",
+    "globby": "^4.0.0",
+    "js-yaml": "^3.5.2",
+    "jsdom": "^8.0.4",
+    "lodash": "^4.0.0",
+    "nunjucks": "^2.1.0",
+    "parser-front-matter": "^1.3.0",
+    "plasma": "^0.9.1",
+    "through2": "^2.0.0"
+  }
+}

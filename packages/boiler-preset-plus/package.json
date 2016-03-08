@@ -1,0 +1,34 @@
+{
+  "name": "boiler-preset-plus",
+  "version": "0.1.0",
+  "description": "Build Boilerplate Plus",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "boiler-preset-base": "^0.1.0",
+    "boiler-task-karma": "^0.1.0",
+    "boiler-task-selenium": "^0.1.0"
+  }
+}
+
