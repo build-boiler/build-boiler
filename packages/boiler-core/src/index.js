@@ -175,17 +175,13 @@ export default function(gulp, opts = {}) {
   }), {});
   let parentTasks = {};
 
-  try {
-    const parentPaths = read(parentDir).filter(fp => {
-      const base = fp.replace(path.extname(fp), '');
+  const parentPaths = read(parentDir).filter(fp => {
+    const base = fp.replace(path.extname(fp), '');
 
-      return !internalDirs.includes(base);
-    });
+    return !internalDirs.includes(base);
+  });
 
-    parentTasks = recurseTasks(parentDir, parentPaths);
-  } catch (err) {
-    //eslint-disable-line no-empty:0
-  }
+  parentTasks = recurseTasks(parentDir, parentPaths);
 
   hook.unmount();
 

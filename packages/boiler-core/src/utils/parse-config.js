@@ -26,7 +26,7 @@ export default function(root, opts) {
         throw new Error(`Cannot find preset ${preset}`);
       }
 
-      return plugins.reduce((acc, plugin) => ({
+      plugins.reduce((acc, plugin) => ({
         ...acc,
         ...plugin
       }), {});
@@ -58,10 +58,10 @@ export default function(root, opts) {
     },
 
     recurse(method, data) {
-      return data.reduce((acc, name) => ({
+      return Array.isArray(data) ? data.reduce((acc, name) => ({
         ...acc,
         ...this[method](name)
-      }), {});
+      }), {}) : {};
     }
   };
 

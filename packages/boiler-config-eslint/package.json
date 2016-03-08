@@ -1,0 +1,26 @@
+{
+  "name": "boiler-config-eslint",
+  "version": "0.1.0",
+  "description": "Linting Config",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dtothefp/open-eslint-config"
+  },
+  "author": "DtotheFP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dtothefp/open-eslint-config/issues"
+  },
+  "homepage": "https://github.com/dtothefp/open-eslint-config#readme",
+  "dependencies": {
+    "app-root-path": "^1.0.0",
+    "eslint": "^2.3.0",
+    "gulp-util": "^3.0.7",
+    "object-assign": "^4.0.1"
+  }
+}

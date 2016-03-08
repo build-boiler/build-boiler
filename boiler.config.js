@@ -1,6 +1,6 @@
 export default {
   bleep: 'bloop',
-  presets: ['base', 'plus'],
+  //presets: ['base', 'plus'],
   tasks: [
     'assemble',
     'browser-sync',

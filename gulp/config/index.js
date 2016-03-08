@@ -168,8 +168,8 @@ export default {
     modules: {
       include: [],
       exclude: [
-        ...Object.keys(dependencies),
-        ...Object.keys(devDependencies)
+        ...Object.keys(dependencies || {}),
+        ...Object.keys(devDependencies || {})
       ],
       target: 'node'
     }

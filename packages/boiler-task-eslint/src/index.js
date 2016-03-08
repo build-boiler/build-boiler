@@ -1,4 +1,4 @@
-import makeEslintConfig from 'eslint-config';
+import makeEslintConfig from 'boiler-config-eslint';
 import formatter from 'eslint-friendly-formatter';
 import boilerUtils from 'boiler-utils';
 

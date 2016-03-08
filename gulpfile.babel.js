@@ -7,6 +7,7 @@ const {sequence} = plugins;
 const scripts = './packages/*/src/**/*.js';
 
 gulp.task('babel', tasks.babel);
+gulp.task('copy', tasks.copy);
 gulp.task('lint:test', tasks.eslint);
 gulp.task('lint:build', tasks.eslint);
 gulp.task('lint', ['lint:test', 'lint:build']);

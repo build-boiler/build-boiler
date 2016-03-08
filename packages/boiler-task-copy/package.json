@@ -24,5 +24,8 @@
     "nunjucks",
     "react",
     "webpack"
-  ]
+  ],
+  "dependencies": {
+    "boiler-utils": "^0.1.0"
+  }
 }

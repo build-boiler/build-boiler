@@ -26,10 +26,10 @@
     "webpack"
   ],
   "dependencies": {
-    "babel-eslint": "^5.0.0",
+    "babel-eslint": "^6.0.0-beta.2",
     "boiler-utils": "^0.1.0",
-    "eslint-config": "^0.4.0-legacy",
+    "boiler-config-eslint": "^0.1.0",
     "eslint-friendly-formatter": "^1.1.0",
-    "eslint-plugin-react": "^3.2.3"
+    "eslint-plugin-react": "^4.2.0"
   }
 }
