@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import path from 'path';
-import tc from './silent-try';
 
 export default function(root, opts) {
   const methods = {
@@ -20,7 +19,7 @@ export default function(root, opts) {
 
     presets(preset) {
       const prefix = 'boiler-preset-';
-      const fp = this.normalizeName(prefix, preset)
+      const fp = this.normalizeName(prefix, preset);
       const plugins = this.tryRequire(fp);
 
       if (_.isUndefined(plugins)) {

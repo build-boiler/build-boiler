@@ -27,9 +27,9 @@
   ],
   "dependencies": {
     "babel-eslint": "^5.0.0",
+    "boiler-utils": "^0.1.0",
     "eslint-config": "^0.4.0-legacy",
     "eslint-friendly-formatter": "^1.1.0",
-    "eslint-plugin-react": "^3.2.3",
-    "gulp-eslint": "^1.1.1"
+    "eslint-plugin-react": "^3.2.3"
   }
 }

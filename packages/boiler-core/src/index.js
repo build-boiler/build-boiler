@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import {readdirSync as read, statSync as stat, existsSync as exists} from 'fs';
 import path, {join} from 'path';
-import {sync as parentSync} from 'find-parent-dir';
+//import {sync as parentSync} from 'find-parent-dir';
 import hacker from 'require-hacker';
-import boilerUtils from 'boiler-utils'
+import boilerUtils from 'boiler-utils';
 import findUp from 'findup-sync';
 import makeCliConfig from './make-cli-config';
 import makeConfig from './make-config';
@@ -45,7 +45,7 @@ export default function(gulp, opts = {}) {
     const fp = join(process.cwd(), 'gulp', 'config', 'index.js');
     hasParentConfig = stat(fp).isFile();
 
-    Object.assign(parentConfig, require(fp))
+    Object.assign(parentConfig, require(fp));
     log(`Merging parent ${blue('gulp/config')} with base config`);
   } catch (err) {
     if (hasParentConfig) {
@@ -74,7 +74,7 @@ export default function(gulp, opts = {}) {
   const config = makeConfig(cliConfig, rootDir, parentConfig);
   const {sources, utils} = config;
   const {taskDir} = sources;
-  const {addbase, addroot} = utils;
+  const {addbase} = utils;
 
   addTaskName(gulp);
 

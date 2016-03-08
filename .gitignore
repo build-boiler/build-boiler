@@ -1,7 +1,6 @@
 #DUHH
 .DS_Store
 .eslintrc
-browser-stack.json
 
 # Logs
 logs
@@ -13,13 +12,10 @@ coverage
 
 # Compiled
 dist
-coverage
 
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
 
-# Pantsuit Deps
-src/fonts
-src/icons
-src/brand
+# Compiled Modules
+packages/*/dist
