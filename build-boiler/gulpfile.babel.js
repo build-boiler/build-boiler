@@ -1,87 +1,97 @@
 import 'babel-polyfill';
-import {omit} from 'lodash';
 import path from 'path';
-import {readJsonSync} from 'fs-extra';
 import gulp from 'gulp';
-import babel from 'gulp-babel';
-import del from 'del';
-import sequence from 'run-sequence';
+import load from 'gulp-load-plugins';
+import through from 'through2';
+import {readJsonSync} from 'fs-extra';
+import build from './packages/boiler-core/src';
+
+const {tasks} = build(gulp);
+
+const loadConfig = {
+  lazy: false,
+  pattern: [
+    'gulp-*',
+    'gulp.*',
+    'del',
+    'run-sequence',
+    'browser-sync'
+  ],
+  rename: {
+    'gulp-util': 'gutil',
+    'run-sequence': 'sequence',
+    'gulp-if': 'gulpIf'
+  }
+};
+
+const {
+  babel,
+  del,
+  plumber,
+  newer,
+  sequence,
+  gutil
+} = load(loadConfig);
+
+const {log, colors} = gutil;
+const {cyan} = colors;
 
 const babelConfigPath = path.resolve(__dirname, '.babelrc');
-const babelConfig = readJsonSync(babelConfigPath);
+const scripts = './packages/*/src/**/*.js';
+const dest = 'packages';
 
-babelConfig.babelrc = false;
+let srcEx, libFragment;
+
+if (path.win32 === path) {
+  srcEx = /(packages\\[^\\]+)\\src\\/;
+  libFragment = "$1\\dist\\";
+} else {
+  srcEx = new RegExp("(packages/[^/]+)/src/");
+  libFragment = "$1/dist/";
+}
 
 gulp.task('babel', (cb) => {
-  const src = [
-    './**/gulp/**/*.js',
-    './index.js',
-    '!./node_modules/**/*',
-    '!./dist/**/*'
-  ];
+  const babelConfig = readJsonSync(babelConfigPath);
 
-  const wrapProm = (src, config) => {
-    return new Promise((res) => {
-      gulp.src(src)
-        .pipe(babel(config))
-        .pipe(gulp.dest('dist'))
-        .on('end', res);
-    });
-  };
-
-  const tasks = [
-    wrapProm(src, babelConfig),
-    wrapProm('./post-install.js', omit(babelConfig, 'plugins'))
-  ];
-
-  Promise.all(tasks).then(() => cb()).catch((err) => cb());
+  return gulp.src(scripts)
+    .pipe(plumber({
+      errorHandler: function (err) {
+        gutil.log(err.stack);
+      }
+    }))
+    .pipe(through.obj(function (file, enc, cb) {
+      file._path = file.path;
+      file.path = file.path.replace(srcEx, libFragment);
+      cb(null, file);
+    }))
+    .pipe(newer(dest))
+    .pipe(through.obj(function (file, enc, cb) {
+      gutil.log(`Compiling", '${cyan(file._path)}'`);
+      cb(null, file);
+    }))
+    .pipe(babel({
+      babelrc: false,
+      ...babelConfig
+    }))
+    .pipe(gulp.dest(dest));
 });
 
-gulp.task('copy', () => {
-  const src = [
-    './global-*.js',
-    './publish.sh',
-    './*.{md,json}',
-    './.*'
-  ];
-
-  const wrapProm = (src, dest = 'dist') => {
-    return new Promise((res) => {
-
-      gulp.src(src)
-        .pipe(gulp.dest(dest))
-        .on('end', res);
-    });
-  };
-
-  const tasks = [
-    wrapProm(src),
-    wrapProm('test-config/**/*', 'dist/test-config')
-  ];
-
-  Promise.all(tasks).then(() => cb()).catch((err) => cb());
-});
-
-gulp.task('clean', () => del('dist'));
+gulp.task('clean', () => del(
+  path.join(
+    dest,
+    '*',
+    'dist'
+  )
+));
 
 gulp.task('default', (cb) => {
   sequence(
     'clean',
-    ['copy', 'babel'],
+    'babel',
     cb
   );
 });
 
 gulp.task('watch', ['default'], () => {
-  const allSrc = [
-    './**/gulp/**/*.js',
-    './{index,post-install}.js',
-    '!./node_modules/**/*',
-    '!./dist/**/*',
-    './global-*.js',
-    './*.{md,json}',
-    './.*'
-  ];
-
-  gulp.watch(allSrc, ['copy', 'babel']);
+  gulp.watch(scripts, ['babel']);
 });
