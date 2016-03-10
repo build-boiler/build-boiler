@@ -1,7 +1,7 @@
 {
-  "name": "boiler-task-eslint",
+  "name": "boiler-config-base",
   "version": "0.1.0",
-  "description": "Build Boilerplate Static Templating",
+  "description": "Build Boilerplate Base Config",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -26,12 +26,10 @@
     "webpack"
   ],
   "dependencies": {
-    "babel-eslint": "6.0.0-beta.5",
-    "boiler-config-eslint": "^0.1.0",
     "boiler-utils": "^0.1.0",
-    "eslint": "2.2.0",
-    "eslint-friendly-formatter": "^1.1.0",
-    "eslint-plugin-react": "^4.2.0",
-    "gulp-eslint": "^2.0.0"
+    "findup-sync": "^0.3.0",
+    "fs-extra": "^0.26.5",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "yargs": "^4.1.0"
   }
 }

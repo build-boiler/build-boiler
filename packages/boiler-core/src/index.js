@@ -1,13 +1,12 @@
 import _ from 'lodash';
 import {readdirSync as read, statSync as stat, existsSync as exists} from 'fs';
 import path, {join} from 'path';
-//import {sync as parentSync} from 'find-parent-dir';
 import hacker from 'require-hacker';
 import boilerUtils from 'boiler-utils';
-import findUp from 'findup-sync';
-import makeCliConfig from './make-cli-config';
-import makeConfig from './make-config';
+import makeConfig from 'boiler-config-base';
 import getBoilerDeps from './utils/parse-config';
+import getGulpPlugins from './get-gulp-plugins';
+import getTaskConfig from './get-boiler-task-config';
 
 export default function(gulp, opts = {}) {
   const babel = require('babel-core');
@@ -15,19 +14,44 @@ export default function(gulp, opts = {}) {
     gulpTaskname: addTaskName,
     renameKey,
     buildLogger,
-    removeExtension: removeExt
+    removeExtension: removeExt,
+    tryExists
   } = boilerUtils;
-  const {default: log, blue} = buildLogger;
-  const excludeRe = /^(.*?\/)?node_modules\/(?!@hfa\/).+\.jsx?$/;
+  const {log, blue} = buildLogger;
   const {include} = opts;
-  //const parentDist = parentSync(__dirname, 'dist');
-  //const parentMod = parentSync(__dirname, 'node_modules');
-  //const rootDir = parentMod || parentDist || path.resolve(__dirname, '..', '..');
-  //=> this is ./packages || node-modules
-  const rootDir = path.resolve(__dirname, '..', '..');
-  const {cliConfig, plugins} = makeCliConfig(process.cwd());
+  const baseConfig = makeConfig();
+  /**
+   * Config from `boiler.config.js`
+   */
+  const {boilerConfig, sources, utils, environment, file} = baseConfig;
+  const {rootDir, taskDir} = sources;
+  const {addbase} = utils;
+  const {isDev} = environment;
+  const baseExclude = /^(.*?\/)?(?:src|lib|packages|node_modules)\/.+\.jsx?$/;
+  const {
+    presets,
+    tasks: boilerTasks,
+    babelExclude: excludeRe = baseExclude
+  } = boilerConfig;
+
+  const boilerData = getBoilerDeps(rootDir, {
+    tasks: boilerTasks,
+    presets
+  });
+  const taskNames = Object.keys(boilerData || {});
+  const plugins = getGulpPlugins(baseConfig, taskNames);
+
+  /**
+   * Because in `babelrc` it is very hard to use minimatch to
+   * exclude/include files for `babel-register` to process, we
+   * use `babel` inside `require-hacker` to process files from
+   * `process.cwd()/gulp/**
+   */
   const hook = hacker.hook('js', hackedPath => {
-    const shouldInclude = include ? include.test(hackedPath) : !excludeRe.test(hackedPath);
+    const shouldInclude = include ?
+      include.test(hackedPath) :
+      !excludeRe.test(hackedPath)
+    ;
     let compiled;
 
     if (shouldInclude && hackedPath.indexOf(rootDir) === -1) {
@@ -38,51 +62,40 @@ export default function(gulp, opts = {}) {
 
     return compiled;
   });
+
   const parentConfig = {};
-  let hasParentConfig, hasBoilerConfig, boilerData;
 
-  try {
-    const fp = join(process.cwd(), 'gulp', 'config', 'index.js');
-    hasParentConfig = stat(fp).isFile();
+  /**
+   * Try to get the config from `root/gulp/config/index`
+   */
+  const parentData = tryExists(
+    join(process.cwd(), 'gulp', 'config', 'index.js')
+  );
 
-    Object.assign(parentConfig, require(fp));
+  if (parentData) {
+    Object.assign(parentConfig, parentData);
     log(`Merging parent ${blue('gulp/config')} with base config`);
-  } catch (err) {
-    if (hasParentConfig) {
-      throw err;
-    }
   }
-
-  try {
-    const fp = findUp('boiler.config.js');
-    hasBoilerConfig = stat(fp).isFile();
-
-    const {presets, tasks, ...boilerConfig} = require(fp);
-    boilerData = getBoilerDeps(
-      path.resolve(__dirname, '..', '..'),
-      {tasks, presets}
-    );
-
-    Object.assign(parentConfig, boilerConfig);
-    log(`Found boiler config at ${blue(renameKey(fp))}`);
-  } catch (err) {
-    if (hasBoilerConfig) {
-      throw err;
-    }
-  }
-
-  const config = makeConfig(cliConfig, rootDir, parentConfig);
-  const {sources, utils} = config;
-  const {taskDir} = sources;
-  const {addbase} = utils;
 
   addTaskName(gulp);
 
-  process.env.NODE_ENV = config.ENV;
+  process.env.NODE_ENV = isDev ? 'development' : 'production';
+
   //hack for karma, ternary was making `undefined` a string
-  if (config.file) {
-    process.env.TEST_FILE = config.file;
+  if (file) {
+    process.env.TEST_FILE = file;
   }
+
+  /**
+   * Combine the base config from `boiler-config-base` =>
+   *   - cliConfig
+   *   - `boiler.config.js`
+   *   - sources/environment/utils/pkg/boilerConfig etc
+   * with the parent config hooks from `gulp/config/index.js`
+   */
+  const config  = getTaskConfig(baseConfig, parentConfig, {
+    tasks: taskNames
+  });
 
   /**
    * Reqires all gulp tasks passing the `gulp` object, all `plugins` and `config` object

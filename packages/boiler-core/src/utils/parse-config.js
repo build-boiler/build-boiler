@@ -1,15 +1,23 @@
 import _ from 'lodash';
 import path from 'path';
+import boilerUtils from 'boiler-utils';
 
 export default function(root, opts) {
+  const {tryExists, buildLogger} = boilerUtils;
+  const {prefix: logP, blue} = buildLogger;
   const methods = {
     tasks(task) {
       const prefix = 'boiler-task-';
-      const fp = this.normalizeName(prefix, task);
-      const fn = this.tryRequire(fp);
+      const paths = this.normalizeName(prefix, task);
+      let fn;
+
+      paths.forEach(fp => {
+        if (fn) return;
+        fn = tryExists(fp, {resolve: true});
+      });
 
       if (_.isUndefined(fn)) {
-        throw new Error(`Cannot find task ${task}`);
+        throw new Error(`${logP} Cannot find task ${blue(task)}`);
       }
 
       return {
@@ -19,33 +27,22 @@ export default function(root, opts) {
 
     presets(preset) {
       const prefix = 'boiler-preset-';
-      const fp = this.normalizeName(prefix, preset);
-      const plugins = this.tryRequire(fp);
+      const paths = this.normalizeName(prefix, preset);
+      let plugins;
+
+      paths.forEach(fp => {
+        if (plugins) return;
+        plugins = tryExists(fp, {resolve: true});
+      });
 
       if (_.isUndefined(plugins)) {
-        throw new Error(`Cannot find preset ${preset}`);
+        throw new Error(`${logP} Cannot find preset ${blue(preset)}`);
       }
 
-      plugins.reduce((acc, plugin) => ({
+      return plugins.reduce((acc, plugin) => ({
         ...acc,
         ...plugin
       }), {});
-    },
-
-
-    tryRequire(paths) {
-      let ret;
-
-      paths.forEach(fp => {
-        if (ret) return;
-        try {
-          ret = require(fp);
-        } catch (err) {
-          //eslint-disable-line no-empty:0
-        }
-      });
-
-      return ret;
     },
 
     normalizeName(prefix, name) {

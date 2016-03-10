@@ -1,7 +1,7 @@
 {
-  "name": "boiler-task-eslint",
+  "name": "boiler-config-hfa",
   "version": "0.1.0",
-  "description": "Build Boilerplate Static Templating",
+  "description": "Build Boilerplate HFA Config",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -24,14 +24,6 @@
     "nunjucks",
     "react",
     "webpack"
-  ],
-  "dependencies": {
-    "babel-eslint": "6.0.0-beta.5",
-    "boiler-config-eslint": "^0.1.0",
-    "boiler-utils": "^0.1.0",
-    "eslint": "2.2.0",
-    "eslint-friendly-formatter": "^1.1.0",
-    "eslint-plugin-react": "^4.2.0",
-    "gulp-eslint": "^2.0.0"
-  }
+  ]
 }
+
