@@ -62,24 +62,56 @@ if (process.argv.indexOf('--force') !== -1) {
     });
   });
 } else {
-  const {tasks, plugins} = build(gulp);
-  const {sequence} = plugins;
+  const {tasks, config, plugins: $} = build(gulp);
+  const {sources, utils, environment} = config;
+  const {isDev} = environment;
+  const {testDir, buildDir} = sources;
+  const {addbase} = utils;
 
-  gulp.task('babel', tasks.babel);
+  gulp.task('assemble', tasks.assemble);
+  gulp.task('browser-sync', tasks.browserSync);
+  gulp.task('clean', tasks.clean);
   gulp.task('copy', tasks.copy);
+  gulp.task('custom', tasks.custom);
+  gulp.task('karma', tasks.karma);
   gulp.task('lint:test', tasks.eslint);
   gulp.task('lint:build', tasks.eslint);
   gulp.task('lint', ['lint:test', 'lint:build']);
+  gulp.task('selenium', tasks.selenium);
+  gulp.task('selenium:tunnel', tasks.selenium);
+  gulp.task('webpack:global', tasks.webpack);
+  gulp.task('webpack:main', tasks.webpack);
+  gulp.task('webpack', ['webpack:global', 'webpack:main']);
 
-  gulp.task('default', ['lint', 'babel']);
-
-  gulp.task('watch', ['default'], () => {
-    gulp.watch(scripts, (cb) => {
+  gulp.task('build', (cb) => {
+    if (isDev) {
+      //gulp watch
       sequence(
-        'lint',
-        'babel',
+        ['clean', 'custom'],
+        ['copy', 'lint'],
+        'webpack',
+        'assemble',
+        'browser-sync',
         cb
       );
-    });
+    } else {
+      sequence(
+        'clean',
+        ['copy', 'lint'],
+        'webpack',
+        'assemble',
+        cb
+      );
+    }
+  });
+
+  gulp.task('default', ['build']);
+
+  gulp.task('watch', ['build'], () => {
+    gulp.watch(addbase(buildDir, '{js,css}/**/*.{js,css}'), $.browserSync.reload);
+    gulp.watch([
+      addbase(testDir, '**/*.js'),
+      addbase(buildDir, '**/*.js')
+    ], ['lint']);
   });
 }

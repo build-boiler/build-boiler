@@ -101,8 +101,8 @@ export default {
     },
     expose: {
       /*modules to expose globally ex. => js-cookie: 'Cookie'*/
-      'js-cookie': 'Cookie',
-      'query-string': 'qs'
+      //'js-cookie': 'Cookie',
+      //'query-string': 'qs'
     },
     alias: {
       /*alias modules ex. => underscore: 'lodash'*/

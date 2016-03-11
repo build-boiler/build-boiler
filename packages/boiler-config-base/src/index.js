@@ -221,7 +221,9 @@ export default function(boilerConfigFp, opts = {}) {
     main
   };
 
+  //TODO: pass ENV more intelligently
   return {
+    ...cliConfig,
     boilerConfig,
     bsConfig,
     environment,

@@ -1,15 +1,15 @@
 export default {
   'extends': 'hfa',
   bleep: 'bloop',
-  presets: ['base', 'plus'],
-  //tasks: [
+  //presets: ['base', 'plus'],
+  tasks: [
     //'assemble',
     //'browser-sync',
     //'clean',
-    //'copy',
-    //'eslint',
+    'copy',
+    'eslint',
     //'karma',
     //'selenium',
-    //'webpack'
-  //]
+    'webpack'
+  ]
 };
