@@ -45,7 +45,10 @@ export default function(boilerConfigFp, opts = {}) {
      * a) extends: 'hfa'
      * b) extends: gulp/config/hfa.js
      */
-    customConfig = tryExists(ext, {resolve: true});
+    customConfig = tryExists(
+      ext.indexOf(process.cwd()) === -1 ? path.join(process.cwd(), ext) : ext,
+      {resolve: true}
+    );
     customConfig = customConfig || tryExists(
       path.join(rootDir, `boiler-config-${ext}`),
       {resolve: true}
@@ -60,6 +63,8 @@ export default function(boilerConfigFp, opts = {}) {
           boilerConfig[key] = customVal;
         }
       });
+
+      log(`Found extended config ${blue(ext)}`);
     } else {
       throw new Error(`boiler.config.js not found at ${ext}`);
     }

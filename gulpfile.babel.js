@@ -67,12 +67,13 @@ if (process.argv.indexOf('--force') !== -1) {
   });
 } else {
   const {tasks, config, plugins: $} = build(gulp);
-  const {sources, utils, environment} = config;
+  const {sources, utils, environment, release} = config;
   const {isDev} = environment;
   const {testDir, buildDir} = sources;
   const {addbase} = utils;
 
   gulp.task('assemble', tasks.assemble);
+  gulp.task('babel', tasks.babel);
   gulp.task('browser-sync', tasks.browserSync);
   gulp.task('clean', tasks.clean);
   gulp.task('copy', tasks.copy);
@@ -96,6 +97,14 @@ if (process.argv.indexOf('--force') !== -1) {
         'webpack',
         'assemble',
         'browser-sync',
+        cb
+      );
+    } else if (release) {
+      $.sequence(
+        'clean',
+        'copy',
+        'lint',
+        'babel',
         cb
       );
     } else {

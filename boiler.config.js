@@ -1,5 +1,5 @@
 export default {
-  'extends': 'hfa',
+  'extends': 'configs/boiler-config-hfa/src/index',
   bleep: 'bloop',
   //presets: ['base', 'plus'],
   tasks: [

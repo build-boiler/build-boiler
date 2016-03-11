@@ -7,10 +7,12 @@ export default function(gulp, plugins, config) {
     babel,
     plumber,
     newer,
-    gutil
+    gutil,
+    gulpIf
   } = plugins;
   const {log, colors} = gutil;
   const {cyan} = colors;
+  const {release} = config;
   const babelConfigPath = path.join(process.cwd(), '.babelrc');
   const scripts = './packages/*/src/**/*.js';
   const dest = 'packages';
@@ -37,7 +39,7 @@ export default function(gulp, plugins, config) {
         file.path = file.path.replace(srcEx, libFragment);
         cb(null, file);
       }))
-      //.pipe(newer(dest))
+      .pipe(gulpIf(!release, newer(dest)))
       .pipe(through.obj(function(file, enc, cb) {
         log(`Compiling", '${cyan(file._path)}'`);
         cb(null, file);
