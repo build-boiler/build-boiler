@@ -1,6 +1,6 @@
 {
   "name": "boiler-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build Boilerplate Core",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,8 +27,8 @@
   ],
   "dependencies": {
     "app-root-path": "^1.0.0",
-    "boiler-config-base": "^0.1.0",
-    "boiler-utils": "^0.1.0",
+    "boiler-config-base": "^0.2.0",
+    "boiler-utils": "^0.2.0",
     "find-parent-dir": "^0.3.0",
     "findup-sync": "^0.3.0",
     "fs-extra": "^0.26.4",

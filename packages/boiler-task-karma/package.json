@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-karma",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,8 +26,8 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-task-webpack": "^0.1.0",
-    "boiler-utils": "^0.1.0",
+    "boiler-task-webpack": "^0.2.0",
+    "boiler-utils": "^0.2.0",
     "browser-sync": "^2.11.1",
     "istanbul-cobertura-badger": "^1.2.1",
     "karma": "^0.13.21",

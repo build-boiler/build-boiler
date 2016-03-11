@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-clean",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,7 +26,7 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-utils": "^0.1.0",
+    "boiler-utils": "^0.2.0",
     "del": "^2.2.0"
   }
 }
