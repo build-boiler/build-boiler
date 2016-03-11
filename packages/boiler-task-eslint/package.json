@@ -1,0 +1,37 @@
+{
+  "name": "boiler-task-eslint",
+  "version": "0.2.0",
+  "description": "Build Boilerplate Static Templating",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "babel-eslint": "^5.0.0",
+    "boiler-config-eslint": "^0.2.0",
+    "boiler-utils": "^0.2.0",
+    "eslint": "^1.10.3",
+    "eslint-friendly-formatter": "^1.1.0",
+    "eslint-plugin-react": "^3.16.1",
+    "gulp-eslint": "^1.1.1"
+  }
+}

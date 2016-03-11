@@ -1,12 +1,10 @@
 sudo: false
 language: node_js
 node_js:
-- 5.6.0
+- 5.8.0
 env:
   global:
   - CXX=g++-4.8
-  - secure: J4U2Kg+85BLdLyV81RHS4nrknS4vZqBJpmupVGWbcvcMmeVNeHgXSBoBvhj/74nWDUl6A/9tdzB98NO3rxBEkeZDCPJNh1Kgl+zYe//1k+GKnga2EP2zsEunO6POE8FvFeR01vFgF89zWMYSoCKtwjiFSK18C9QHJ3TwHp9YxBSA4OSBKsGnlarBngpsYib3twPUylbAtDIJh5p11FFem5gwCtHCLpqQ22QSVy5xokgGJYCjvppIg8PwDsT2OEu9pOBZ6m3r82tJPdiO9hbTgToIhX4UbVY98eOaudtrPNLmvyrloK0h2halCqjAeIogzXfgQ1DATjyONHoe/henqqsfWMaKaOJKkKvN/hWm9Iq4pdWaoCjraKYCHJ0MwgHcKW7OVTv1MiT8J75VfD+FW+wR2L9tA95R22atAccRCV0PctODX4JThaom1upsSYcKy3DaJ14dBOuudLpJwTCBl/ULRg7o0rTUBHKfxwZC56kr8PtXJ/WCQ9JqLNQm9U3LdUPdXcG55K/Ci+O1Bfo6Q1IDGlUej05uQab0mWlo8wpi1OmKEjrIzwBxn1zhY9357T0RH2+UG7B9BGTl/9QfU/NuCrRIosoxacYTFuX8JK6udr8Im2URNKsNF0+aDPXnrkoFYhxYgIryuUydx/G9xlX0ms2LnpOTirGrRREtAgA=
-  - secure: FcMaKCwdVshgHUdBbzOD7TnmMZhIPcCz1mYcWqoU3ytfCVlujaK9l3z5q6zBr/i8nXRz6jMWKrhah/AIb7XqV9pAGxn7b8D/BXuNIcNNgV8XkDwYV5FipC0tOfS8JZ4N/RiFWCDLPWWR6+lhBtkNKgV+45/9YdsvPSaKETy1N441n4W7kZlrnSoTuZqnxjOaH4koaBH67hM+axm2n85T5GED0CjHDUTEEFEf353DpShCOWCYILAdV3lRRFgTJBvNlAInkdj+rN90nrtCAn4xU0UasgYhKGdGOGFM24bQ9lKqxRMp9pbl+lh4sxt4EJJIqEty8mcs4fdVa+6EVfBySjr0PUDM7lSR6smAO8B8yfc6ab9p7ninCH3rgWxd+FLLwlfw1hAcQxMy1kZziuiiQZvOIVxGtY5FIVSqG23mQSWtXZgOm7bz7GMZH2axl4rpsx2pjnLnWtg8idZeODXbjjKgCuIGLiese8TunLu398uOP5D3riJMWfRqLjKoK9YYj2DXaAuly4PgkdV/FHt4iN3skToVHqKUStFlvnTfXx/y2IsxwTqQsfK0uyjjdY15sDY/x7mNYciqKSBE2Zuhw+IT8SRrSU1/R7UqryIFlldzE7/RBJSexWrF2X7NKz4CN4O9rlDpbkilWmE0ywtAQOsZk8l23DwHynZH61XVtgM=
 addons:
   apt:
     sources:
@@ -16,7 +14,6 @@ addons:
 cache:
   directories:
   - node_modules
-  - build-boiler/node_modules
 notifications:
   email:
     on_success: 'never'
@@ -24,11 +21,8 @@ notifications:
 before_install:
 - npm config set progress=false
 - npm install -g npm@^3
-- npm i -g gulp
-- cd build-boiler && pwd && ls
 install:
 - npm i
+- npm run bs
 script:
-- gulp
-after_script:
-- if [ -z ${TRAVIS_TAG+x} ]; then echo "skipping publish"; else cd dist && ./publish.sh; fi
+- npm start
