@@ -26,6 +26,7 @@
     "webpack"
   ],
   "dependencies": {
+    "boiler-utils": "^0.1.0",
     "istanbul-cobertura-badger": "^1.2.1",
     "karma": "^0.13.21",
     "karma-browserstack-launcher": "^0.1.9",

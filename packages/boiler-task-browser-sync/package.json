@@ -26,6 +26,7 @@
     "webpack"
   ],
   "dependencies": {
+    "boiler-utils": "^0.1.0",
     "browser-sync": "^2.9.8",
     "open": "0.0.5"
   }

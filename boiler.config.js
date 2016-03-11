@@ -5,7 +5,7 @@ export default {
   tasks: [
     //'assemble',
     //'browser-sync',
-    //'clean',
+    'clean',
     'copy',
     'eslint',
     //'karma',

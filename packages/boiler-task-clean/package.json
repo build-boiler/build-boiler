@@ -26,6 +26,7 @@
     "webpack"
   ],
   "dependencies": {
+    "boiler-utils": "^0.1.0",
     "del": "^2.2.0"
   }
 }

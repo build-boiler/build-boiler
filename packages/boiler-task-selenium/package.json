@@ -28,6 +28,7 @@
   "dependencies": {
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.3.13",
+    "boiler-utils": "^0.1.0",
     "browserstacktunnel-wrapper": "^1.4.2",
     "immutable": "^3.7.6",
     "lodash": "^4.0.0",
