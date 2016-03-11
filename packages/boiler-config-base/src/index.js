@@ -75,10 +75,8 @@ export default function(boilerConfigFp, opts = {}) {
     internalHost = 'localhost'
   } = boilerConfig;
 
-  const globalBundleName = 'global';
   const devUrl = join(devPath, bucketBase);
   const prodUrl = join(prodPath, bucketBase);
-  const mainBundleName = 'main';
   const isDev = ENV === 'development';
   const isServer = ENV === 'server';
   const isIE = browser === 'ie' || browser === 'internet explorer';
@@ -87,7 +85,7 @@ export default function(boilerConfigFp, opts = {}) {
   const devBranch = 'devel';
   const isMaster = TRAVIS_BRANCH === 'master';
   const isDevRoot = TRAVIS_BRANCH === devBranch;
-  const isModule = /\/node_modules\//.test(rootDir);
+  const isModule = path.basename(rootDir) === 'node_modules';
 
   const babelrc = `{
     "presets": ["react", "es2015", "stage-0"],
@@ -118,21 +116,9 @@ export default function(boilerConfigFp, opts = {}) {
     }
   }`;
 
-  const defaultEntry = {
-    [mainBundleName]: [`./${scriptDir}/index.js`],
-    [globalBundleName]: [join(rootDir, `global-${isModule ? 'prod' : 'dev'}.js`)]
-  };
-
   const sources = {
-    buckets: {
-      prod: '', //enter prod bucket here
-      dev: '' //enter dev bucket here
-    },
     coverageDir: 'coverage',
     babelrc: JSON.parse(babelrc),
-    componentEntries: [
-      '**/{,*-}entry.{js,jsx}'
-    ],
     devUrl,
     prodUrl,
     rootDir,
@@ -148,9 +134,7 @@ export default function(boilerConfigFp, opts = {}) {
     devHost: 'localhost',
     devPort: 8000,
     hotPort: 8080,
-    globalBundleName,
-    mainBundleName,
-    entry: entry || defaultEntry
+    entry
   };
 
   const {addbase, trim, ...restUtils} = gulpTaskUtils;
@@ -171,7 +155,8 @@ export default function(boilerConfigFp, opts = {}) {
     isServer,
     isIE,
     isMaster,
-    isDevRoot
+    isDevRoot,
+    isModule
   };
 
   if (!isDev && TRAVIS_BRANCH) {

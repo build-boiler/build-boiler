@@ -6,6 +6,7 @@ import {name as moduleName} from '../../package';
 
 export default function(opts) {
   const {
+    boilerConfig = {},
     coverage,
     environment,
     sources,
@@ -40,7 +41,8 @@ export default function(opts) {
   const {isDev, isIE} = environment;
   const {fileLoader} = paths;
   const {addbase, addroot} = utils;
-  const excludeRe = /^(.*?\/)?node_modules\/(?!@hfa\/).+\.jsx?$/;
+  const {babelExclude} = boilerConfig;
+  const excludeRe = babelExclude || /node_modules/;
   const testCoverage = coverage && TEST;
   const {coverageRe} = karma;
   const babelQuery = {};

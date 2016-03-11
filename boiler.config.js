@@ -3,7 +3,7 @@ export default {
   bleep: 'bloop',
   //presets: ['base', 'plus'],
   tasks: [
-    //'assemble',
+    'assemble',
     'browser-sync',
     'clean',
     'copy',

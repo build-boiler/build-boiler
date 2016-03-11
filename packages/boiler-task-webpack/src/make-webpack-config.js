@@ -78,15 +78,6 @@ export default function(config) {
   const defaultConfig = {
     alias,
     externals,
-    eslint: {
-      rules,
-      configFile,
-      formatter,
-      emitError: false,
-      emitWarning: false,
-      failOnWarning: !isDev,
-      failOnError: !isDev
-    },
     resolveLoader: {
       //fallback for Webpack 1
       modulesDirectories: loaderRoot,
@@ -111,6 +102,20 @@ export default function(config) {
     node,
     ...baseConfig
   };
+
+  if (isMainTask) {
+    Object.assign(defaultConfig, {
+      eslint: {
+        rules,
+        configFile,
+        formatter,
+        emitError: false,
+        emitWarning: false,
+        failOnWarning: !isDev,
+        failOnError: !isDev
+      }
+    });
+  }
 
   const commons = {vendors};
   const context = addbase(srcDir);

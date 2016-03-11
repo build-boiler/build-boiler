@@ -1,5 +1,6 @@
 import path from 'path';
 import loadPlugins from 'gulp-load-plugins';
+import {name} from '../package';
 
 export default function(config, tasks = []) {
   const {rootDir} = config.sources;
@@ -22,7 +23,11 @@ export default function(config, tasks = []) {
     }
   };
 
-  const packageDirs = tasks.map(task => path.join(rootDir, `boiler-task-${task}`));
+  const packageDirs = [
+    path.join(rootDir, name),
+    ...tasks.map(task => path.join(rootDir, `boiler-task-${task}`))
+  ];
+
   const modulePlugins = packageDirs.length ? packageDirs.reduce((acc, fp) => {
     const plugins = loadPlugins({
       config: path.join(fp, 'package.json'),

@@ -35,11 +35,14 @@ if (process.argv.indexOf('--force') !== -1) {
   const babelFn = require(
     path.join(process.cwd(), 'gulp', 'tasks', 'babel')
   );
+  const copyFn = require(
+    path.join(process.cwd(), 'gulp', 'tasks', 'copy')
+  );
 
   const {eslint, sequence} = plugins;
   const eslintConfig = makeEslintConfig({
     basic: false,
-    react: false,
+    react: true,
     isDev: true,
     lintEnv: 'build'
   });
@@ -51,12 +54,13 @@ if (process.argv.indexOf('--force') !== -1) {
 
   gulp.task('babel', tasks.babel || babelFn(gulp, plugins, {}));
   gulp.task('lint', tasks.lint || eslintFn);
+  gulp.task('copy', tasks.copy || copyFn(gulp, plugins, {}));
 
-  gulp.task('watch', ['lint', 'babel'], () => {
+  gulp.task('watch', ['lint', 'babel', 'copy'], () => {
     gulp.watch(scripts, [], (cb) => {
       sequence(
         'lint',
-        'babel',
+        ['babel', 'copy'],
         cb
       );
     });
@@ -72,7 +76,6 @@ if (process.argv.indexOf('--force') !== -1) {
   gulp.task('browser-sync', tasks.browserSync);
   gulp.task('clean', tasks.clean);
   gulp.task('copy', tasks.copy);
-  gulp.task('custom', tasks.custom);
   gulp.task('karma', tasks.karma);
   gulp.task('lint:test', tasks.eslint);
   gulp.task('lint:build', tasks.eslint);
@@ -86,18 +89,20 @@ if (process.argv.indexOf('--force') !== -1) {
   gulp.task('build', (cb) => {
     if (isDev) {
       //gulp watch
-      sequence(
-        ['clean', 'custom'],
-        ['copy', 'lint'],
+      $.sequence(
+        'clean',
+        'copy',
+        'lint',
         'webpack',
         'assemble',
         'browser-sync',
         cb
       );
     } else {
-      sequence(
+      $.sequence(
         'clean',
-        ['copy', 'lint'],
+        'copy',
+        'lint',
         'webpack',
         'assemble',
         cb

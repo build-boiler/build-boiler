@@ -1,3 +1,4 @@
+import path from 'path';
 import _ from 'lodash';
 import boilerUtils from 'boiler-utils';
 
@@ -15,11 +16,30 @@ export default function(baseConfig, taskConfig, opts = {}) {
   const {buildLogger} = boilerUtils;
   const {log, magenta} = buildLogger;
   const {tasks = []} = opts;
-  const {environment} = baseConfig;
+  const {environment, sources} = baseConfig;
+  const {buildDir, scriptDir, rootDir} = sources;
   const {isDev, isServer} = environment;
 
   const taskObj = tasks ? tasks.reduce((acc, task) => {
     task = _.camelCase(task);
+
+    if (task === 'webpack' && !sources.entry) {
+      const mainBundleName = 'main';
+      const globalBundleName = 'global';
+
+      const entry = {
+        [mainBundleName]: [`./${scriptDir}/index.js`],
+        [globalBundleName]: [
+          path.join(rootDir, `boiler-task-${task}`, buildDir, 'global-entry.js')
+        ]
+      };
+
+      Object.assign(sources, {
+        mainBundleName,
+        globalBundleName,
+        entry
+      });
+    }
 
     return {
       ...acc,
@@ -38,6 +58,14 @@ export default function(baseConfig, taskConfig, opts = {}) {
   const {webpack, ...restTaskConfig} = taskObj;
 
   const enableIsomorphic = _.isPlainObject(isomorphic) && Object.keys(isomorphic).length > 0;
+
+  if (enableIsomorphic && !isomorphic.entries) {
+    Object.assign(isomorphic, {
+      componentEntries: [
+        '**/{,*-}entry.{js,jsx}'
+      ]
+    });
+  }
 
   const webpackPaths = {
     fileLoader: [
@@ -104,6 +132,7 @@ export default function(baseConfig, taskConfig, opts = {}) {
     environment: {
       enableIsomorphic
     },
+    isomorphic,
     webpackConfig,
     ...restTaskConfig
   });

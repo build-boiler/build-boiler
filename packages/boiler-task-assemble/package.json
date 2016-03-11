@@ -27,6 +27,8 @@
   ],
   "dependencies": {
     "assemble-core": "^0.12.0",
+    "boiler-addon-isomorphic-tools": "^0.1.0",
+    "boiler-task-webpack": "^0.1.0",
     "boiler-utils": "^0.1.0",
     "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
