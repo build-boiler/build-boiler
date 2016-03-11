@@ -42,10 +42,12 @@ export default function(boilerConfigFp, opts = {}) {
     /**
      * Try by filepath or module name to find some custom config
      * ex. in `boiler.config.js`
-     * a) extends: 'hfa'
-     * b) extends: gulp/config/hfa.js
+     * a) extends: 'some-node-module`
+     * b) extends: '/some/relative/path/hfa'
+     * c) extends: gulp/config/hfa.js
      */
-    customConfig = tryExists(
+    customConfig = tryExists(ext, { resolve: true });
+    customConfig = customConfig || tryExists(
       ext.indexOf(process.cwd()) === -1 ? path.join(process.cwd(), ext) : ext,
       {resolve: true}
     );
