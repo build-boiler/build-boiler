@@ -26,6 +26,7 @@
     "webpack"
   ],
   "dependencies": {
+    "lodash": "^4.0.0",
     "webpack-isomorphic-tools": "^2.2.14"
   }
 }
