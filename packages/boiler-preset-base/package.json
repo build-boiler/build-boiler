@@ -29,7 +29,7 @@
     "boiler-task-assemble": "^0.5.0",
     "boiler-task-browser-sync": "^0.2.0",
     "boiler-task-clean": "^0.2.0",
-    "boiler-task-copy": "^0.2.0",
+    "boiler-task-copy": "^0.3.0",
     "boiler-task-eslint": "^0.2.0",
     "boiler-task-webpack": "^0.3.0"
   }

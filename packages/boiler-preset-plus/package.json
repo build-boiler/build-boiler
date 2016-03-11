@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "boiler-preset-base": "^0.2.0",
-    "boiler-task-karma": "^0.2.0",
+    "boiler-task-karma": "^0.5.0",
     "boiler-task-selenium": "^0.2.0"
   }
 }
