@@ -48,9 +48,10 @@ export default function(gulp, opts = {}) {
       include.test(hackedPath) :
       !excludeRe.test(hackedPath)
     ;
+    const isInternal = hackedPath.replace(rootDir, '').indexOf('boiler-') !== -1;
     let compiled;
 
-    if (shouldInclude && hackedPath.indexOf(rootDir) === -1) {
+    if (shouldInclude && !isInternal) {
       compiled = babel.transformFileSync(hackedPath, {
         sourceRoot: path.dirname(hackedPath)
       }).code;

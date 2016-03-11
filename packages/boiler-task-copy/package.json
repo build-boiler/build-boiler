@@ -26,6 +26,7 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-utils": "^0.2.0"
+    "boiler-utils": "^0.2.0",
+    "gulp-rename": "^1.2.2"
   }
 }

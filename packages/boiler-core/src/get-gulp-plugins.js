@@ -1,6 +1,6 @@
 import path from 'path';
 import loadPlugins from 'gulp-load-plugins';
-import {name} from '../package';
+import {sync as globSync} from 'globby';
 
 export default function(config, tasks = []) {
   const {rootDir} = config.sources;
@@ -23,11 +23,8 @@ export default function(config, tasks = []) {
     }
   };
 
-  const packageDirs = [
-    path.join(rootDir, name),
-    ...tasks.map(task => path.join(rootDir, `boiler-task-${task}`))
-  ];
-
+  const packages = globSync('boiler-*', {cwd: rootDir});
+  const packageDirs = packages.map(pkg => path.join(rootDir, pkg));
   const modulePlugins = packageDirs.length ? packageDirs.reduce((acc, fp) => {
     const plugins = loadPlugins({
       config: path.join(fp, 'package.json'),

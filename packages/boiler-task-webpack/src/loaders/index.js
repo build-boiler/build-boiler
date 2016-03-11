@@ -26,7 +26,6 @@ export default function(opts) {
   const {
     babelrc: baseBabelrc,
     includePaths,
-    rootDir,
     srcDir,
     entry,
     mainBundleName
@@ -271,9 +270,6 @@ export default function(opts) {
         } else {
           if (testCoverage && !/\@hfa/.test(fp) && !/node_modules/.test(fp)) {
             ex = coverageRe.test(fp);
-          } else if (fp.indexOf(rootDir) !== -1) {
-            const root = fp.replace(rootDir, '');
-            ex = excludeRe.test(root);
           } else {
             ex = ex = excludeRe.test(fp);
           }
