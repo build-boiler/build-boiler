@@ -37,7 +37,7 @@ export default function(gulp, plugins, config) {
         file.path = file.path.replace(srcEx, libFragment);
         cb(null, file);
       }))
-      .pipe(newer(dest))
+      //.pipe(newer(dest))
       .pipe(through.obj(function(file, enc, cb) {
         log(`Compiling", '${cyan(file._path)}'`);
         cb(null, file);

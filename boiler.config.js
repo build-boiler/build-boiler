@@ -9,7 +9,7 @@ export default {
     'copy',
     'eslint',
     'karma',
-    //'selenium',
+    'selenium',
     'webpack'
   ]
 };
