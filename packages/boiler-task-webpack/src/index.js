@@ -6,6 +6,8 @@ import middleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import makeConfig from './make-webpack-config';
 
+export const makeWebpackConfig = makeConfig;
+
 export default function(gulp, plugins, config) {
   const {sources, utils, environment, webpackConfig} = config;
   const {mainBundleName} = sources;

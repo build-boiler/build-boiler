@@ -40,6 +40,7 @@
     "babel-preset-react": "^6.1.18",
     "babel-preset-stage-0": "^6.1.18",
     "babel-register": "^6.3.13",
+    "chai": "^3.5.0",
     "eslint": "2.2.0",
     "eslint-config": "^0.3.0-legacy",
     "eslint-friendly-formatter": "^1.2.2",

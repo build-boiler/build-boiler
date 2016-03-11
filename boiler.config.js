@@ -8,7 +8,7 @@ export default {
     'clean',
     'copy',
     'eslint',
-    //'karma',
+    'karma',
     //'selenium',
     'webpack'
   ]

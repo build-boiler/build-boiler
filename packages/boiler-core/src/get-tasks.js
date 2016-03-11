@@ -60,9 +60,12 @@ export default function(gulp, plugins, config, boilerData) {
       log(`Custom task found at ${blue(renameKey(taskPath))}`);
     }
 
+    //TODO: figure out why module exports babel plugin isn't working
+    const gulpFn = fn.default || fn;
+
     return moduleTask ?
-      fn(gulp, plugins, config, parentMod) :
-      fn(gulp, plugins, config);
+      gulpFn(gulp, plugins, config, parentMod) :
+      gulpFn(gulp, plugins, config);
   }
 
 
