@@ -18,10 +18,14 @@ export default function(baseConfig, taskConfig, opts = {}) {
   const {environment} = baseConfig;
   const {isDev, isServer} = environment;
 
-  const taskObj = tasks ? tasks.reduce((acc, task) => ({
-    ...acc,
-    [task]: taskConfig[task] || {}
-  }), {}) : {};
+  const taskObj = tasks ? tasks.reduce((acc, task) => {
+    task = _.camelCase(task);
+
+    return {
+      ...acc,
+      [task]: taskConfig[task] || {}
+    };
+  }, {}) : {};
 
   const {
     //if a "project" not a "module" turn on file reving

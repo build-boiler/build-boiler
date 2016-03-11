@@ -4,7 +4,7 @@ export default {
   //presets: ['base', 'plus'],
   tasks: [
     //'assemble',
-    //'browser-sync',
+    'browser-sync',
     'clean',
     'copy',
     'eslint',
