@@ -150,13 +150,18 @@ export default function(opts) {
     _.merge(babelQuery, babelBaseConfig, babelEnvConfig);
   }
 
-  const preLoaders = [
-    {
+  const preLoaders = [];
+
+  if (!TEST && !SERVER) {
+    //TODO: figure out why eslint all of a sudden started throwing
+    //error only with tests
+    //error  Parsing error: Illegal import declaration
+    preLoaders.push({
       test: /\.jsx?$/,
       exclude: /node_modules/,
       loader: 'eslint-loader'
-    }
-  ];
+    });
+  }
 
   const transformPolly = ['transform-runtime', {polyfill: true}];
   const baseTransform = ['transform-runtime', {polyfill: false}];

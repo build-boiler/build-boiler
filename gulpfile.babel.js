@@ -112,6 +112,19 @@ if (process.argv.indexOf('--force') !== -1) {
 
   gulp.task('default', ['build']);
 
+
+  gulp.task('test:integration', (cb) => {
+    $.sequence(
+      ['clean', 'lint'],
+      'karma',
+      cb
+    );
+
+    gulp.watch([
+      addbase(testDir, '**/*.js')
+    ], ['lint:test']);
+  });
+
   gulp.task('watch', ['build'], () => {
     gulp.watch(addbase(buildDir, '{js,css}/**/*.{js,css}'), $.browserSync.reload);
     gulp.watch([

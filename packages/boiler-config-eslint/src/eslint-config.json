@@ -7,25 +7,18 @@
     "browser": true,
     "node": true
   },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "arrowFunctions": true,
-      "blockBindings": true,
-      "experimentalObjectRestSpread": true,
-      "generators": true,
-      "jsx": true,
-      "module": true,
-      "modules": true,
-      "restParams": true,
-      "spread": true,
-      "jsx": true
-    }
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "experimentalObjectRestSpread": true,
+    "generators": true,
+    "jsx": true,
+    "module": true,
+    "modules": true,
+    "restParams": true,
+    "spread": true
   },
   "globals": {
-    "Promise": true,
-    "Map": true,
     "describe": true,
     "it": true,
     "before": true,
