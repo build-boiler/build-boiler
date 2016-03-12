@@ -1,7 +1,7 @@
 {
-  "name": "boiler-addon-nunjucks",
+  "name": "boiler-addon-assemble-isomorphic",
   "version": "0.2.0",
-  "description": "Build Boilerplate Static Templating",
+  "description": "Build Boilerplate Isomorphic Components for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -26,8 +26,17 @@
     "webpack"
   ],
   "dependencies": {
+    "async": "^1.5.2",
+    "boiler-addon-isomorphic-tools": "^0.2.0",
+    "boiler-task-webpack": "^0.3.0",
+    "boiler-utils": "^0.2.0",
+    "fs-extra": "^0.26.4",
+    "globby": "^4.0.0",
+    "jsdom": "^8.0.4",
+    "lodash": "^4.0.0",
     "nunjucks": "^2.1.0",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "through2": "^2.0.0"
   }
 }

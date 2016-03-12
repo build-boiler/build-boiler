@@ -53,5 +53,12 @@ export default function(fp, opts = {}) {
     if (throwOn) throw err;
   }
 
-  return exists && require(req);
+  if (exists) {
+    const mod = require(req);
+
+    //HACK: sometimes there is a `default` key
+    exists = mod.default || mod;
+  }
+
+  return exists;
 }

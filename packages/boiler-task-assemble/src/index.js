@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import Assemble from 'assemble-core';
-import nunjucks from 'nunjucks';
 import fsX, {readJsonSync} from 'fs-extra';
-import consolidate from 'consolidate';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import {join} from 'path';
@@ -10,16 +8,15 @@ import async from 'async';
 import Plasma from 'plasma';
 import boilerUtils from 'boiler-utils';
 import makeTools from 'boiler-addon-isomorphic-tools';
-import addTags from './custom-tags';
-import addMiddleware from './middleware';
 import jsxLoader from './jsx-loader';
 import isoMerge from './isomorphic-merge-plugin';
 
-export default function(gulp, plugins, config) {
+export default function(gulp, plugins, config, {addons}) {
   const {browserSync} = plugins;
   const {
     buildLogger,
     renameKey,
+    runAddons,
     runParentFn: callParent,
     runCustomTask: runFn
   } = boilerUtils;
@@ -87,19 +84,18 @@ export default function(gulp, plugins, config) {
     ...parentData
   });
 
-  const nunj = nunjucks.configure({
-    watch: false,
-    noCache: true
+  //TODO: handle config
+  runAddons(addons, app, {
+    config,
+    fn: {
+      template: registerTags,
+      middleware: parentMiddlware
+    },
+    isomorphic: enableIsomorphic
   });
 
-  addTags(nunj, app, {
-    isomorphic: enableIsomorphic,
-    fn: registerTags
-  });
-
-  addMiddleware(app, config, parentMiddlware);
-
-  app.engine('.html', consolidate.nunjucks);
+  //TODO Modularize Middleware
+  //addMiddleware(app, config, parentMiddlware);
 
   app.option('renameKey', renameKey);
 
@@ -144,7 +140,6 @@ export default function(gulp, plugins, config) {
         data: {
           app,
           assets,
-          nunj,
           jsxLoader
         }
       });

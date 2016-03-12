@@ -1,6 +1,5 @@
 export default {
   'extends': 'configs/boiler-config-hfa/src/index',
-  bleep: 'bloop',
   //presets: ['base', 'plus'],
   tasks: [
     'assemble',
@@ -11,5 +10,10 @@ export default {
     'karma',
     'selenium',
     'webpack'
+  ],
+  addons: [
+    'assemble-middleware',
+    ['assemble-nunjucks', {isomorphic: true}],
+    'configs/addons/assemble-sample'
   ]
 };
