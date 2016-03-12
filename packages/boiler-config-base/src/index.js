@@ -36,6 +36,12 @@ export default function(boilerConfigFp, opts = {}) {
     Object.assign(boilerConfig, boilerDefaults);
   }
 
+  //TODO: remove all HFA specific references
+  //boiler-task-webpack/src/gather-commonjs-modules.js
+  //boiler-task-webpack/src/plugins.js
+  //boiler-task-karma/src/karma-config.js
+  let isHfa;
+
   if (ext) {
     let customConfig;
 
@@ -57,6 +63,8 @@ export default function(boilerConfigFp, opts = {}) {
     );
 
     if (customConfig) {
+      isHfa = /boiler-config-hfa/.test(ext);
+
       customConfig && Object.keys(customConfig).forEach(key => {
         const parentVal = boilerConfig[key];
         const customVal = customConfig[key];
@@ -161,6 +169,7 @@ export default function(boilerConfigFp, opts = {}) {
     isDev,
     isServer,
     isIE,
+    isHfa,
     isMaster,
     isDevRoot,
     isModule

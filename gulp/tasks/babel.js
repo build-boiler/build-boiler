@@ -46,6 +46,7 @@ export default function(gulp, plugins, config) {
       }))
       .pipe(babel({
         babelrc: false,
+        comments: true,
         ...babelConfig
       }))
       .pipe(gulp.dest(dest));
