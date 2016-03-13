@@ -1,8 +1,3 @@
-## Build Boilerplate
-*NOTE*: If you are looking to use the `build-boiler` NPM module to simplify your hipster 2016 builds, please `npm i -D build-boiler@latest` https://www.npmjs.com/package/build-boiler and then mimic the direcory structure and dependencies of this repo in the project where `buld-boiler` is installed.
-
-![](http://i.imgur.com/hsQwU0a.gif)
-
 #### Steps to Install & Run
 - Install [NVM](https://github.com/creationix/nvm) to manage/install NodeJS
 - `nvm install 5` to install Node 5
@@ -10,6 +5,8 @@
 - `npm i -g gulp` to install Gulp task runner globally
 - `npm i`
 - `gulp watch`
+
+![](http://i.imgur.com/hsQwU0a.gif)
 
 #### How, What, Why
 The `build-boilerplate-repo` skeleton (ie. everything in the top level of this repo, excluding the `build-boiler` directory) is a small application for testing local development of the [build-boiler](https://github.com/dtothefp/build-boiler/tree/master/build-boiler) module. The [build-boiler NPM module](https://www.npmjs.com/package/build-boiler) is constructed in this repo's `build-boiler` directory, compiled from `src` to `dist` in that directory, and deployed through Travis. This module is meant to power small to large projects that desire generation of static HTML, the usage of es6/7 for client and build code, SCSS comilation, and Image compression. The primary tasks are `gulp watch` to develop locally with livereload & sourcemaps, and `gulp build` to build your app for production with uglification of JS, minification of CSS, and hashing of JS/CSS filepaths.
