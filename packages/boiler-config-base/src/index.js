@@ -16,13 +16,30 @@ export default function(boilerConfigFp, opts = {}) {
   const cliConfig = makeCliConfig(rootDir);
   const {ENV, browser} = cliConfig;
   const {entry} = opts;
+  const cwd = process.cwd();
+
+  //TODO: remove all HFA specific references
+  //boiler-task-webpack/src/gather-commonjs-modules.js
+  //boiler-task-webpack/src/plugins.js
+  //boiler-task-karma/src/karma-config.js
+  let boilerConfig, isHfa;
+
   /**
    * Config from `boiler.config.js`
    */
-  const boilerConfig = tryExists(boilerConfigFp || 'boiler.config.js', {lookUp: true}) || {};
-  const {extends: ext} = boilerConfig;
+  if (boilerConfigFp) {
+    boilerConfigFp = boilerConfigFp.indexOf(cwd) === -1 ?
+      path.join(cwd, boilerConfigFp) :
+      boilerConfigFp;
 
-  if (Object.keys(boilerConfig).length) {
+    boilerConfig = tryExists(boilerConfigFp, {resolve: true}) || boilerConfig;
+  } else {
+    boilerConfig = tryExists('boiler.config.js', {lookUp: true}) || boilerConfig;
+  }
+
+  const {extends: ext} = boilerConfig || {};
+
+  if (boilerConfig) {
     log(`Found boiler config at ${blue('boiler.config.js')}`);
   } else {
     const boilerDefaults = {
@@ -35,12 +52,6 @@ export default function(boilerConfigFp, opts = {}) {
 
     Object.assign(boilerConfig, boilerDefaults);
   }
-
-  //TODO: remove all HFA specific references
-  //boiler-task-webpack/src/gather-commonjs-modules.js
-  //boiler-task-webpack/src/plugins.js
-  //boiler-task-karma/src/karma-config.js
-  let isHfa;
 
   if (ext) {
     let customConfig;
