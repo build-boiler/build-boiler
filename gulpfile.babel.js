@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import path from 'path';
 import gulp from 'gulp';
-import build from './packages/boiler-core/src';
 import loadPlugins from 'gulp-load-plugins';
 import formatter from 'eslint-friendly-formatter';
 import makeEslintConfig from 'eslint-config';
@@ -13,6 +12,8 @@ if (process.argv.indexOf('--force') !== -1) {
   let plugins;
 
   try {
+    const build = require('./packages/boiler-core/src');
+
     ({tasks, plugins} = build(gulp));
   } catch (err) {
     plugins = loadPlugins({
@@ -60,12 +61,15 @@ if (process.argv.indexOf('--force') !== -1) {
     gulp.watch(scripts, [], (cb) => {
       sequence(
         'lint',
-        ['babel', 'copy'],
+        ['babel'],
         cb
       );
     });
+
+    gulp.watch('./packages/*/src/**/*.json', ['copy']);
   });
 } else {
+  const build = require('./packages/boiler-core/src');
   const {tasks, config, plugins: $} = build(gulp);
   const {sources, utils, environment, release} = config;
   const {isDev} = environment;
