@@ -112,7 +112,7 @@ export default function(opts = {}) {
     'space-before-blocks': 2,        // http://eslint.org/docs/rules/space-before-blocks
     'space-before-function-paren': [2, 'never'], // http://eslint.org/docs/rules/space-before-function-paren
     'space-infix-ops': 2,            // http://eslint.org/docs/rules/space-infix-ops
-    'keyword-spacing': 2    // http://eslint.org/docs/rules/space-return-throw-case
+    'space-after-keywords': 2       // http://eslint.org/docs/rules/space-after-keywords
     //'spaced-comment': [2, 'always',  {// http://eslint.org/docs/rules/spaced-comment
       //'exceptions': ['-', '+'],
       //'markers': ['=', '!']           // space here to support sprockets directives

@@ -27,16 +27,6 @@ if (localPath) {
 }
 
 export default function(opts) {
-  let exists = false;
-
-  try {
-    const stats = fs.statSync(rcPath);
-
-    exists = stats.isFile();
-  } catch (err) {
-    exists = false;
-  }
-
   const {react} = opts;
   const baseRules = makeBaseRules({
     ...opts,
@@ -44,16 +34,26 @@ export default function(opts) {
   });
   const reactRules = react ? makeReactRules({isDev: true}) : {};
   const rules = assign({}, baseRules, reactRules);
+  const content = JSON.stringify(
+    assign(config, {rules})
+    , null
+    , '\t'
+  );
+  let exists = false;
+
+  try {
+    const stats = fs.statSync(rcPath);
+    const read = fs.readFileSync(rcPath, {encoding: 'utf8'});
+
+    exists = stats.isFile() && content === read;
+  } catch (err) {
+    exists = false;
+  }
 
   if (!exists) {
     log(`Generating .eslintrc to ${blue(rcPath)}`);
 
     try {
-      const content = JSON.stringify(
-        assign(config, {rules})
-        , null
-        , '\t'
-      );
       fs.writeFileSync(rcPath, content);
     } catch (err) {
       log('Error generating .eslintrc');
