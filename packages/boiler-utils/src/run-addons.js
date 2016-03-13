@@ -9,7 +9,7 @@ import {log, blue} from './build-logger';
  * @param {Object} opts parent functions from the "task"
  * @return {undefined}
  */
-export default function(addons, data, opts = {}) {
+export default function(addons = {}, data, opts = {}) {
   Object.keys(addons).forEach(name => {
     const addon = addons[name];
     log(`Running addon ${blue(name)}`);

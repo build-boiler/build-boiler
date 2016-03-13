@@ -118,14 +118,21 @@ export default function(gulp, plugins, config, boilerData) {
     [_.camelCase(name)]: getTask(name, true, boilerData[name])
   }), {});
   let parentTasks = {};
+  let parentPaths;
 
-  const parentPaths = read(parentDir).filter(fp => {
-    const base = fp.replace(path.extname(fp), '');
+  try {
+    parentPaths = read(parentDir).filter(fp => {
+      const base = fp.replace(path.extname(fp), '');
 
-    return !internalDirs.includes(base);
-  });
+      return !internalDirs.includes(base);
+    });
 
-  parentTasks = recurseTasks(parentDir, parentPaths);
+    parentTasks = recurseTasks(parentDir, parentPaths);
+  } catch (err) {
+    if (parentPaths) {
+      throw err;
+    }
+  }
 
   return {
     ...parentTasks,
