@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-selenium",
-  "version": "0.2.0",
+  "version": "0.5.4",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -28,7 +28,7 @@
   "dependencies": {
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.3.13",
-    "boiler-utils": "^0.5.3",
+    "boiler-utils": "^0.5.4",
     "browserstacktunnel-wrapper": "^1.4.2",
     "immutable": "^3.7.6",
     "lodash": "^4.0.0",

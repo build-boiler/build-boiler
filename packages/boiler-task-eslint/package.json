@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-eslint",
-  "version": "0.2.0",
+  "version": "0.5.4",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,8 +27,8 @@
   ],
   "dependencies": {
     "babel-eslint": "^6.0.0-beta.5",
-    "boiler-config-eslint": "^0.2.0",
-    "boiler-utils": "^0.5.3",
+    "boiler-config-eslint": "^0.5.4",
+    "boiler-utils": "^0.5.4",
     "eslint": "2.2.x",
     "eslint-friendly-formatter": "^1.1.0",
     "eslint-plugin-react": "^4.2.1",
