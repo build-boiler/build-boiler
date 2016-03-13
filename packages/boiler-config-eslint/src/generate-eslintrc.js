@@ -32,26 +32,26 @@ export default function(opts) {
     ...opts,
     isDev: true
   });
-  const reactRules = react ? makeReactRules({isDev: true}) : {};
-  const rules = assign({}, baseRules, reactRules);
-  const content = JSON.stringify(
-    assign(config, {rules})
-    , null
-    , '\t'
-  );
   let exists = false;
 
   try {
     const stats = fs.statSync(rcPath);
-    const read = fs.readFileSync(rcPath, {encoding: 'utf8'});
 
-    exists = stats.isFile() && content === read;
+    exists = stats.isFile();
   } catch (err) {
     exists = false;
   }
 
   if (!exists) {
     log(`Generating .eslintrc to ${blue(rcPath)}`);
+
+    const reactRules = react ? makeReactRules({isDev: true}) : {};
+    const rules = assign({}, baseRules, reactRules);
+    const content = JSON.stringify(
+      assign(config, {rules})
+      , null
+      , '\t'
+    );
 
     try {
       fs.writeFileSync(rcPath, content);
