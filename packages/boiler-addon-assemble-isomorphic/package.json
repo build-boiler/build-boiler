@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-assemble-isomorphic",
-  "version": "0.2.0",
+  "version": "0.5.3",
   "description": "Build Boilerplate Isomorphic Components for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -29,7 +29,7 @@
     "async": "^1.5.2",
     "boiler-addon-isomorphic-tools": "^0.2.0",
     "boiler-task-webpack": "^0.3.0",
-    "boiler-utils": "^0.2.0",
+    "boiler-utils": "^0.5.3",
     "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
     "jsdom": "^8.0.4",
