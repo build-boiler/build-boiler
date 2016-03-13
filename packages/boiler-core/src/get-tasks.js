@@ -4,15 +4,18 @@ import {readdirSync as read, statSync as stat, existsSync as exists} from 'fs';
 import boilerUtils from 'boiler-utils';
 
 export default function(gulp, plugins, config, boilerData) {
-  const {sources, utils} = config;
-  const {taskDir} = sources;
+  const {boilerConfig, sources, utils} = config;
+  const {taskDir, rootDir} = sources;
   const {addbase} = utils;
   const {
+    handleAddons,
     renameKey,
     buildLogger,
     removeExtension: removeExt
   } = boilerUtils;
   const {log, blue} = buildLogger;
+  const {addons: addonConfig} = boilerConfig;
+  const addons = handleAddons(addonConfig, rootDir);
 
   /**
    * Reqires all gulp tasks passing the `gulp` object, all `plugins` and `config` object
@@ -22,7 +25,7 @@ export default function(gulp, plugins, config, boilerData) {
    */
   function getTask(taskPath, moduleTask, fn) {
     fn = fn || require(taskPath);
-    let parentMod;
+    let parentMod, ret;
 
     if (moduleTask) {
       let foundPath;
@@ -63,9 +66,17 @@ export default function(gulp, plugins, config, boilerData) {
     //TODO: figure out why module exports babel plugin isn't working
     const gulpFn = fn.default || fn;
 
-    return moduleTask ?
-      gulpFn(gulp, plugins, config, parentMod) :
-      gulpFn(gulp, plugins, config);
+    if (moduleTask) {
+      //pass the addons from `boiler.config.js`
+      ret = gulpFn(gulp, plugins, config, {
+        fn: parentMod,
+        addons: addons[taskPath]
+      });
+    } else {
+      ret = gulpFn(gulp, plugins, config);
+    }
+
+    return ret;
   }
 
 

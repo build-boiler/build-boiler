@@ -6,35 +6,31 @@ import path from 'path';
 import fs from 'fs';
 import assign from 'object-assign';
 import {path as appPath} from 'app-root-path';
+import findUp from 'findup-sync';
 
 import config from './eslint-config';
 import makeBaseRules from './base-rules';
 import makeReactRules from './react-rules';
-import log, {blue} from './logger';
+import boilerUtils from 'boiler-utils';
 
-if (!global._babelPolyfill) {
-  require('babel-polyfill');
+const {buildLogger} = boilerUtils;
+const {log, blue} = buildLogger;
+const packageDir = 'packages';
+const localPath = findUp(packageDir);
+let rcPath;
+
+if (localPath) {
+  const [base] = localPath.split(path.sep + packageDir);
+  rcPath = path.join(base, '.eslintrc');
+} else {
+  rcPath = path.join(appPath, '.eslintrc');
 }
 
-const rcPath = path.join(appPath, '/.eslintrc');
-
-function cbToProm(fn) {
-  return (arg) => {
-    return new Promise((res, rej) => {
-      fn.call(fn, arg, (err, data) => {
-        if (err) return rej(err);
-
-        res(data);
-      });
-    });
-  };
-}
-
-export default async function(opts) {
+export default function(opts) {
   let exists = false;
 
   try {
-    const stats = await cbToProm(fs.stat)(rcPath);
+    const stats = fs.statSync(rcPath);
 
     exists = stats.isFile();
   } catch (err) {
@@ -52,13 +48,16 @@ export default async function(opts) {
   if (!exists) {
     log(`Generating .eslintrc to ${blue(rcPath)}`);
 
-    return await (fs.writeFile)(
-      rcPath,
-      JSON.stringify(
+    try {
+      const content = JSON.stringify(
         assign(config, {rules})
         , null
         , '\t'
-      )
-    );
+      );
+      fs.writeFileSync(rcPath, content);
+    } catch (err) {
+      log('Error generating .eslintrc');
+      throw err;
+    }
   }
 }

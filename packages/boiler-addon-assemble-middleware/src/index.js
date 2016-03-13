@@ -2,11 +2,17 @@ import _ from 'lodash';
 import path from 'path';
 import boilerUtils from 'boiler-utils';
 
-export default function(app, config, {preRender = [], onload = []}) {
+export default function(app, opts = {}) {
   const {
     requireDir,
     transformArray: createArray
   } = boilerUtils;
+  const {config, fn: parentConfig} = opts;
+  const {middleware} = parentConfig;
+  let {
+    preRender = [],
+    onload = []
+  } = middleware;
   const onloadFns = requireDir(
     path.join(__dirname, 'onload')
   );

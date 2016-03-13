@@ -12,7 +12,9 @@ import isStream from './is-stream';
  */
 export default function(args, opts = {}) {
   const gulpArgs = [...args];
-  const [parentMod] = gulpArgs.slice(-1);
+  const [parentArgs] = gulpArgs.slice(-1);
+  //TODO: potentially process `addons` here
+  const {fn: parentMod/*, addons*/} = parentArgs;
   let ret;
 
   function normalizeOutput(retVal = {}) {

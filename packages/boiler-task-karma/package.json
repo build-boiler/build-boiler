@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "boiler-task-webpack": "^0.3.0",
-    "boiler-utils": "^0.2.0",
+    "boiler-utils": "^0.5.3",
     "browser-sync": "^2.11.1",
     "istanbul-cobertura-badger": "^1.2.1",
     "karma": "^0.13.21",

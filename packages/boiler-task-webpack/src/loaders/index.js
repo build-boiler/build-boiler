@@ -157,7 +157,7 @@ export default function(opts) {
     //error  Parsing error: Illegal import declaration
     preLoaders.push({
       test: /\.jsx?$/,
-      exclude: /node_modules/,
+      exclude: [/node_modules/, /global-entry/],
       loader: 'eslint-loader'
     });
   }

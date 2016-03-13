@@ -1,7 +1,7 @@
 {
-  "name": "boiler-task-clean",
-  "version": "0.2.0",
-  "description": "Build Boilerplate Static Templating",
+  "name": "boiler-addon-assemble-nunjucks",
+  "version": "0.5.3",
+  "description": "Build Boilerplate Middleware for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -27,6 +27,11 @@
   ],
   "dependencies": {
     "boiler-utils": "^0.5.3",
-    "del": "^2.2.0"
+    "nunjucks": "^2.1.0",
+    "cheerio": "^0.20.0",
+    "consolidate": "^0.14.0",
+    "lodash": "^4.0.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7"
   }
 }

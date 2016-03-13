@@ -1,6 +1,6 @@
 {
   "name": "boiler-config-base",
-  "version": "0.4.0",
+  "version": "0.5.3",
   "description": "Build Boilerplate Base Config",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,10 +26,9 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-utils": "^0.2.0",
+    "boiler-utils": "^0.5.3",
     "findup-sync": "^0.3.0",
     "fs-extra": "^0.26.5",
-    "gulp-load-plugins": "^1.0.0-rc.1",
     "lodash": "^4.0.0",
     "yargs": "^4.1.0"
   }
