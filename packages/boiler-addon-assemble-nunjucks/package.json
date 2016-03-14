@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-assemble-nunjucks",
-  "version": "0.5.3",
+  "version": "0.5.9",
   "description": "Build Boilerplate Middleware for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",

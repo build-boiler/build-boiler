@@ -1,6 +1,6 @@
 {
   "name": "boiler-core",
-  "version": "0.5.7",
+  "version": "0.5.9",
   "description": "Build Boilerplate Core",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,7 +26,7 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-config-base": "^0.5.4",
+    "boiler-config-base": "^0.5.9",
     "boiler-utils": "^0.5.7",
     "globby": "^4.0.0",
     "gulp-load-plugins": "^1.2.0",
