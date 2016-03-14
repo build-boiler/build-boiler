@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isPlainObject from 'lodash/isPlainObject';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import Plasma from 'plasma';
@@ -23,8 +23,8 @@ export default function(config) {
         {namespace: () => 'global_data'}
       );
 
-      if (_.isPlainObject(globalData)) {
-        _.assign(file.data, globalData);
+      if (isPlainObject(globalData)) {
+        Object.assign(file.data, globalData);
       }
 
       next(null, file);

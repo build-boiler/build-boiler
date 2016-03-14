@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import isString from 'lodash/isString';
+import isUndefined from 'lodash/isUndefined';
+import isFunction from 'lodash/isFunction';
+import isPlainObject from 'lodash/isPlainObject';
 import boilerUtils from 'boiler-utils';
 
 export default function(nunj, app, opts = {}) {
@@ -22,7 +25,7 @@ export default function(nunj, app, opts = {}) {
   }
 
   ignore.push(
-    ...transformArray(parentIgnore, _.isString)
+    ...transformArray(parentIgnore, isString)
   );
 
   const data = requireDir(__dirname, {
@@ -31,13 +34,13 @@ export default function(nunj, app, opts = {}) {
     dict: 'basename'
   });
 
-  let tags = _.isFunction(registerFn) ? registerFn(nunj, app, data) : data;
+  let tags = isFunction(registerFn) ? registerFn(nunj, app, data) : data;
 
-  if (_.isUndefined(tags)) {
+  if (isUndefined(tags)) {
     tags = data;
   }
 
-  if (_.isPlainObject(tags)) {
+  if (isPlainObject(tags)) {
     Object.keys(tags).forEach(basename => {
       const Tag = tags[basename];
 

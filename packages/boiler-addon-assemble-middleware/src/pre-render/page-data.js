@@ -1,5 +1,6 @@
+import isPlainObject from 'lodash/isPlainObject';
+import merge from 'lodash/merge';
 import path from 'path';
-import _ from 'lodash';
 import {sync as globSync} from 'globby';
 import {readJsonSync} from 'fs-extra';
 import {safeLoad} from 'js-yaml';
@@ -57,10 +58,10 @@ export default function(config) {
         {namespace: false}
       );
 
-      if (_.isPlainObject(pageData)) {
+      if (isPlainObject(pageData)) {
         const currentPageData = pageData[file.key];
 
-        currentPageData && _.merge(file.data, currentPageData);
+        currentPageData && merge(file.data, currentPageData);
       }
 
       next(null, file);

@@ -1,5 +1,7 @@
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
+import isPlainObject from 'lodash/isPlainObject';
 import path from 'path';
-import _ from 'lodash';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import nunjucks from 'nunjucks';
@@ -62,7 +64,7 @@ export default class GetSnippet {
       return new SafeString('');
     }
 
-    if (_.isPlainObject(isoData)) {
+    if (isPlainObject(isoData)) {
       //use this if using an `include` or global context is available
       ({props} = ctx);
       ({name, wrapper} = isoData);
@@ -85,7 +87,7 @@ export default class GetSnippet {
         Component = snippetFn(name);
       }
 
-      if (_.isString(wrapper)) {
+      if (isString(wrapper)) {
         try {
           Wrapper = snippetFn(wrapper);
         } catch (err) {
@@ -111,7 +113,7 @@ export default class GetSnippet {
             {children}
           </Wrapper>
         );
-      } else if (_.isFunction(wrapper)) {
+      } else if (isFunction(wrapper)) {
         Wrapper = wrapper(children || Component);
 
         comp = <Wrapper reactor={reactor} {...rest} />;

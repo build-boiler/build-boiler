@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import isPlainObject from 'lodash/isPlainObject';
 import {readJsonSync} from 'fs-extra';
 import Plasma from 'plasma';
 
@@ -19,8 +19,8 @@ export default function(config) {
         addbase(srcDir, scriptDir, '**/*.json'), {namespace: true}
       );
 
-      if (_.isPlainObject(jsonData)) {
-        _.assign(file.data, jsonData);
+      if (isPlainObject(jsonData)) {
+        Object.assign(file.data, jsonData);
       }
 
       next(null, file);

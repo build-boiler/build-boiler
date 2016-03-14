@@ -1,4 +1,6 @@
-import _ from 'lodash';
+import camelCase from 'lodash/camelCase';
+import isBoolean from 'lodash/isBoolean';
+import isFunction from 'lodash/isFunction';
 import path from 'path';
 import boilerUtils from 'boiler-utils';
 import {series} from 'async';
@@ -32,18 +34,18 @@ export default function(app, opts = {}) {
   ];
 
   hooks.forEach(hook => {
-    const method = _.camelCase(hook);
+    const method = camelCase(hook);
     const ignoreFns = ignore[method] || ignore;
 
     //return early if ignore = true
-    if (_.isBoolean(ignoreFns) && !!ignoreFns) return;
+    if (isBoolean(ignoreFns) && !!ignoreFns) return;
 
     const fns = requireDir(path.join(__dirname, hook), {
       ignore: ignoreFns
     });
     const parentFns = createArray(
       middleware[method],
-      _.isFunction
+      isFunction
     );
 
     fns.push(...parentFns);

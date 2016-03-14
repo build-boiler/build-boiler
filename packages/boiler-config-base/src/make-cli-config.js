@@ -1,7 +1,13 @@
 import _ from 'lodash';
 import yargs from 'yargs';
 
-export default function(root) {
+/**
+ * Create command line options
+ * @param {Object} opts.cli additional cli options
+ * @return {Object}
+ */
+export default function(opts = {}) {
+  const {cli = {}} = opts;
   const devKey = 'development';
   const prodKey = 'production';
   const {argv} = yargs
@@ -46,7 +52,8 @@ export default function(root) {
     q: {
       alias: 'quick',
       type: 'boolean'
-    }
+    },
+    ...cli
   });
 
   const devTasks = [
