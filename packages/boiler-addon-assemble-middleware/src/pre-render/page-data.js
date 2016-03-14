@@ -62,6 +62,8 @@ export default function(config) {
 
         currentPageData && _.merge(file.data, currentPageData);
       }
+
+      next(null, file);
     } catch (err) {
       next(err);
     }

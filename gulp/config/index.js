@@ -39,17 +39,17 @@ export default {
        */
       preRender: [
         (file, next) => {
-
+          next(null, file);
         },
         (config) => {
           return (file, next) => {
-
+            next(null, file);
           };
         }
       ],
-      onload(config) {
+      onLoad(config) {
         return (file, next) => {
-
+          next(null, file);
         };
       }
     }

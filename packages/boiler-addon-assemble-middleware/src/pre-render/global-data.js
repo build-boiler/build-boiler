@@ -26,6 +26,8 @@ export default function(config) {
       if (_.isPlainObject(globalData)) {
         _.assign(file.data, globalData);
       }
+
+      next(null, file);
     } catch (err) {
       next(err);
     }

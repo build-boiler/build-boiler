@@ -1,15 +1,9 @@
-import _ from 'lodash';
-import Assemble from 'assemble-core';
-import fsX, {readJsonSync} from 'fs-extra';
-import {safeLoad} from 'js-yaml';
-import {readFileSync} from 'fs';
 import {join} from 'path';
-import async from 'async';
-import Plasma from 'plasma';
 import boilerUtils from 'boiler-utils';
-import makeTools from 'boiler-addon-isomorphic-tools';
 import jsxLoader from './jsx-loader';
 import isoMerge from './isomorphic-merge-plugin';
+import setup from './app-setup';
+import getAssetStats from './parse-assets';
 
 export default function(gulp, plugins, config, {addons}) {
   const {browserSync} = plugins;
@@ -25,112 +19,47 @@ export default function(gulp, plugins, config, {addons}) {
     assemble: assembleParentConfig,
     sources,
     utils,
-    environment,
-    webpackConfig
+    environment
   } = config;
   const {
     srcDir,
-    scriptDir,
     buildDir,
-    templateDir,
-    globalStatsFile,
-    statsFile
+    templateDir
   } = sources;
   const {addbase, logError} = utils;
   const {isDev, enableIsomorphic} = environment;
-  const plasma = new Plasma();
-  const app = new Assemble();
   const templatePath = addbase(srcDir, templateDir);
   const src = join(templatePath, 'pages/**/*.html');
-  const statsDir = addbase(buildDir);
-  const globalStatsPath = join(statsDir, globalStatsFile);
   const {
     data: parentData,
     registerTags,
     middleware: parentMiddlware = {}
   } = assembleParentConfig;
-  const tools = makeTools(_.assign({}, config, {
-    isPlugin: false,
-    isMainTask: true
-  }));
+
+  const app = setup(config, {
+    data: parentData,
+    templatePath
+  });
 
   if (isDev) {
     const watch = require('base-watch');
     app.use(watch());
   }
 
-  plasma.dataLoader('yml', function(fp) {
-    const str = readFileSync(fp, 'utf8');
-    return safeLoad(str);
-  });
-
-  function makeTemplatePath(dir) {
-    return (fp) => `${join(templatePath, dir, fp)}.html`;
-  }
-
-  function makeJSPath(dir) {
-    return (fp) => `${join(srcDir, scriptDir, dir, fp)}.js`;
-  }
-
-  app.data({
-    sources,
-    environment,
-    webpackConfig,
-    join,
-    headScripts: makeJSPath('head-scripts'),
-    layouts: makeTemplatePath('layouts'),
-    macros: makeTemplatePath('macros'),
-    partials: makeTemplatePath('partials'),
-    ...parentData
-  });
-
   //TODO: handle config
   runAddons(addons, app, {
     config,
     fn: {
-      template: registerTags,
+      nunjucks: registerTags,
       middleware: parentMiddlware
     },
     isomorphic: enableIsomorphic
   });
 
-  //TODO Modularize Middleware
-  //addMiddleware(app, config, parentMiddlware);
-
-  app.option('renameKey', renameKey);
-
-  function makeStats(main, global) {
-    const {assets: images, ...rest} = global;
-
-    return _.merge({}, main, rest, {images});
-  }
-
   return (cb) => {
-    let prom;
-
-    if (enableIsomorphic) {
-      prom = tools.development(isDev).server(statsDir).then(() => {
-        return Promise.resolve(
-          makeStats(tools.assets(), readJsonSync(globalStatsPath))
-        );
-      });
-    } else {
-      prom = new Promise((res, rej) => {
-        const statsPaths = [
-          join(statsDir, statsFile),
-          globalStatsPath
-        ];
-
-        async.map(statsPaths, fsX.readJson, (err, results) => {
-          if (err) return res({});
-          const [main, global] = results;
-
-          res(
-            makeStats(main, global)
-          );
-        });
-      });
-    }
+    const prom = getAssetStats(config, {
+      isomorphic: enableIsomorphic
+    });
 
     prom.then((assets) => {
       app.data({assets});

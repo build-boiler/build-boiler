@@ -4,7 +4,7 @@ import boilerUtils from 'boiler-utils';
 export default function(nunj, app, opts = {}) {
   const {fn, addonConfig} = opts;
   const isomorphic = addonConfig.isomorphic || opts.isomorphic;
-  const {template: registerFn} = fn;
+  const {nunjucks: registerFn} = fn;
   const ignore = ['index'];
   const isomorphicTags = ['get-snippet'];
   const add = (Tag) => nunj.addExtension(Tag.name, new Tag(app));

@@ -10,7 +10,12 @@ export default function(boilerConfigFp, opts = {}) {
     opts = boilerConfigFp;
     boilerConfigFp = null;
   }
-  const {buildLogger, tryExists, gulpTaskUtils} = boilerUtils;
+  const {
+    buildLogger,
+    handleAddons,
+    tryExists,
+    gulpTaskUtils
+  } = boilerUtils;
   const {log, blue} = buildLogger;
   const rootDir = findUp('packages') || findUp('node_modules');
   const cliConfig = makeCliConfig(rootDir);
@@ -40,6 +45,10 @@ export default function(boilerConfigFp, opts = {}) {
   const {extends: ext} = boilerConfig || {};
 
   if (boilerConfig) {
+    const {addons = {}} = boilerConfig;
+    Object.assign(boilerConfig, {
+      addons: handleAddons(addons, rootDir)
+    });
     log(`Found boiler config at ${blue('boiler.config.js')}`);
   } else {
     const boilerDefaults = {
