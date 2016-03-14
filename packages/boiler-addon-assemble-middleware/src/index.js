@@ -7,16 +7,23 @@ export default function(app, opts = {}) {
   const {
     buildLogger,
     requireDir,
-    transformArray: createArray,
-    ignore = {}
+    transformArray: createArray
   } = boilerUtils;
   const {log, blue} = buildLogger;
-  const {config, fn: parentConfig} = opts;
-  const {middleware} = parentConfig;
+  const {
+    config,
+    fn: parentConfig = {},
+    addonConfig = {}
+  } = opts;
+  const {
+    middleware = {}
+  } = parentConfig;
 
   function callFns(fn, ...rest) {
     fn.length === 1 ? fn(config).apply(null, rest) : fn.apply(null, rest);
   }
+
+  const ignore = addonConfig.ignore || opts.ignore || {};
 
   const hooks = [
     'on-load',
@@ -27,6 +34,10 @@ export default function(app, opts = {}) {
   hooks.forEach(hook => {
     const method = _.camelCase(hook);
     const ignoreFns = ignore[method] || ignore;
+
+    //return early if ignore = true
+    if (_.isBoolean(ignoreFns) && !!ignoreFns) return;
+
     const fns = requireDir(path.join(__dirname, hook), {
       ignore: ignoreFns
     });

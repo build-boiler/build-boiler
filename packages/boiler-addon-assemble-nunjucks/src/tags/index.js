@@ -2,17 +2,28 @@ import _ from 'lodash';
 import boilerUtils from 'boiler-utils';
 
 export default function(nunj, app, opts = {}) {
-  const {fn, addonConfig} = opts;
+  const {
+    fn = {},
+    addonConfig = {}
+  } = opts;
   const isomorphic = addonConfig.isomorphic || opts.isomorphic;
+  const parentIgnore = addonConfig.ignore || opts.ignore;
   const {nunjucks: registerFn} = fn;
   const ignore = ['index'];
   const isomorphicTags = ['get-snippet'];
   const add = (Tag) => nunj.addExtension(Tag.name, new Tag(app));
-  const {requireDir} = boilerUtils;
+  const {
+    requireDir,
+    transformArray
+  } = boilerUtils;
 
   if (!isomorphic) {
     ignore.push(...isomorphicTags);
   }
+
+  ignore.push(
+    ...transformArray(parentIgnore, _.isString)
+  );
 
   const data = requireDir(__dirname, {
     ignore,

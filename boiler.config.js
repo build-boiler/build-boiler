@@ -13,7 +13,11 @@ export default {
   //],
   addons: [
     'assemble-middleware',
-    ['assemble-nunjucks', {isomorphic: true}]
+    'assemble-nunjucks'
+    //['assemble-middleware', {
+      //ignore: {onLoad: true}
+    //}],
+    //['assemble-nunjucks', {isomorphic: true, ignore: 'get-asset'}]
     //'configs/addons/assemble-sample'
   ]
 };

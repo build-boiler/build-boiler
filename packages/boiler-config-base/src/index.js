@@ -45,7 +45,7 @@ export default function(boilerConfigFp, opts = {}) {
   const {extends: ext} = boilerConfig || {};
 
   if (boilerConfig) {
-    const {addons = {}} = boilerConfig;
+    const {addons = []} = boilerConfig;
     Object.assign(boilerConfig, {
       addons: handleAddons(addons, rootDir)
     });
