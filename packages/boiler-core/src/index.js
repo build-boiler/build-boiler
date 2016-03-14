@@ -14,9 +14,9 @@ export default function(gulp, opts = {}) {
     buildLogger,
     tryExists
   } = boilerUtils;
+  const {fp: configFp, include} = opts;
   const {log, blue} = buildLogger;
-  const {include} = opts;
-  const baseConfig = makeConfig();
+  const baseConfig = makeConfig(configFp);
   /**
    * Config from `boiler.config.js`
    */

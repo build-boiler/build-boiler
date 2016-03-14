@@ -49,7 +49,7 @@ export default function(boilerConfigFp, opts = {}) {
     Object.assign(boilerConfig, {
       addons: handleAddons(addons, rootDir)
     });
-    log(`Found boiler config at ${blue('boiler.config.js')}`);
+    log(`Found boiler config at ${blue(boilerConfigFp || 'boiler.config.js')}`);
   } else {
     const boilerDefaults = {
       devAssets: '',

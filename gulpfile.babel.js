@@ -70,7 +70,9 @@ if (process.argv.indexOf('--force') !== -1) {
   });
 } else {
   const build = require('./packages/boiler-core/src');
-  const {tasks, config, plugins: $} = build(gulp);
+  const {tasks, config, plugins: $} = build(gulp, {
+    //fp: 'boiler.custom.config.js'
+  });
   const {sources, utils, environment, release} = config;
   const {isDev} = environment;
   const {testDir, buildDir} = sources;
