@@ -22,6 +22,8 @@ export default function(config) {
       if (_.isPlainObject(jsonData)) {
         _.assign(file.data, jsonData);
       }
+
+      next(null, file);
     } catch (err) {
       next(err);
     }

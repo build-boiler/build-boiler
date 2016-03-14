@@ -5,17 +5,15 @@ import boilerUtils from 'boiler-utils';
 
 export default function(gulp, plugins, config, boilerData) {
   const {boilerConfig, sources, utils} = config;
-  const {taskDir, rootDir} = sources;
+  const {taskDir} = sources;
   const {addbase} = utils;
   const {
-    handleAddons,
     renameKey,
     buildLogger,
     removeExtension: removeExt
   } = boilerUtils;
   const {log, blue} = buildLogger;
-  const {addons: addonConfig} = boilerConfig;
-  const addons = handleAddons(addonConfig, rootDir);
+  const {addons} = boilerConfig;
 
   /**
    * Reqires all gulp tasks passing the `gulp` object, all `plugins` and `config` object
