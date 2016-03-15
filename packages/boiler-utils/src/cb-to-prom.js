@@ -5,14 +5,11 @@
  * @return {Function}
  */
 export default function(fn) {
-  return (arg) => {
+  return (...args) => {
     return new Promise((res, rej) => {
-      fn.call(fn, arg, (err, data) => {
-        if (err) return rej(err);
+      const cb = (err, data) => err ? rej(err) : res(data);
 
-        res(data);
-      });
+      fn.apply(fn, [...args, cb]);
     });
   };
 }
-
