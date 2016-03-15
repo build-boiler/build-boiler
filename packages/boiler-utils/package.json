@@ -1,6 +1,6 @@
 {
   "name": "boiler-utils",
-  "version": "0.5.7",
+  "version": "0.5.13",
   "description": "Build Boilerplate Utilities",
   "main": "dist/index.js",
   "author": "DtotheFP",
