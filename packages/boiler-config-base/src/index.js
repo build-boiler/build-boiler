@@ -22,12 +22,13 @@ export default function(boilerConfigFp, opts = {}) {
   const {ENV, browser} = cliConfig;
   const {entry} = opts;
   const cwd = process.cwd();
+  let boilerConfig = {};
 
   //TODO: remove all HFA specific references
   //boiler-task-webpack/src/gather-commonjs-modules.js
   //boiler-task-webpack/src/plugins.js
   //boiler-task-karma/src/karma-config.js
-  let boilerConfig, isHfa;
+  let isHfa;
 
   /**
    * Config from `boiler.config.js`
