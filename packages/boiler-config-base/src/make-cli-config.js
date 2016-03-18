@@ -7,7 +7,7 @@ import yargs from 'yargs';
  * @return {Object}
  */
 export default function(opts = {}) {
-  const {cli = {}} = opts;
+  const {cli = {}, env} = opts;
   const devKey = 'development';
   const prodKey = 'production';
   const {argv} = yargs
@@ -61,8 +61,10 @@ export default function(opts = {}) {
     'test:integration'
   ];
 
-  if (_.intersection(argv._, devTasks).length) {
+  if (_.intersection(argv._, devTasks).length || env === devKey) {
     argv.ENV = devKey;
+  } else if (env === prodKey) {
+    argv.ENV = prodKey;
   }
 
   /**

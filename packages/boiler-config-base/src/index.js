@@ -17,11 +17,10 @@ export default function(boilerConfigFp, opts = {}) {
     gulpTaskUtils
   } = boilerUtils;
   const {log, blue} = buildLogger;
-  const {entry, env: configEnv} = opts;
+  const {entry} = opts;
   const rootDir = findUp('packages') || findUp('node_modules');
   const cliConfig = makeCliConfig(opts);
-  const {browser} = cliConfig;
-  const ENV = configEnv || cliConfig.ENV;
+  const {ENV, browser} = cliConfig;
   const cwd = process.cwd();
   let boilerConfig = {};
 
