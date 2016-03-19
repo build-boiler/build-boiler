@@ -1,12 +1,13 @@
-import {assign, isFunction, isUndefined} from 'lodash';
+import assign from 'lodash/assign';
+import merge from 'lodash/merge';
+import isFunction from 'lodash/isFunction';
+import isUndefined from 'lodash/isUndefined';
 import webpack from 'webpack';
 import boilerUtils from 'boiler-utils';
 import Express from 'express';
 import middleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
-import makeConfig from './make-webpack-config';
-
-export const makeWebpackConfig = makeConfig;
+import makeConfig from 'boiler-config-webpack';
 
 export default function(gulp, plugins, config) {
   const {sources, utils, environment, webpackConfig} = config;
@@ -15,7 +16,7 @@ export default function(gulp, plugins, config) {
   const {middleware: parentMiddleware, hot} = webpackConfig;
   const {getTaskName} = utils;
   const {buildDir, devPort, devHost, hotPort} = sources;
-  const {gutil, app} = plugins;
+  const {gutil} = plugins;
   const {
     runParentFn: callParent,
     runCustomTask: runFn
@@ -25,6 +26,7 @@ export default function(gulp, plugins, config) {
   return (cb) => {
     const taskName = getTaskName(gulp.currentTask);
     const isMainTask = taskName === mainBundleName;
+    const isServer = taskName === 'server';
     const runHot = isMainTask && !isIE && hot;
 
     const devPath = isDev ? `http://${devHost}:${hotPort}/` : '/';
@@ -36,7 +38,17 @@ export default function(gulp, plugins, config) {
       publicPath = isUndefined(branch) ?  bsPath : assetPath;
     }
 
-    const baseConfig = assign({}, config, {isMainTask, publicPath, app});
+    const baseConfig = assign({}, config, {isMainTask, publicPath, taskName});
+
+    if (isServer) {
+      merge(baseConfig, {
+        ENV: 'server',
+        environment: {
+          isServer: true
+        }
+      });
+    }
+
     const webpackConfig = makeConfig(baseConfig);
     const parentConfig = callParent(arguments, {data: webpackConfig});
     const {

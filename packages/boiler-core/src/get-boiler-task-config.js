@@ -49,13 +49,9 @@ export default function(baseConfig, taskConfig, opts = {}) {
 
   const {
     //if a "project" not a "module" turn on file reving
-    shouldRev = false,
-    includePaths = [],
     isomorphic = {},
     cb
   } = taskConfig;
-
-  const {webpack, ...restTaskConfig} = taskObj;
 
   const enableIsomorphic = _.isPlainObject(isomorphic) && Object.keys(isomorphic).length > 0;
 
@@ -82,6 +78,16 @@ export default function(baseConfig, taskConfig, opts = {}) {
     ]
   };
 
+  const {
+    webpack = {},
+    ...restTaskConfig
+  } = taskObj;
+
+  //HACK: to preserver legacy `gulp/config/index` behavior but move properties
+  //into the task where they belong
+  const shouldRev = webpack.shouldRev || taskConfig.shouldRev;
+  const includePaths = webpack.includePaths || taskConfig.includePaths || [];
+
   const webpackConfig = {
     alias: {},
 
@@ -99,36 +105,28 @@ export default function(baseConfig, taskConfig, opts = {}) {
       __dirname: true
     },
 
-    paths: Object.keys(webpackPaths).reduce((acc, key) => {
-      const [devPath, prodPath] = webpackPaths[key];
-      const revProd = !isDev && shouldRev;
-
-      if (key === 'fileLoader') {
-        Object.assign(acc, {[key]: devPath});
-      } else {
-        Object.assign(acc, {[key]: revProd && !isServer ? prodPath : devPath});
-      }
-
-      return acc;
-    }, {}),
-
-    vendors: [
-      'lodash',
-      'react',
-      'react-dom'
-    ],
-
     webpackPaths
   };
 
-  if (webpack) {
-    _.merge(webpackConfig, webpack);
-  }
+  const paths = Object.keys(webpackPaths).reduce((acc, key) => {
+    const [devPath, prodPath] = webpackPaths[key];
+    const revProd = !isDev && shouldRev;
+
+    if (key === 'fileLoader') {
+      Object.assign(acc, {[key]: devPath});
+    } else {
+      Object.assign(acc, {[key]: revProd && !isServer ? prodPath : devPath});
+    }
+
+    return acc;
+  }, {});
+
+  _.merge(webpackConfig, webpack, {
+    includePaths,
+    paths
+  });
 
   const combinedConfig = _.merge({}, baseConfig, {
-    sources: {
-      includePaths
-    },
     environment: {
       enableIsomorphic
     },
