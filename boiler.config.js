@@ -18,7 +18,8 @@ export default {
     'boiler-addon-webpack-loaders-optimize',
     'boiler-addon-webpack-loaders-babel',
     'boiler-addon-webpack-styles',
-    'boiler-addon-webpack-isomorphic'
+    'boiler-addon-webpack-isomorphic',
+    'boiler-addon-webpack-karma'
     //['assemble-middleware', {
       //ignore: {onLoad: true}
     //}],

@@ -1,7 +1,7 @@
 import path from 'path';
 import _, {assign, merge} from 'lodash';
 import gutil from 'gulp-util';
-import {makeWebpackConfig} from 'boiler-task-webpack';
+import makeWebpackConfig from 'boiler-config-webpack';
 import boilerUtils from 'boiler-utils';
 import makeDeviceFilter from './filter-devices';
 import defaultBsBrowsers from './browser-stack/browsers';

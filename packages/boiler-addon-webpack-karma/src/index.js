@@ -1,17 +1,29 @@
+import _config from './config';
+import _loaders from './loaders';
+import _plugins from './plugins';
 
-  //if (isMainTask) {
-    //Object.assign(defaultConfig, {
-      //eslint: {
-        //rules,
-        //configFile,
-        //formatter,
-        //emitError: false,
-        //emitWarning: false,
-        //failOnWarning: !isDev,
-        //failOnError: !isDev
-      //}
-    //});
+export const plugins = _plugins;
+export const loaders = _loaders;
+export const config = _config;
+
+//HACK: sharing the babel query between methods in order to
+//pass to the `isparta` config
+//let babelQuery = null;
+//const methodHooks = {
+  //plugins: _plugins,
+  //loaders(config, data) {
+    //const loaderData = _loaders(config, data);
+    //babelQuery = loaderData.babelQuery;
+
+    //return loaderData;
+  //},
+  //config(config, data) {
+    //return _config(config, data, {query: babelQuery});
   //}
+//};
+
+//export default methodHooks;
+
 
   //const defaultExternals = {
     //'sinon': 'window.sinon'
