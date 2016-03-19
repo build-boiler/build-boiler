@@ -1,10 +1,12 @@
 import path from 'path';
 import assign from 'lodash/assign';
+import boilerUtils from 'boiler-utils';
 
 export default function(config, data) {
   const {SERVER} = config;
 
   if (SERVER) {
+    const {tryExists} = boilerUtils;
     const {boilerConfig, toolsPlugin} = config;
     const re = toolsPlugin.regular_expression('images').toString();
     const {babelExclude} = boilerConfig;
@@ -12,10 +14,16 @@ export default function(config, data) {
     const {babelQuery} = data;
     const {plugins: babelPlugins} = babelQuery;
     const {preLoaders, loaders, postLoaders} = data;
-    const omit = ['typecheck', 'rewire'];
+    const pluginName = 'babel-plugin-add-module-exports';
+    const opts = {resolve: true, omitReq: true};
+    let pluginFp = tryExists(
+      path.resolve(__dirname, '..', '..', 'node_modules', pluginName),
+      opts
+    );
+    pluginFp = pluginFp || tryExists(pluginName, opts) || pluginName;
     const plugins = [
-      path.resolve(__dirname, '..', 'node_modules', 'babel-plugin-add-module-exports'),
-      ...babelPlugins.filter(plugin => !omit.includes(plugin))
+      pluginFp,
+      ...babelPlugins.filter(plugin => !/typecheck/.test(plugin) && !/rewire/.test(plugin))
     ];
 
     assign(babelQuery, {plugins});

@@ -26,12 +26,7 @@
     "webpack"
   ],
   "dependencies": {
-    "babel-plugin-rewire": "^1.0.0-beta-5",
-    "babel-plugin-transform-decorators-legacy": "^1.2.0",
-    "babel-plugin-typecheck": "^3.5.1",
-    "babel-preset-es2015": "^6.1.18",
-    "babel-preset-react": "^6.1.18",
-    "babel-preset-stage-0": "^6.1.18",
+    "babel-plugin-rewire": "^1.0.0-rc-1",
     "boiler-utils": "^0.5.4",
     "isparta": "^4.0.0",
     "isparta-loader": "^2.0.0",
