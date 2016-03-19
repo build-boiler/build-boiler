@@ -197,5 +197,12 @@ export default function(config, defaultConfig, opts = {}) {
     return prodConfig;
   };
 
-  return {development, production};
+  //HACK: for adding configs
+  const {methods = {}} = baseConfig;
+
+  return {
+    development,
+    production,
+    ...methods
+  };
 }

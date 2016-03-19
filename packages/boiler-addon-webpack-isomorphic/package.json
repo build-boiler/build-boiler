@@ -26,8 +26,8 @@
     "webpack"
   ],
   "dependencies": {
+    "babel-plugin-add-module-exports": "^0.1.2",
     "boiler-utils": "^0.5.4",
     "globby": "^4.0.0"
   }
 }
-
