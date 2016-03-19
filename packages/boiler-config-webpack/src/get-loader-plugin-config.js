@@ -1,11 +1,12 @@
-import _ from 'lodash';
+import assign from 'lodash/assign';
+import isArray from 'lodash/isArray';
 import makeEslintConfig from 'boiler-config-eslint';
 import makeTools from 'boiler-addon-isomorphic-tools';
-import makeLoaders from './loaders';
 import makePlugins from './plugins';
 import makeExternals from './make-externals';
+import applyAddons from './utils/apply-addons';
 
-export default function(config) {
+export default function(config, {dirs}) {
   const {
     eslint: eslintParentConfig,
     isMainTask,
@@ -24,22 +25,30 @@ export default function(config) {
   const TEST = ENV === 'test' || ENV === 'ci';
   const SERVER = ENV === 'server' || isServer;
   const extract = !isMainTask;
-  const [expose] = _.isArray(main) ? main.map( fp => addbase(srcDir, fp) ) : [];
+  const [expose] = isArray(main) ? main.map( fp => addbase(srcDir, fp) ) : [];
   const {externals, provide} = makeExternals(externalConfig, SERVER);
   const toolsPlugin = makeTools(
-    _.assign({}, config, {isPlugin: true})
+    assign({}, config, {isPlugin: true})
   );
   const sharedConfig = {
+    dirs,
     toolsPlugin,
     DEBUG,
     TEST,
     SERVER
   };
-  const loaders = makeLoaders(
-    _.assign({}, config, sharedConfig, {extract, expose})
-  );
+  const loaderConfig = assign({}, config, sharedConfig, {extract, expose});
+  const loaderData = {
+    preLoaders: [],
+    loaders: [],
+    postLoaders: []
+  };
+  const loaderRe = /^loaders-.+$/;
+  const loaders = applyAddons(loaderConfig, loaderData, {
+    include: loaderRe
+  });
   const plugins = makePlugins(
-    _.assign({}, config, sharedConfig, {provide})
+    assign({}, config, sharedConfig, {provide})
   );
   const defaultEslintConfig = {
     isDev,
@@ -48,14 +57,23 @@ export default function(config) {
     react: false
   };
   const eslintConfig = makeEslintConfig(
-    _.assign({}, defaultEslintConfig, eslintParentConfig)
+    assign({}, defaultEslintConfig, eslintParentConfig)
   );
 
-  return {
+  const base = {
     isServer: SERVER,
     externals,
     ...loaders,
-    ...plugins,
+    plugins,
     ...eslintConfig
   };
+
+  const methods = ['loaders', 'plugins'];
+
+  return methods.reduce((acc, method) => {
+    return applyAddons(config, acc, {
+      method,
+      exclude: loaderRe
+    });
+  }, base);
 }

@@ -13,7 +13,11 @@ export default {
   //],
   addons: [
     'assemble-middleware',
-    'assemble-nunjucks'
+    'assemble-nunjucks',
+    'boiler-addon-webpack-loaders-base',
+    'boiler-addon-webpack-loaders-optimize',
+    'boiler-addon-webpack-loaders-babel',
+    'boiler-addon-webpack-styles'
     //['assemble-middleware', {
       //ignore: {onLoad: true}
     //}],

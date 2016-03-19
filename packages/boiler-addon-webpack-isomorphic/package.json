@@ -1,7 +1,7 @@
 {
-  "name": "boiler-task-webpack",
-  "version": "0.5.9",
-  "description": "Build Boilerplate Static Templating",
+  "name": "boiler-addon-webpack-isomorphic",
+  "version": "0.5.8",
+  "description": "Build Boilerplate Isomorphic Rendering",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -26,12 +26,8 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-config-webpack": "^0.5.8",
     "boiler-utils": "^0.5.4",
-    "express": "^4.13.4",
-    "lodash": "^4.0.0",
-    "webpack": "^1.12.13",
-    "webpack-dev-middleware": "^1.5.1",
-    "webpack-hot-middleware": "2.7.1"
+    "globby": "^4.0.0"
   }
 }
+

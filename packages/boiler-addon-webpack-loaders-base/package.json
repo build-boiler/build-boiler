@@ -1,7 +1,7 @@
 {
-  "name": "boiler-task-webpack",
-  "version": "0.5.9",
-  "description": "Build Boilerplate Static Templating",
+  "name": "boiler-addon-webpack-loaders-base",
+  "version": "0.5.8",
+  "description": "Build Boilerplate Webpack Base Loaders",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -26,12 +26,18 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-config-webpack": "^0.5.8",
     "boiler-utils": "^0.5.4",
-    "express": "^4.13.4",
+    "css-loader": "^0.23.0",
+    "eslint-loader": "^1.0.0",
+    "exports-loader": "^0.6.2",
+    "expose-loader": "^0.7.0",
+    "file-loader": "^0.8.4",
+    "imports-loader": "^0.6.4",
+    "json-loader": "^0.5.2",
     "lodash": "^4.0.0",
-    "webpack": "^1.12.13",
-    "webpack-dev-middleware": "^1.5.1",
-    "webpack-hot-middleware": "2.7.1"
+    "postcss": "^5.0.0",
+    "postcss-loader": "^0.8.0",
+    "postcss-reporter": "^1.0.0",
+    "style-loader": "^0.13.0"
   }
 }

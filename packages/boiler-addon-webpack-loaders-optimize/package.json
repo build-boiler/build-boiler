@@ -1,6 +1,6 @@
 {
-  "name": "boiler-task-webpack",
-  "version": "0.5.9",
+  "name": "boiler-addon-webpack-loaders-optimize",
+  "version": "0.5.8",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,12 +26,9 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-config-webpack": "^0.5.8",
     "boiler-utils": "^0.5.4",
-    "express": "^4.13.4",
-    "lodash": "^4.0.0",
-    "webpack": "^1.12.13",
-    "webpack-dev-middleware": "^1.5.1",
-    "webpack-hot-middleware": "2.7.1"
+    "img-loader": "^1.2.2",
+    "url-loader": "^0.5.6"
   }
 }
+
