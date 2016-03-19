@@ -75,7 +75,5 @@ export default function(config) {
     dirs: moduleDirs
   });
 
-  const fn = configMethods[ENV];
-
-  return fn();
+  return configMethods[ENV]();
 }

@@ -47,9 +47,8 @@ export default function(config, {dirs}) {
   const loaders = applyAddons(loaderConfig, loaderData, {
     include: loaderRe
   });
-  const plugins = makePlugins(
-    assign({}, config, sharedConfig, {provide})
-  );
+  const pluginConfig = assign({}, config, sharedConfig, {provide});
+  const plugins = makePlugins(pluginConfig);
   const defaultEslintConfig = {
     isDev,
     lintEnv: TEST ? 'test' : 'web',
@@ -63,14 +62,19 @@ export default function(config, {dirs}) {
   const base = {
     isServer: SERVER,
     externals,
-    ...loaders,
     plugins,
+    ...loaders,
     ...eslintConfig
   };
 
-  const methods = ['loaders', 'plugins'];
+  const addonConfig = {
+    loaders: loaderConfig,
+    plugins: pluginConfig
+  };
 
-  return methods.reduce((acc, method) => {
+  return Object.keys(addonConfig).reduce((acc, method) => {
+    const config = addonConfig[method];
+
     return applyAddons(config, acc, {
       method,
       exclude: loaderRe

@@ -4,7 +4,7 @@ import jsdom from 'jsdom';
 import webpack from 'webpack';
 import MemoryFS from 'memory-fs';
 import boilerUtils from 'boiler-utils';
-import {makeWebpackConfig} from 'boiler-config-webpack';
+import makeWebpackConfig from 'boiler-config-webpack';
 
 /**
  * Loader to compile React components and es6 functions with Webpack

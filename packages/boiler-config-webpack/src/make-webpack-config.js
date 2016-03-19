@@ -176,32 +176,26 @@ export default function(config, defaultConfig, opts = {}) {
   });
 
   const baseConfig = applyAddons(config, defaultConfig, {method: 'config'});
+  const development = () => baseConfig;
+  const production = () => {
+    const prodConfig = development();
 
-  const configFn = {
-    development() {
-      return baseConfig;
-    },
-
-    production() {
-      const prodConfig = this.development();
-
-      if (!quick) {
-        prodConfig.plugins.push(
-          new webpack.optimize.UglifyJsPlugin({
-            output: {
-              comments: false
-            },
-            compress: {
-              warnings: false
-            }
-          }),
-          new webpack.optimize.DedupePlugin()
-        );
-      }
-
-      return prodConfig;
+    if (!quick) {
+      prodConfig.plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+          output: {
+            comments: false
+          },
+          compress: {
+            warnings: false
+          }
+        }),
+        new webpack.optimize.DedupePlugin()
+      );
     }
+
+    return prodConfig;
   };
 
-  return configFn;
+  return {development, production};
 }
