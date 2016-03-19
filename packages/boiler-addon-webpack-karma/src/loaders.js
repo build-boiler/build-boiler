@@ -9,16 +9,19 @@ export default function(config, data) {
   const {coverageRe} = karma;
   const testCoverage = coverage && TEST;
 
-  if (testCoverage) {
+  if (TEST) {
     const {preLoaders, loaders} = data;
-    const isparta = {
-      test: /\.jsx?$/,
-      loader: 'isparta',
-      exclude: /\/(test|node_modules)\//,
-      include: coverageRe
-    };
 
-    preLoaders.unshift(isparta);
+    if (testCoverage) {
+      const isparta = {
+        test: /\.jsx?$/,
+        loader: 'isparta',
+        exclude: /\/(test|node_modules)\//,
+        include: coverageRe
+      };
+
+      preLoaders.unshift(isparta);
+    }
 
     loaders.forEach(loaderData => {
       const {loader, exclude, query} = loaderData;
@@ -27,20 +30,22 @@ export default function(config, data) {
        * Update the `exclude` function for `babel-loader`
        */
       if (/babel/.test(loader)) {
-        loaderData.exclude = (fp) => {
-          let ex = exclude(fp);
+        if (testCoverage) {
+          loaderData.exclude = (fp) => {
+            let ex = exclude(fp);
 
-          //TODO: remove HFA specific logic
-          const shouldTest = testCoverage &&
-            !/\@hfa/.test(fp) &&
-            !/node_modules/.test(fp);
+            //TODO: remove HFA specific logic
+            const shouldTest = testCoverage &&
+              !/\@hfa/.test(fp) &&
+              !/node_modules/.test(fp);
 
-          if (!ex && shouldTest) {
-            ex = coverageRe.test(fp);
-          }
+            if (!ex && shouldTest) {
+              ex = coverageRe.test(fp);
+            }
 
-          return ex;
-        };
+            return ex;
+          };
+        }
 
         loaderData.query = modifyQuery(query);
       }
