@@ -1,7 +1,7 @@
 {
-  "name": "boiler-task-webpack",
-  "version": "0.5.9",
-  "description": "Build Boilerplate Static Templating",
+  "name": "boiler-addon-webpack-styles",
+  "version": "0.5.8",
+  "description": "Build Boilerplate Isomorphic Rendering",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -26,12 +26,16 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-config-webpack": "^0.5.8",
+    "autoprefixer": "^6.3.3",
     "boiler-utils": "^0.5.4",
-    "express": "^4.13.4",
+    "css-loader": "^0.23.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "lodash": "^4.0.0",
-    "webpack": "^1.12.13",
-    "webpack-dev-middleware": "^1.5.1",
-    "webpack-hot-middleware": "2.7.1"
+    "node-sass": "^3.4.2",
+    "postcss": "^5.0.0",
+    "postcss-loader": "^0.8.0",
+    "postcss-reporter": "^1.0.0",
+    "sass-loader": "^3.0.0",
+    "style-loader": "^0.13.0"
   }
 }

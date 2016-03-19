@@ -11,7 +11,13 @@ import findUp from 'findup-sync';
  * @return {Any|undefined}
  */
 export default function(fp, opts = {}) {
-  const {resolve, name, lookUp, throwOn} = opts;
+  const {
+    omitReq,
+    resolve,
+    name,
+    lookUp,
+    throwOn
+  } = opts;
   let exists, req;
 
   /*eslint brace-style:0*/
@@ -60,5 +66,5 @@ export default function(fp, opts = {}) {
     exists = mod.default || mod;
   }
 
-  return exists;
+  return omitReq ? req : exists;
 }

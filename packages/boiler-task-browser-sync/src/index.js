@@ -17,44 +17,44 @@ export default function(gulp, plugins, config) {
   let openPath = baseOpen;
   let shouldOpen = true;
 
-  if (_.isFunction(parentOpenFn)) {
-    openPath = callReturn(config)(parentOpenFn, baseOpen);
-  } else if (_.isBoolean(parentOpenFn)) {
-    shouldOpen = parentOpenFn;
-  }
-
-  const expireHeaders = (req, res, next) => {
-    res.setHeader('cache-control', 'public, max-age=0');
-    next();
-  };
-
-  const defaultMiddleware = [
-    (req, res, next) => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'authorization, accept');
-      res.setHeader('Access-Control-Max-Age', '1728000');
-      if (req.method === 'OPTIONS') {
-        res.end();
-      } else {
-        next();
-      }
-    },
-    expireHeaders
-  ];
-
-  const middleware = _.isFunction(parentMiddleware) ?
-    parentMiddleware(config, defaultMiddleware) :
-    defaultMiddleware;
-
-  if (_.isUndefined(middleware)) {
-    logError({
-      err: new Error('You must `return` a middleware Function or Array'),
-      plugin: '[browser-sync: middleware]'
-    });
-  }
-
   return (cb) => {
+    if (_.isFunction(parentOpenFn)) {
+      openPath = callReturn(config)(parentOpenFn, baseOpen);
+    } else if (_.isBoolean(parentOpenFn)) {
+      shouldOpen = parentOpenFn;
+    }
+
+    const expireHeaders = (req, res, next) => {
+      res.setHeader('cache-control', 'public, max-age=0');
+      next();
+    };
+
+    const defaultMiddleware = [
+      (req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'authorization, accept');
+        res.setHeader('Access-Control-Max-Age', '1728000');
+        if (req.method === 'OPTIONS') {
+          res.end();
+        } else {
+          next();
+        }
+      },
+      expireHeaders
+    ];
+
+    const middleware = _.isFunction(parentMiddleware) ?
+      parentMiddleware(config, defaultMiddleware) :
+      defaultMiddleware;
+
+    if (_.isUndefined(middleware)) {
+      logError({
+        err: new Error('You must `return` a middleware Function or Array'),
+        plugin: '[browser-sync: middleware]'
+      });
+    }
+
     const bsConfig = {
       open: false,
       port: devPort,

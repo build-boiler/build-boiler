@@ -52,6 +52,7 @@
     "gulp-eslint": "^1.1.1",
     "gulp-if": "^2.0.0",
     "gulp-load-plugins": "^1.2.0",
+    "gulp-mocha": "^2.2.0",
     "gulp-newer": "^1.1.0",
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.7",
@@ -66,5 +67,7 @@
     "react-dom": "^0.14.7",
     "run-sequence": "^1.1.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "lerna": "^1.1.2"
+  }
 }
