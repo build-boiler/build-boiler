@@ -1,6 +1,6 @@
 {
   "name": "boiler-config-webpack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,9 +26,9 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-addon-isomorphic-tools": "^0.2.0",
-    "boiler-config-eslint": "^0.5.4",
-    "boiler-utils": "^0.5.4",
+    "boiler-addon-isomorphic-tools": "^1.0.1",
+    "boiler-config-eslint": "^1.0.1",
+    "boiler-utils": "^1.0.1",
     "eslint-friendly-formatter": "^1.2.2",
     "globby": "^4.0.0",
     "gulp-util": "^3.0.7",

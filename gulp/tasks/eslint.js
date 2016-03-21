@@ -6,7 +6,8 @@ export default function(gulp, plugins, config, opts) {
 
   if (taskName === 'build') {
     src.push(...[
-      addbase('packages/*/src/**/*.js')
+      addbase('packages/*/src/**/*.js'),
+      addbase('scripts/**/*.js')
     ]);
   }
 
