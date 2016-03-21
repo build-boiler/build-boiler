@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-webpack-isomorphic",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Build Boilerplate Isomorphic Rendering",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,7 +27,8 @@
   ],
   "dependencies": {
     "babel-plugin-add-module-exports": "^0.1.2",
-    "boiler-utils": "^0.5.4",
-    "globby": "^4.0.0"
+    "boiler-utils": "^1.0.1",
+    "globby": "^4.0.0",
+    "lodash": "^4.0.0"
   }
 }
