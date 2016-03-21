@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-webpack-styles",
-  "version": "0.5.8",
+  "version": "1.0.0",
   "description": "Build Boilerplate Isomorphic Rendering",
   "main": "dist/index.js",
   "author": "DtotheFP",

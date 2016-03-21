@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-webpack",
-  "version": "0.5.9",
+  "version": "1.0.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",

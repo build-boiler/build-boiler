@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-browser-sync",
-  "version": "0.5.4",
+  "version": "1.0.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",

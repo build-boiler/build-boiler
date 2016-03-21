@@ -1,6 +1,6 @@
 {
   "name": "boiler-core",
-  "version": "0.5.12",
+  "version": "1.0.0",
   "description": "Build Boilerplate Core",
   "main": "dist/index.js",
   "author": "DtotheFP",
