@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import renameKey from '../../../utils/rename-key';
+import boilerUtils from 'boiler-utils';
 
 /**
  * Webpack loader used for "SERVER" build to load local
@@ -11,6 +11,7 @@ import renameKey from '../../../utils/rename-key';
  */
 export default function(content) {
   this.cacheable && this.cacheable();
+  const {renameKey} = boilerUtils;
   const cb = this.async();
   const resourcePath = renameKey(this.resourcePath);
 
