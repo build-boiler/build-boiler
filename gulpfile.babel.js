@@ -87,6 +87,7 @@ if (process.argv.indexOf('--force') !== -1) {
   gulp.task('lint:test', tasks.eslint);
   gulp.task('lint:build', tasks.eslint);
   gulp.task('lint', ['lint:test', 'lint:build']);
+  gulp.task('mocha', tasks.mocha);
   gulp.task('selenium', tasks.selenium);
   gulp.task('selenium:tunnel', tasks.selenium);
   gulp.task('webpack:global', tasks.webpack);

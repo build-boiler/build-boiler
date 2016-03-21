@@ -1,6 +1,6 @@
 {
   "name": "boiler-config-eslint",
-  "version": "0.5.6",
+  "version": "1.0.1",
   "description": "Linting Config",
   "main": "dist/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "homepage": "https://github.com/dtothefp/open-eslint-config#readme",
   "dependencies": {
     "app-root-path": "^1.0.0",
-    "boiler-utils": "^0.5.4",
+    "boiler-utils": "^1.0.1",
     "findup-sync": "^0.3.0",
     "object-assign": "^4.0.1"
   }

@@ -1,4 +1,9 @@
-import _ from 'lodash';
+import merge from 'lodash/merge';
+import isFunction from 'lodash/isFunction';
+import isString from 'lodash/isString';
+import isUndefined from 'lodash/isUndefined';
+import isRegExp from 'lodash/isRegExp';
+import isPlainObject from 'lodash/isPlainObject';
 
 /**
  * Utility to check if argument is function, call it, and always
@@ -26,22 +31,22 @@ export default function(...args) {
       fnArgs.unshift(args[0]);
     }
 
-    if (_.isFunction(check)) {
+    if (isFunction(check)) {
       ret = check.apply(check, fnArgs);
-    } else if (_.isRegExp(check)) {
+    } else if (isRegExp(check)) {
       ret = check.test(opts);
-    } else if (_.isString(check)) {
+    } else if (isString(check)) {
       ret = check === opts;
     } else if (Array.isArray(check)) {
       check.forEach(tester => {
         if (ret) return;
         ret = compareVals(tester, opts);
       });
-    } else if (_.isPlainObject(check) && _.isPlainObject(opts)) {
-      ret = _.assign({}, opts, check);
+    } else if (isPlainObject(check) && isPlainObject(opts)) {
+      ret = merge({}, opts, check);
     }
 
-    return _.isUndefined(ret) ? opts : ret;
+    return isUndefined(ret) ? opts : ret;
   }
 
   return hasConfig ? compareVals : compareVals.apply(null, args);

@@ -17,7 +17,7 @@ cache:
 notifications:
   email:
     on_success: 'never'
-    on_failure: 'always'
+    on_failure: 'never'
 before_install:
 - npm config set progress=false
 - npm install -g npm@^3

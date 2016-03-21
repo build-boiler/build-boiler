@@ -1,0 +1,39 @@
+{
+  "name": "boiler-config-webpack",
+  "version": "1.0.1",
+  "description": "Build Boilerplate Static Templating",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "boiler-addon-isomorphic-tools": "^1.0.1",
+    "boiler-config-eslint": "^1.0.1",
+    "boiler-utils": "^1.0.1",
+    "eslint-friendly-formatter": "^1.2.2",
+    "globby": "^4.0.0",
+    "gulp-util": "^3.0.7",
+    "lodash": "^4.0.0",
+    "source-map-support": "^0.4.0",
+    "url-loader": "^0.5.6"
+  }
+}

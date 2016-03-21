@@ -1,0 +1,34 @@
+{
+  "name": "boiler-addon-webpack-isomorphic",
+  "version": "1.0.1",
+  "description": "Build Boilerplate Isomorphic Rendering",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "boiler-utils": "^1.0.1",
+    "globby": "^4.0.0",
+    "lodash": "^4.0.0"
+  }
+}
