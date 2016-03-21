@@ -104,7 +104,7 @@ export default function(config, {dirs}) {
       case 'plugins':
         ret = callParent(
           pluginParentConfig,
-          pick(data, method)
+          data[method]
         );
         break;
     }
