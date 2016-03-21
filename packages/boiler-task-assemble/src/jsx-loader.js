@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import glob from 'globby';
 import jsdom from 'jsdom';
 import webpack from 'webpack';
 import MemoryFS from 'memory-fs';
@@ -24,31 +23,17 @@ export default function(collection) {
 
   const {
     buildLogger,
-    compileModule: compile,
-    renameKey
+    compileModule: compile
   } = boilerUtils;
-  const {log, magenta, blue} = buildLogger;
+  const {log, blue} = buildLogger;
 
   /**
-   * @param {String|Array} patterns glob patterns
-   * @param {Object} options glob options
    * @param {Object} data any additional context
    * @param {Function} cb callback to be called at the end
    *
    * @return {undefined} use the cb
    */
-  collection.load = (patterns, options = {}, config, cb) => {
-    const files = glob.sync(patterns, options);
-    const entry = files.reduce((acc, fp) => {
-      const name = renameKey(fp);
-      log(`Compiling ${magenta(name)} component for isomorphic build`);
-
-      return {
-        ...acc,
-        [name]: [`./${fp}`]
-      };
-    }, {});
-
+  collection.load = (config, cb) => {
     const {webpackConfig: baseConfig} = config;
     const {webpackPaths} = baseConfig;
     const [jsBundleName] = webpackPaths.jsBundleName;
@@ -69,9 +54,8 @@ export default function(collection) {
       }
     );
 
-    serverConfig.sources.entry = entry;
-
     const webpackConfig = makeWebpackConfig(serverConfig);
+    const {entry} = webpackConfig;
 
     webpackConfig.plugins.push(
       function() {

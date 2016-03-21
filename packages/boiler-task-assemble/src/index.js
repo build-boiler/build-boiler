@@ -81,9 +81,6 @@ export default function(gulp, plugins, config, {addons}) {
 
       const task = (done) => {
         if (enableIsomorphic) {
-          const {isomorphic} = config;
-          const {context: cwd, entries: componentEntries} = isomorphic;
-
           /**
            * Create the isomorphic "snippets"
            */
@@ -91,8 +88,6 @@ export default function(gulp, plugins, config, {addons}) {
 
           app.task('template', (done) => {
             app.snippets.load(
-              componentEntries,
-              {cwd},
               config,
               (err) => {
                 if (err) {
