@@ -51,7 +51,7 @@ const thunkCp = (dir, deps, cb) => {
       //eslint-disable-line no-empty
     }
 
-    code ? cb(code) : cb(null, code)
+    code ? cb(code) : cb(null, code);
   });
 };
 
