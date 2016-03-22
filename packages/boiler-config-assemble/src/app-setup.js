@@ -21,8 +21,7 @@ export default function(config, opts = {}) {
   const app = assemble();
   const plasma = new Plasma();
   const {
-    data = {},
-    templatePath
+    data = {}
   } = opts;
   const {
     environment,
@@ -32,10 +31,12 @@ export default function(config, opts = {}) {
   } = config;
   const {
     srcDir,
-    scriptDir
+    scriptDir,
+    templateDir
   } = sources;
   const {addbase} = utils;
   const {renameKey} = boilerUtils;
+  const templatePath = addbase(srcDir, templateDir);
   let parentData;
 
   function makeTemplatePath(dir) {

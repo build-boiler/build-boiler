@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {log, blue} from './build-logger';
+import boilerUtils from 'boiler-utils';
 
 /**
  * Utility function to handle calling of addons inside
@@ -7,22 +7,30 @@ import {log, blue} from './build-logger';
  * @param {Object} addons
  * @param {Object} data arguments to be passed to `addon` function
  * @param {Object} opts parent functions from the "task"
- * @return {undefined}
+ *
+ * @return {Object}
  */
 export default function(addons = {}, data, opts = {}) {
-  Object.keys(addons).forEach(name => {
+  const {buildLogger} = boilerUtils;
+  const {log, blue} = buildLogger;
+
+  return Object.keys(addons).reduce((acc, name) => {
     const addon = addons[name];
     log(`Running addon ${blue(name)}`);
+    //normalize key making `isomorphic-static` => `isomorphic`
+    const [key] = name.split('-');
 
     if (_.isFunction(addon)) {
-      addon(data, opts);
+      acc[key] = addon(data, opts);
     } else if (Array.isArray(addon)) {
       const [fn, addonConfig] = addon;
 
-      fn.apply(fn, [
+      acc[key] = fn.apply(fn, [
         data,
         Object.assign({}, opts, {addonConfig})
       ]);
     }
-  });
+
+    return acc;
+  }, {});
 }

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import path from 'path';
 import tryExists from './try-exists';
+import installDeps from './install-peer-dep';
 
 /**
  * Utility for handling data passed to `addons`
@@ -17,6 +18,8 @@ export default function(addons = [], root) {
    */
   function getAddon(addon) {
     let baseName;
+
+    installDeps(root, addon);
 
     let fn = tryExists(
       addon.indexOf(cwd) === -1 ? path.join(cwd, addon) : addon,

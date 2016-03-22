@@ -102,6 +102,7 @@ if (force || release) {
   gulp.task('selenium:tunnel', tasks.selenium);
   gulp.task('webpack:global', tasks.webpack);
   gulp.task('webpack:main', tasks.webpack);
+  gulp.task('webpack:server', tasks.webpack);
   gulp.task('webpack', ['webpack:global', 'webpack:main']);
 
   gulp.task('build', (cb) => {
@@ -130,6 +131,7 @@ if (force || release) {
         'copy',
         'lint',
         'webpack',
+        //'webpack:server',
         'assemble',
         cb
       );

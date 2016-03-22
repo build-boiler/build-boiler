@@ -12,14 +12,16 @@ export default {
     //'webpack'
   //],
   addons: [
+    //'assemble-isomorphic-static',
+    'assemble-isomorphic-memory',
     'assemble-middleware',
     'assemble-nunjucks',
-    'boiler-addon-webpack-loaders-base',
-    'boiler-addon-webpack-loaders-optimize',
-    'boiler-addon-webpack-babel',
-    'boiler-addon-webpack-styles',
-    'boiler-addon-webpack-isomorphic',
-    'boiler-addon-webpack-karma'
+    'webpack-loaders-base',
+    'webpack-loaders-optimize',
+    'webpack-babel',
+    'webpack-styles',
+    'webpack-isomorphic',
+    'webpack-karma'
     //['assemble-middleware', {
       //ignore: {onLoad: true}
     //}],

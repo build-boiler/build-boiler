@@ -1,22 +1,17 @@
 import {join} from 'path';
 import boilerUtils from 'boiler-utils';
-import jsxLoader from './jsx-loader';
-import isoMerge from './isomorphic-merge-plugin';
-import setup from './app-setup';
-import getAssetStats from './parse-assets';
+import makeConfig from 'boiler-config-assemble';
 
 export default function(gulp, plugins, config, {addons}) {
   const {browserSync} = plugins;
   const {
     buildLogger,
     renameKey,
-    runAddons,
     runParentFn: callParent,
     runCustomTask: runFn
   } = boilerUtils;
   const {log, blue} = buildLogger;
   const {
-    assemble: assembleParentConfig,
     sources,
     utils,
     environment
@@ -30,46 +25,34 @@ export default function(gulp, plugins, config, {addons}) {
   const {isDev, enableIsomorphic} = environment;
   const templatePath = addbase(srcDir, templateDir);
   const src = join(templatePath, 'pages/**/*.html');
-  const {
-    data: parentData,
-    registerTags,
-    middleware: parentMiddlware = {}
-  } = assembleParentConfig;
-
-  const app = setup(config, {
-    data: parentData,
-    templatePath
-  });
-
-  if (isDev) {
-    const watch = require('base-watch');
-    app.use(watch());
-  }
-
-  //TODO: handle config
-  runAddons(addons, app, {
-    config,
-    fn: {
-      nunjucks: registerTags,
-      middleware: parentMiddlware
-    },
-    isomorphic: enableIsomorphic
-  });
 
   return (cb) => {
-    const prom = getAssetStats(config, {
-      isomorphic: enableIsomorphic
-    });
+    const {
+      app,
+      assets: prom,
+      data: addonData = {}
+    } = makeConfig(config);
+
+    if (isDev) {
+      const watch = require('base-watch');
+      app.use(watch());
+    }
 
     prom.then((assets) => {
       app.data({assets});
 
+      const {
+        nunjucks: nunj,
+        isomorphic: isomorphicAddonData
+      } = addonData;
+      const {jsxLoader, plugin: isoMerge} = isomorphicAddonData;
       const parentConfig = callParent(arguments, {
         src,
         data: {
           app,
           assets,
-          jsxLoader
+          jsxLoader,
+          nunj
         }
       });
 

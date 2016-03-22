@@ -44,6 +44,7 @@
     "babel-preset-stage-0": "^6.1.18",
     "babel-register": "^6.3.13",
     "chai": "^3.5.0",
+    "deps": "^0.1.2",
     "eslint": "^1.10.3",
     "eslint-config": "0.3.0-legacy",
     "eslint-friendly-formatter": "^1.2.2",
@@ -69,7 +70,8 @@
     "query-string": "^3.0.3",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "webpack": "^1.12.14"
   },
   "dependencies": {}
 }

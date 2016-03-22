@@ -20,11 +20,10 @@ export default function(config, data) {
   let methods;
 
   if (isServer) {
-    const {buildLogger, renameKey} = boilerUtils;
-    const {log, blue} = buildLogger;
-    const {buildDir} = sources;
-    const {paths} = webpackConfig;
-    const {jsBundleName} = paths;
+    const {renameKey} = boilerUtils;
+    const {serverDir} = sources;
+    const {webpackPaths} = webpackConfig;
+    const [jsBundleName] = webpackPaths.jsBundleName;
     const {addbase} = utils;
     const {
       context: defaultContext,
@@ -34,13 +33,13 @@ export default function(config, data) {
     } = data;
     const {loaders} = module;
     const {
+      output,
       entries = [],
-        context = defaultContext
+      context = defaultContext
     } = isomorphic;
     const files = globSync(entries, {cwd: context});
     const entry = files.reduce((acc, fp) => {
       const name = renameKey(fp);
-      log(`Compiling ${blue(name)} component for isomorphic build`);
 
       return {
         ...acc,
@@ -71,7 +70,7 @@ export default function(config, data) {
           context,
           entry,
           output: {
-            path: addbase(buildDir),
+            path: addbase(output || serverDir),
             publicPath,
             filename: path.join('js', jsBundleName),
             libraryTarget: 'commonjs2'

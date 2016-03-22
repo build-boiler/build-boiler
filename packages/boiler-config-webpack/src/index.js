@@ -21,6 +21,7 @@ export default function(config) {
       node
   } = webpackConfig;
   const {addbase, addroot} = utils;
+
   const moduleDirs = fs
     .readdirSync(rootDir)
     .filter((dir) => /boiler-.*-webpack-?/.test(dir));
