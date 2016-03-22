@@ -32,6 +32,7 @@
     "webpack"
   ],
   "devDependencies": {
+    "async": "^2.0.0-rc.1",
     "babel-core": "^6.5.2",
     "babel-eslint": "^5.0.0",
     "babel-plugin-add-module-exports": "^0.1.1",
@@ -59,6 +60,7 @@
     "gulp-util": "^3.0.7",
     "gutil": "^1.6.4",
     "js-cookie": "^2.1.0",
+    "js-yaml": "^3.5.5",
     "key-mirror": "^1.0.1",
     "lerna": "^1.1.2",
     "lodash": "^4.0.0",
@@ -69,9 +71,5 @@
     "react-dom": "^0.14.7",
     "run-sequence": "^1.1.5"
   },
-  "dependencies": {
-    "async": "^2.0.0-rc.1",
-    "js-yaml": "^3.5.5",
-    "lerna": "^1.1.2"
-  }
+  "dependencies": {}
 }

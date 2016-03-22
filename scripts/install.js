@@ -1,35 +1,61 @@
+const async = require('async');
 const assign = require('lodash/assign');
 const gutil = require('gulp-util');
 const path = require('path');
 const fs = require('fs');
 const colors = gutil.colors;
 const log = gutil.log;
-const spawn = require('child_process').spawnSync;
+const child = require('child_process');
 const rootDir = path.resolve(__dirname, '..');
 const packageDir = 'packages';
 const packageDirs = fs.readdirSync(
   path.join(rootDir, packageDir)
 ).filter(dir => dir[0] !== '.');
+const spawn = child.spawn;
+const exec = child.execSync;
 
-if (process.env.TRAVIS_BRANCH) {
-  const yml = require('js-yaml');
-  const travisPath = path.join(process.cwd(), '.travis.yml');
-  const travisConfig = yml.safeLoad(
-    fs.readFileSync(travisPath)
-  );
-  const directories = packageDirs.reduce((list, dir) => ([
-    ...list,
-    path.join(packageDir, dir, 'node_modules')
-  ]), ['node_modules']);
-  const newYml = assign({}, travisConfig, {cache: directories});
+const yml = require('js-yaml');
+const travisPath = path.join(process.cwd(), '.travis.yml');
+const travisConfig = yml.safeLoad(
+  fs.readFileSync(travisPath)
+);
+const directories = packageDirs.reduce((list, dir) => ([
+  ...list,
+  path.join(packageDir, dir, 'node_modules')
+]), ['node_modules']);
+const newYml = assign({}, travisConfig, {cache: directories});
 
-  fs.writeFileSync(
-    travisPath,
-    yml.safeDump(newYml, {indent: 0})
-  );
-}
+fs.writeFileSync(
+  travisPath,
+  yml.safeDump(newYml, {indent: 0})
+);
 
-packageDirs.forEach(dir => {
+const thunkCp = (dir, deps, cb) => {
+  const dirPath = path.join('packages', dir);
+
+  log(`Installing external deps for ${colors.magenta(dirPath)}:\n  ${colors.blue(deps.join('\n  '))}\n`);
+
+  const cp = spawn('npm', [
+    'install'
+  ].concat(deps), {stdio: 'inherit', cwd: dirPath});
+
+  cp.on('close', (code) => {
+    try {
+      const etcPath = path.join(dirPath, 'etc');
+      const stat = fs.statSync(etcPath);
+
+      if (stat.isDirectory()) {
+        fs.rmdirSync(etcPath);
+      }
+    } catch (err) {
+      //eslint-disable-line no-empty
+    }
+
+    code ? cb(code) : cb(null, code)
+  });
+};
+
+const tasks = packageDirs.map(dir => {
   const pkg = require(
     path.join(rootDir, packageDir, dir, 'package.json')
   );
@@ -47,22 +73,18 @@ packageDirs.forEach(dir => {
     return list;
   }, []);
 
-  if (externalDeps.length) {
-    const dirPath = path.join('packages', dir);
-    log(`Installing external deps for ${colors.magenta(dir)}:\n  ${colors.blue(externalDeps.join('\n  '))}`);
-    spawn('npm', [
-      'install'
-    ].concat(externalDeps), {stdio: 'inherit', cwd: dirPath});
-
-    try {
-      const etcPath = path.join(dirPath, 'etc');
-      const stat = fs.statSync(etcPath);
-
-      if (stat.isDirectory()) {
-        fs.rmdirSync(etcPath);
-      }
-    } catch (err) {
-      //eslint-disable-line no-empty
+  return (cb) => {
+    if (externalDeps.length) {
+      thunkCp(dir, externalDeps, cb);
+    } else {
+      cb(null);
     }
-  }
+  };
+});
+
+exec('npm config set progress=false');
+
+async.parallelLimit(tasks, 2, (err, result) => {
+  exec('npm config set progress=true');
+  if (err) return console.log(err);
 });
