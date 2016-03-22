@@ -29,7 +29,6 @@ export default function(config, {dirs}) {
   const {
     callAndReturn
   } = boilerUtils;
-  const callParent = callAndReturn(config);
   const {main} = entry;
   const DEBUG = isDev;
   const TEST = ENV === 'test' || ENV === 'ci';
@@ -41,13 +40,14 @@ export default function(config, {dirs}) {
     assign({}, config, {isPlugin: true})
   );
   const sharedConfig = {
+    ...config,
     dirs,
     toolsPlugin,
     DEBUG,
     TEST,
     SERVER
   };
-  const loaderConfig = assign({}, config, sharedConfig, {extract, expose});
+  const loaderConfig = assign({}, sharedConfig, {extract, expose});
   const loaderData = {
     preLoaders: [],
     loaders: [],
@@ -57,7 +57,7 @@ export default function(config, {dirs}) {
   const loaders = applyAddons(loaderConfig, loaderData, {
     include: loaderRe
   });
-  const pluginConfig = assign({}, config, sharedConfig, {provide});
+  const pluginConfig = assign({}, sharedConfig, {provide});
   const plugins = makePlugins(pluginConfig);
   const defaultEslintConfig = {
     isDev,
@@ -84,6 +84,7 @@ export default function(config, {dirs}) {
 
   return Object.keys(addonConfig).reduce((acc, method) => {
     const config = addonConfig[method];
+    const callParent = callAndReturn(config);
     const data = applyAddons(config, acc, {
       method,
       exclude: loaderRe
