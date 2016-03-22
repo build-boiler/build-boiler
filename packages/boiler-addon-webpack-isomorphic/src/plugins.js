@@ -26,11 +26,11 @@ export default function(config, data) {
         case tools:
           //omit iso tools
           break;
-        case define:
-          merge(plugin.definitions, definitions);
-          break;
         //case provide:
           //break;
+        case define:
+          merge(plugin.definitions, definitions);
+          /*intentional fall through*/
         default:
           ret = plugin;
           break;
