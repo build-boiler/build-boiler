@@ -1,3 +1,4 @@
+const assign = require('lodash/assign');
 const gutil = require('gulp-util');
 const path = require('path');
 const fs = require('fs');
@@ -5,13 +6,32 @@ const colors = gutil.colors;
 const log = gutil.log;
 const spawn = require('child_process').spawnSync;
 const rootDir = path.resolve(__dirname, '..');
+const packageDir = 'packages';
 const packageDirs = fs.readdirSync(
-  path.join(rootDir, 'packages')
+  path.join(rootDir, packageDir)
 ).filter(dir => dir[0] !== '.');
+
+if (process.env.TRAVIS_BRANCH) {
+  const yml = require('js-yaml');
+  const travisPath = path.join(process.cwd(), '.travis.yml');
+  const travisConfig = yml.safeLoad(
+    fs.readFileSync(travisPath)
+  );
+  const directories = packageDirs.reduce((list, dir) => ([
+    ...list,
+    path.join(packageDir, dir, 'node_modules')
+  ]), ['node_modules']);
+  const newYml = assign({}, travisConfig, {cache: directories});
+
+  fs.writeFileSync(
+    travisPath,
+    yml.safeDump(newYml, {indent: 0})
+  );
+}
 
 packageDirs.forEach(dir => {
   const pkg = require(
-    path.join(rootDir, 'packages', dir, 'package.json')
+    path.join(rootDir, packageDir, dir, 'package.json')
   );
 
   const deps = pkg.dependencies;
