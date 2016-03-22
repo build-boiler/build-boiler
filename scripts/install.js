@@ -31,7 +31,7 @@ packageDirs.forEach(dir => {
     const dirPath = path.join('packages', dir);
     log(`Installing external deps for ${colors.magenta(dir)}:\n  ${colors.blue(externalDeps.join('\n  '))}`);
     spawn('npm', [
-      'install',
+      'install'
     ].concat(externalDeps), {stdio: 'inherit', cwd: dirPath});
 
     try {
