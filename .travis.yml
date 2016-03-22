@@ -23,6 +23,7 @@ before_install:
 - npm install -g npm@^3
 install:
 - npm i
+- npm run compile
 - npm run bs
 script:
 - npm start

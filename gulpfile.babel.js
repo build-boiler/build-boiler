@@ -6,13 +6,15 @@ import formatter from 'eslint-friendly-formatter';
 import makeEslintConfig from 'eslint-config';
 
 const scripts = './packages/*/src/**/*.js';
+const release = process.argv.indexOf('--release') !== -1;
+const force = process.argv.indexOf('--force') !== -1;
 
-if (process.argv.indexOf('--force') !== -1) {
+if (force || release) {
   let tasks = {};
   let plugins;
 
   try {
-    const build = require('./packages/boiler-core/src');
+    const build = require('./packages/boiler-core/sc');
 
     ({tasks, plugins} = build(gulp));
   } catch (err) {
@@ -52,10 +54,18 @@ if (process.argv.indexOf('--force') !== -1) {
       .pipe(eslint(eslintConfig))
       .pipe(eslint.format(formatter));
   };
+  const config = {force, release};
 
-  gulp.task('babel', tasks.babel || babelFn(gulp, plugins, {}));
+  gulp.task('babel', tasks.babel || babelFn(gulp, plugins, config));
   gulp.task('lint', tasks.lint || eslintFn);
-  gulp.task('copy', tasks.copy || copyFn(gulp, plugins, {}));
+  gulp.task('copy', tasks.copy || copyFn(gulp, plugins, config));
+  gulp.task('build', (cb) => {
+    sequence(
+      'lint',
+      ['copy', 'babel'],
+      cb
+    );
+  });
 
   gulp.task('watch', ['lint', 'babel', 'copy'], () => {
     gulp.watch(scripts, [], (cb) => {

@@ -28,11 +28,21 @@ packageDirs.forEach(dir => {
   }, []);
 
   if (externalDeps.length) {
+    const dirPath = path.join('packages', dir);
     log(`Installing external deps for ${colors.magenta(dir)}:\n  ${colors.blue(externalDeps.join('\n  '))}`);
     spawn('npm', [
       'install',
-      '--prefix',
-      path.join('packages', dir)
-    ].concat(externalDeps), {stdio: 'inherit'});
+    ].concat(externalDeps), {stdio: 'inherit', cwd: dirPath});
+
+    try {
+      const etcPath = path.join(dirPath, 'etc');
+      const stat = fs.statSync(etcPath);
+
+      if (stat.isDirectory()) {
+        fs.rmdirSync(etcPath);
+      }
+    } catch (err) {
+      //eslint-disable-line no-empty
+    }
   }
 });
