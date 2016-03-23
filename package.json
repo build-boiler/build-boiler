@@ -7,7 +7,7 @@
     "start": "gulp",
     "bs": "node ./scripts/install.js && lerna bootstrap",
     "compile": "gulp build --release",
-    "publish": "gulp --release && lerna publish"
+    "publish": "gulp build --release && lerna publish"
   },
   "author": "DtotheFP",
   "license": "Copyright 2016",
