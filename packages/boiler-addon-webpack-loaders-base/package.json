@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-webpack-loaders-base",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Build Boilerplate Webpack Base Loaders",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,7 +26,7 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-utils": "^1.0.1",
+    "boiler-utils": "^1.1.0",
     "eslint-loader": "^1.0.0",
     "exports-loader": "^0.6.2",
     "expose-loader": "^0.7.0",
