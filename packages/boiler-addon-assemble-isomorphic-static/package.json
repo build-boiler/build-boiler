@@ -1,7 +1,7 @@
 {
-  "name": "boiler-addon-webpack-isomorphic",
-  "version": "1.0.6",
-  "description": "Build Boilerplate Isomorphic Rendering",
+  "name": "boiler-addon-assemble-isomorphic-static",
+  "version": "1.0.1",
+  "description": "Build Boilerplate Isomorphic Components for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -26,12 +26,11 @@
     "webpack"
   ],
   "dependencies": {
-    "babel-plugin-add-module-exports": "^0.1.2",
     "boiler-utils": "^1.0.1",
+    "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
-    "lodash": "^4.0.0"
-  },
-  "peerDependencies": {
-    "webpack": "1.x"
+    "jsdom": "^8.0.4",
+    "lodash": "^4.0.0",
+    "through2": "^2.0.0"
   }
 }

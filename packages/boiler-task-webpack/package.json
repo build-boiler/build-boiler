@@ -30,8 +30,10 @@
     "boiler-utils": "^1.0.1",
     "express": "^4.13.4",
     "lodash": "^4.0.0",
-    "webpack": "^1.12.13",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-hot-middleware": "2.7.1"
+  },
+  "peerDependencies": {
+    "webpack": "1.x"
   }
 }

@@ -1,9 +1,10 @@
-import _ from 'lodash';
+import path from 'path';
+import merge from 'lodash/merge';
 import jsdom from 'jsdom';
-import webpack from 'webpack';
 import MemoryFS from 'memory-fs';
 import boilerUtils from 'boiler-utils';
 import makeWebpackConfig from 'boiler-config-webpack';
+import webpack from 'webpack';
 
 /**
  * Loader to compile React components and es6 functions with Webpack
@@ -34,12 +35,15 @@ export default function(collection) {
    * @return {undefined} use the cb
    */
   collection.load = (config, cb) => {
-    const {webpackConfig: baseConfig} = config;
+    const {
+      isomorphic = {},
+      webpackConfig: baseConfig
+    } = config;
+    const {memory} = isomorphic;
     const {webpackPaths} = baseConfig;
     const [jsBundleName] = webpackPaths.jsBundleName;
 
-    const fs = new MemoryFS();
-    const serverConfig = _.merge({},
+    const serverConfig = merge({},
       config,
       {
         ENV: 'server',
@@ -70,21 +74,32 @@ export default function(collection) {
     );
 
     const compiler = webpack(webpackConfig);
-    const {sources, utils} = config;
-    const {buildDir, scriptDir} = sources;
-    const {addbase} = utils;
+    const {sources} = config;
+    const {scriptDir} = sources;
+    const {path: outDir} = webpackConfig.output;
+    let fs;
 
-    compiler.outputFileSystem = fs;
+    if (memory) {
+      fs = new MemoryFS();
+      compiler.outputFileSystem = fs;
+    }
 
     compiler.run((err, stats) => {
       if (err) return cb(err);
 
       Object.keys(entry).forEach(file => {
         const filename = `${file}.js`;
-        const fp = addbase(buildDir, scriptDir, filename);
+        const fp = path.join(outDir, scriptDir, filename);
         log(`Finished Compiling ${blue(file)} component`);
-        const contents = fs.readFileSync(fp);
-        const fn = compile(contents);
+        let contents, fn;
+
+        if (memory) {
+          contents = fs.readFileSync(fp);
+          fn = compile(contents);
+        } else {
+          contents = '';
+          fn = require(fp);
+        }
 
         collection.addView(file, {
           path: file,
@@ -92,6 +107,7 @@ export default function(collection) {
           fn
         });
       });
+
       cb(null);
     });
   };

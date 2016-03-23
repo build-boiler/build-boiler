@@ -413,6 +413,8 @@ export default {
    * }
    */
   isomorphic: {
+    memory: true, //=> use with `boiler-addon-assemble-isomorphic-memory`
+    output: 'dist/server',
     context: process.cwd(),
     entries: [
       'lib/components/**.{js,jsx}',

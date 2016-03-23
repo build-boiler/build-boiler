@@ -1,7 +1,7 @@
 import {expect} from 'chai';
-import setup from '../config/e2e-setup';
+import setup from '../../config/e2e-setup';
 
-describe('#SampleAsync not exporting ANY browsers', () => {
+describe('Desktop Directory Spec', () => {
   const client = setup();
   const url = '/';
 

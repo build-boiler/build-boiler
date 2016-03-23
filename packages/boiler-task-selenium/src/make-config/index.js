@@ -65,9 +65,9 @@ export default function({config, gulp}) {
     if (hasMobile && hasDesktop) {
       specs = join(testDir, `e2e/**/${file || specGlob}.js`);
     } else if (hasDesktop) {
-      specs = join(testDir, `e2e/{desktop/**,*}${file || specGlob}.js`);
+      specs = join(testDir, `e2e/{desktop/**/,,!(mobile)/**/}${file || specGlob}.js`);
     } else if (hasMobile) {
-      specs = join(testDir, `e2e/{mobile/**,*}${file || specGlob}.js`);
+      specs = join(testDir, `e2e/{mobile/**/,,!(desktop)/**/}${file || specGlob}.js`);
     } else {
       specs = join(testDir, `e2e/**/${file || specGlob}.js`);
     }

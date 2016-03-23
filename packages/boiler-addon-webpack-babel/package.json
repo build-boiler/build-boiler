@@ -42,5 +42,8 @@
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
     "redbox-react": "^1.2.0"
+  },
+  "peerDependencies": {
+    "webpack": "1.x"
   }
 }

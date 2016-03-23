@@ -9,6 +9,10 @@ export default function(gulp, plugins, config, opts) {
     );
   }
 
+  src.push(
+    addbase('server')
+  );
+
   return {
     src
   };

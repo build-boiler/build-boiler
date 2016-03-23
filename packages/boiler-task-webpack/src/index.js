@@ -2,12 +2,12 @@ import assign from 'lodash/assign';
 import merge from 'lodash/merge';
 import isFunction from 'lodash/isFunction';
 import isUndefined from 'lodash/isUndefined';
-import webpack from 'webpack';
 import boilerUtils from 'boiler-utils';
 import Express from 'express';
 import middleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import makeConfig from 'boiler-config-webpack';
+import webpack from 'webpack';
 
 export default function(gulp, plugins, config) {
   const {sources, utils, environment, webpackConfig} = config;

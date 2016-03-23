@@ -30,5 +30,8 @@
     "img-loader": "^1.2.2",
     "lodash": "^4.0.0",
     "url-loader": "^0.5.6"
+  },
+  "peerDependencies": {
+    "webpack": "1.x"
   }
 }
