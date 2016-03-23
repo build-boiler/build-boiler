@@ -1,9 +1,10 @@
+import isFunction from 'lodash/isFunction';
 import {join} from 'path';
 import boilerUtils from 'boiler-utils';
 import makeConfig from 'boiler-config-assemble';
 
 export default function(gulp, plugins, config, {addons}) {
-  const {browserSync} = plugins;
+  const {browserSync, gulpIf} = plugins;
   const {
     buildLogger,
     renameKey,
@@ -43,7 +44,7 @@ export default function(gulp, plugins, config, {addons}) {
 
       const {
         nunjucks: nunj,
-        isomorphic: isomorphicAddonData
+        isomorphic: isomorphicAddonData = {}
       } = addonData;
       const {jsxLoader, plugin: isoMerge} = isomorphicAddonData;
       const parentConfig = callParent(arguments, {
@@ -84,8 +85,15 @@ export default function(gulp, plugins, config, {addons}) {
         }
 
         app.task('build', enableIsomorphic && !isDev ? ['template'] : [], () => {
+          //HACK: clean this up
+          const noop = () => {};
+          const mergeFluxData = enableIsomorphic && isFunction(isoMerge);
+          const fluxPlugin = mergeFluxData ? isoMerge(app, config) : noop;
+
           let stream = app.src(newSrc)
-            .pipe(isoMerge(app, config))
+            .pipe(
+              gulpIf(mergeFluxData, fluxPlugin)
+            )
             .pipe(app.renderFile())
             .pipe(app.dest(buildDir))
             .on('data', (file) => {

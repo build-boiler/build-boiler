@@ -29,6 +29,7 @@
     "base-watch": "^0.1.2",
     "boiler-config-assemble": "^1.1.0",
     "boiler-utils": "^1.1.0",
+    "gulp-if": "^2.0.0",
     "lodash": "^4.0.0"
   }
 }
