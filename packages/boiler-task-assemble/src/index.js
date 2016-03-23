@@ -51,8 +51,8 @@ export default function(gulp, plugins, config, {addons}) {
         data: {
           app,
           assets,
-          jsxLoader,
-          nunj
+          nunj,
+          isomorphic: isomorphicAddonData
         }
       });
 
