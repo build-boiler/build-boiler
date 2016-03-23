@@ -45,9 +45,10 @@ notifications:
 before_install:
   - npm config set progress=false
   - npm install -g npm@^3
+  - npm i -g lerna
 install:
   - npm i
   - npm run compile
-  - npm run bs
+  - lerna bootstrap
 script:
   - npm start
