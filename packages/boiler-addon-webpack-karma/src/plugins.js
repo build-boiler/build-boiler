@@ -32,10 +32,12 @@ export default function(config, data) {
           break;
         case define:
           merge(plugin.definitions, testDefine);
-          //intentional fallthrough
+          ret = plugin;
+          break;
         case provide:
           assign(plugin.definitions, provideDefault);
-          //intentional fallthrough
+          ret = plugin;
+          break;
         default:
           ret = plugin;
           break;

@@ -30,7 +30,8 @@ export default function(config, data) {
           //break;
         case define:
           merge(plugin.definitions, definitions);
-          /*intentional fall through*/
+          ret = plugin;
+          break;
         default:
           ret = plugin;
           break;

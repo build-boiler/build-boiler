@@ -10,7 +10,10 @@ export default function(config, data) {
   const testCoverage = coverage && TEST;
 
   if (TEST) {
-    const {preLoaders, loaders} = data;
+    const {
+      preLoaders = [],
+      loaders = []
+    } = data;
 
     if (testCoverage) {
       const isparta = {
@@ -22,6 +25,9 @@ export default function(config, data) {
 
       preLoaders.unshift(isparta);
     }
+
+    //remove eslint from karma
+    data.preLoaders = preLoaders.filter(({loader}) => !/eslint/.test(loader));
 
     loaders.forEach(loaderData => {
       const {loader, exclude, query} = loaderData;
