@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-webpack-isomorphic",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Build Boilerplate Isomorphic Rendering",
   "main": "dist/index.js",
   "author": "DtotheFP",
