@@ -131,7 +131,7 @@ if (force || release) {
         'copy',
         'lint',
         'webpack',
-        //'webpack:server',
+        'webpack:server',
         'assemble',
         cb
       );

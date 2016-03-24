@@ -10,7 +10,7 @@ import runAddons from './utils/run-addons';
  */
 export default function(config) {
   const {
-    assemble: assembleParentConfig,
+    assemble: assembleParentConfig = {},
     boilerConfig,
     environment
   } = config;

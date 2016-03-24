@@ -28,6 +28,6 @@
   "dependencies": {
     "boiler-preset-base": "^1.0.1",
     "boiler-task-karma": "^1.0.1",
-    "boiler-task-selenium": "^1.0.1"
+    "boiler-task-selenium": "^1.1.0"
   }
 }

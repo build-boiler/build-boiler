@@ -26,11 +26,11 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-task-assemble": "^1.0.1",
+    "boiler-task-assemble": "^1.1.2",
     "boiler-task-browser-sync": "^1.0.1",
     "boiler-task-clean": "^1.0.1",
     "boiler-task-copy": "^1.0.1",
     "boiler-task-eslint": "^1.0.1",
-    "boiler-task-webpack": "^1.0.1"
+    "boiler-task-webpack": "^1.1.0"
   }
 }
