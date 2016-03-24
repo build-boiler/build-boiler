@@ -33,13 +33,17 @@ export default function(config, data) {
     } = data;
     const {loaders} = module;
     const {
+      memory,
+      base,
       output,
       entries = [],
       context = defaultContext
     } = isomorphic;
     const files = globSync(entries, {cwd: context});
     const entry = files.reduce((acc, fp) => {
-      const name = renameKey(fp);
+      const name = renameKey(fp, {
+        base: memory ? false : base
+      });
 
       return {
         ...acc,
