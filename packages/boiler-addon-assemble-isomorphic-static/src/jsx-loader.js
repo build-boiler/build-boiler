@@ -48,7 +48,11 @@ export default function(collection) {
     try {
       files = globSync(entries, {cwd}).map(fp => {
         const name = renameKey(fp, {base});
-        return addbase(outDir, scriptDir, name);
+        return addbase(
+          outDir,
+          base ? '' : scriptDir,
+          name
+        );
       });
     } catch (err) {
       throw new Error('You must add isomorphic data to `gulp/config/index.js`');

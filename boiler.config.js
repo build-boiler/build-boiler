@@ -12,8 +12,8 @@ export default {
     //'webpack'
   //],
   addons: [
-    //'assemble-isomorphic-static',
-    'assemble-isomorphic-memory',
+    'assemble-isomorphic-static',
+    //'assemble-isomorphic-memory',
     'assemble-middleware',
     'assemble-nunjucks',
     'webpack-loaders-base',

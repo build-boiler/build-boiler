@@ -76,7 +76,7 @@ export default function(config, data) {
           output: {
             path: addbase(output || serverDir),
             publicPath,
-            filename: path.join('js', jsBundleName),
+            filename: base ? jsBundleName : path.join('js', jsBundleName),
             libraryTarget: 'commonjs2'
           },
           module: {
