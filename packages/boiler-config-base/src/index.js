@@ -2,7 +2,6 @@ import _ from 'lodash';
 import path, {join} from 'path';
 import boilerUtils from 'boiler-utils';
 import {readJsonSync} from 'fs-extra';
-import findUp from 'findup-sync';
 import makeCliConfig from './make-cli-config';
 
 export default function(boilerConfigFp, opts = {}) {
@@ -18,7 +17,7 @@ export default function(boilerConfigFp, opts = {}) {
   } = boilerUtils;
   const {log, blue} = buildLogger;
   const {entry} = opts;
-  const rootDir = findUp('packages') || findUp('node_modules');
+  const rootDir = path.resolve(__dirname, '..', '..');
   const cliConfig = makeCliConfig(opts);
   const {ENV, browser} = cliConfig;
   const cwd = process.cwd();
