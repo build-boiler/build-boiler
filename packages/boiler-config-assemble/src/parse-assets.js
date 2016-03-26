@@ -8,14 +8,17 @@ export default function(config, opts = {}) {
   const {environment, sources, utils} = config;
   const {
     buildDir,
+    statsDir,
     globalStatsFile,
     statsFile
   } = sources;
   const {isDev} = environment;
   const {addbase} = utils;
   const {isomorphic} = opts;
-  const statsDir = addbase(buildDir);
-  const globalStatsPath = path.join(statsDir, globalStatsFile);
+  //Allow passing a custom `statsDir` from `sources`, useful for stuff
+  //like lambda/server where stats might be copied somewhere other than `dist`
+  const statsPath = addbase(statsDir || buildDir);
+  const globalStatsPath = path.join(statsPath, globalStatsFile);
   const tools = makeTools(Object.assign({}, config, {
     isPlugin: false,
     isMainTask: true
@@ -29,7 +32,7 @@ export default function(config, opts = {}) {
   }
 
   if (isomorphic) {
-    prom = tools.development(isDev).server(statsDir).then(() => {
+    prom = tools.development(isDev).server(statsPath).then(() => {
       return Promise.resolve(
         makeStats(tools.assets(), readJsonSync(globalStatsPath))
       );
@@ -37,7 +40,7 @@ export default function(config, opts = {}) {
   } else {
     prom = new Promise((res, rej) => {
       const statsPaths = [
-        path.join(statsDir, statsFile),
+        path.join(statsPath, statsFile),
         globalStatsPath
       ];
 
