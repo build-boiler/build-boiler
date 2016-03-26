@@ -1,9 +1,10 @@
 import isString from 'lodash/isString';
 import isPlainObject from 'lodash/isPlainObject';
+import isFunction from 'lodash/isFunction';
 import assemble from 'assemble-core';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
-import path, {join} from 'path';
+import {join} from 'path';
 import Plasma from 'plasma';
 import boilerUtils from 'boiler-utils';
 
@@ -37,7 +38,7 @@ export default function(config, opts = {}) {
   const {addbase} = utils;
   const {renameKey} = boilerUtils;
   const templatePath = addbase(srcDir, templateDir);
-  let parentData;
+  let parentData = {};
 
   function makeTemplatePath(dir) {
     return (fp) => `${join(templatePath, dir, fp)}.html`;
@@ -52,18 +53,7 @@ export default function(config, opts = {}) {
     return safeLoad(str);
   });
 
-  if (isString(data)) {
-    const cwd = process.cwd();
-    const dataPath = path.join(
-      data.indexOf(cwd) === -1 ? addbase(data) : data
-    );
-
-    parentData =  plasma.load(dataPath, {namespace: true});
-  } else if (isPlainObject(data)) {
-    parentData = data;
-  }
-
-  app.data({
+  const defaultData = {
     sources,
     environment,
     webpackConfig,
@@ -71,7 +61,32 @@ export default function(config, opts = {}) {
     headScripts: makeJSPath('head-scripts'),
     layouts: makeTemplatePath('layouts'),
     macros: makeTemplatePath('macros'),
-    partials: makeTemplatePath('partials'),
+    partials: makeTemplatePath('partials')
+  };
+
+  const makeDataPath = (fp) => {
+    const cwd = process.cwd();
+
+    return fp.indexOf(cwd) === -1 ? addbase(fp) : fp;
+  };
+
+  if (isString(data)) {
+    const dataPath = makeDataPath(data);
+
+    parentData =  plasma.load(dataPath, {namespace: true});
+  } else if (Array.isArray(data)) {
+    const [fp, opts] = data;
+    const dataPath = makeDataPath(fp);
+
+    parentData =  plasma.load(dataPath, opts);
+  } else if (isPlainObject(data)) {
+    parentData = data;
+  } else if (isFunction(data)) {
+    parentData = data(config, defaultData) || {};
+  }
+
+  app.data({
+    ...defaultData,
     ...parentData
   });
 

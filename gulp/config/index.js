@@ -10,6 +10,26 @@ export default {
   assemble: {
     /**
      * Add data directly to Assemble context `app.data(data)`
+     *
+     * ex. String
+     * path to give to `Plasma`
+     * data: 'path/to/data/*.yml
+     *
+     * ex. Array
+     * path and options to give to `Plasma`
+     * data: ['path/to/data/*.yml', {namespace: false]
+     *
+     * ex. Object
+     * data: {bleep: 'bloop'}
+     *
+     * ex. Function
+     * @param {Object} config `gulp` config
+     * @param {Object} defaultData internal data passed to assemble
+     *
+     * @return {Object} additional data for assemble
+     * data(config, defaultData) {
+     *   return {bleep: 'bloop'}
+     * }
      */
     data: {
       userName: process.cwd().split('/')[2],
