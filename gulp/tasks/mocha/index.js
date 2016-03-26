@@ -1,15 +1,10 @@
-import path from 'path';
-
-export default function(gulp, plugins, config) {
-  const {mocha} = plugins;
+export default function(gulp, plugins, config, opts) {
+  const {src} = opts;
   const {file, utils} = config;
   const {addbase} = utils;
-  const src = addbase('packages', '*', 'test', `**/${file || '*'}-spec.js`);
+  const pkgSrc = addbase('packages', '*', 'test', `**/${file || '*-spec'}.js`);
 
-  return () => {
-    gulp.src(src, {read: false})
-      .pipe(mocha({
-        require: path.join(__dirname, 'hook.js')
-      }));
-  };
+  src.push(pkgSrc);
+
+  return {src};
 }

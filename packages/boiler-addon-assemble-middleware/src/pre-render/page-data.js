@@ -45,7 +45,7 @@ export default function(config) {
     const jsonData = readJsonSync(fp);
 
     const data = {
-      page_data: jsonData
+      page_json: jsonData
     };
 
     return addNamespaceData(fp, data);

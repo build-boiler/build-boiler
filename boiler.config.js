@@ -1,16 +1,17 @@
 export default {
   'extends': 'configs/boiler-config-hfa/src/index',
   presets: ['plus'],
-  //tasks: [
+  tasks: [
     //'assemble',
     //'browser-sync',
     //'clean',
     //'copy',
     //'eslint',
     //'karma',
+    'mocha',
     //'selenium',
     //'webpack'
-  //],
+  ],
   addons: [
     'assemble-isomorphic-static',
     //'assemble-isomorphic-memory',

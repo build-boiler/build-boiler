@@ -63,6 +63,16 @@ export default {
     }
   },
   /**
+   * Mocha Task
+   * pass `require` see `gulp-mocha`
+   * https://github.com/sindresorhus/gulp-mocha
+   * add => adds `require`ed option to pre-defined task `require`
+   */
+  mocha: {
+    add: true,
+    require: path.resolve(__dirname, '..', 'tasks', 'mocha', 'sample-hook.js')
+  },
+  /**
    * BrowserSync Task
    */
   browserSync: {

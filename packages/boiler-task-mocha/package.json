@@ -1,0 +1,35 @@
+{
+  "name": "boiler-task-mocha",
+  "version": "1.1.8",
+  "description": "Build Boilerplate Mocha Testing",
+  "main": "dist/index.js",
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/dtothefp/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dtothefp/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "babel-polyfill": "^6.3.14",
+    "babel-register": "^6.3.13",
+    "boiler-utils": "^1.1.0",
+    "gulp-mocha": "^2.2.0",
+    "lodash": "^4.0.0"
+  }
+}
