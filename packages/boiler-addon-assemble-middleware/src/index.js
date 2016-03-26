@@ -3,15 +3,12 @@ import isBoolean from 'lodash/isBoolean';
 import isFunction from 'lodash/isFunction';
 import path from 'path';
 import boilerUtils from 'boiler-utils';
-import {series} from 'async';
 
 export default function(app, opts = {}) {
   const {
-    buildLogger,
     requireDir,
     transformArray: createArray
   } = boilerUtils;
-  const {log, blue} = buildLogger;
   const {
     config,
     fn: parentConfig = {},
@@ -50,28 +47,11 @@ export default function(app, opts = {}) {
 
     fns.push(...parentFns);
 
-    app[method](/\.html$/, (file, next) => {
-      /**
-       * onLoad is sync so can't be used with `async.series`
-       */
-      if (method === 'onLoad') {
-        const noop = () => {};
-
-        fns.forEach(fn => callFns(fn, file, noop));
-        next(null, file);
-      } else {
-        const seriesFns = fns.reduce((list, fn) => ([
-          ...list,
-          (cb) => callFns(fn, file, cb)
-        ]), []);
-
-        series(seriesFns, (err, result) => {
-          if (err) log(`Error in ${blue(method)} middleware`);
-
-          next(null, file);
-        });
-      }
-
+    fns.forEach(fn => {
+      app[method](/\.html$/, (file, next) => {
+        callFns(fn, file, next);
+      });
     });
+
   });
 }

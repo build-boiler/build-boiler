@@ -26,7 +26,7 @@
     "webpack"
   ],
   "dependencies": {
-    "assemble-core": "^0.14.3",
+    "assemble-core": "0.13.0",
     "boiler-addon-isomorphic-tools": "^1.0.1",
     "boiler-utils": "^1.1.0",
     "fs-extra": "^0.26.4",
