@@ -70,7 +70,9 @@
     "query-string": "^3.0.3",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "rewire": "^2.5.1",
     "run-sequence": "^1.1.5",
+    "sinon": "^1.17.3",
     "webpack": "^1.12.14"
   },
   "dependencies": {}

@@ -1,57 +1,58 @@
-import _ from 'lodash';
-import fs from 'fs';
+import path from 'path';
 
+/**
+ * Create `externals for webpack
+ * @param {Object} config `gulp config`
+ * @return {Object} externals
+ *
+ * ex.
+ * {
+ *   react: 'commonjs react'
+ * }
+ */
 export default function(config) {
-  const {isomorphic, pkg, utils} = config;
   const {
-    include = {},
-    exclude = {}
+    isomorphic = {},
+    pkg = {}
+  } = config;
+  const {
+    include = [],
+    exclude = []
   } = isomorphic.modules || {};
-  const {addbase} = utils;
   const {dependencies} = pkg;
-  let hfaDir = [];
 
-  try {
-    hfaDir = fs.readdirSync(addbase('node_modules', '@hfa'));
-  } catch (err) {/*eslint no-empty:0*/}
+  const blacklist = Array.isArray(exclude) && exclude.length ?
+    exclude :
+    Object.keys(dependencies);
 
-  const hfaMods = hfaDir.reduce((list, hfaMod) => {
-    let deps;
+  function addCommonJs(dirs, opts = {}) {
+    const {base = ''} = opts;
 
-    try {
-      deps = fs.readdirSync(addbase('node_modules', `@hfa/${hfaMod}`, 'node_modules'));
-    } catch (err) {
-      deps = [];
-    }
+    return dirs.reduce((acc, mod) => {
+      const isBin = ['.bin'].indexOf(mod) !== -1;
 
-    return [...list, ...deps];
-  }, []);
+      if (isBin) return acc;
 
-  const blacklist = [].concat(include);
-  const whitelist = [
-    'formidable'
-  ].concat(exclude);
+      try {
+        require.resolve(
+          path.join(base, mod)
+        );
 
-  const allDeps = _.union(
-    dependencies,
-    hfaMods,
-    pkg,
-    whitelist
-  );
+        if (include.indexOf(mod) === -1) acc[mod] = `commonjs ${mod}`;
+      } catch (err) {
+        if (!base) {
+          //TODO: update for the case that a directory name is passed in
+          //means this is a private NPM directory
+          Object.assign(
+            acc,
+            addCommonJs([mod], {base: mod})
+          );
+        }
+      }
 
-  function filterDeps(dep) {
-    const isBin = ['.bin'].indexOf(dep) !== -1;
-    const isHfa = /^@hfa\/?.*$/.test(dep);
-    const isBlacklist = blacklist.indexOf(dep) !== -1;
-    const shouldExclude = isBin || isHfa || isBlacklist;
-
-    return !shouldExclude;
+      return acc;
+    }, {});
   }
 
-  return allDeps
-    .filter(filterDeps)
-    .reduce((acc, mod) => ({
-      ...acc,
-      [mod]: `commonjs ${mod}`
-    }), {});
+  return addCommonJs(blacklist);
 }
