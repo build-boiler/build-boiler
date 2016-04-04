@@ -16,8 +16,6 @@ export default function(config, data) {
   } = config;
   const {isServer} = environment;
 
-  let methods;
-
   if (isServer) {
     const {renameKey} = boilerUtils;
     const {serverDir} = sources;
@@ -50,7 +48,7 @@ export default function(config, data) {
       };
     }, {});
 
-    methods = {
+    const methods = {
       server() {
         const {devPort, devHost} = sources;
         const {branch, asset_path: assetPath} = environment;
@@ -96,10 +94,7 @@ export default function(config, data) {
       }
     };
 
-  }
-
-  if (methods) {
-    merge(data, methods);
+    merge(data, {methods});
   }
 
   return data;

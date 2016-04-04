@@ -1,4 +1,5 @@
 import assign from 'lodash/assign';
+import merge from 'lodash/merge';
 import modifyQuery from './utils/add-rewire';
 
 export default function(config, data) {
@@ -56,7 +57,7 @@ export default function(config, data) {
       }
     };
 
-    assign(data.methods, methods);
+    merge(data, {methods});
   }
 
   return data;
