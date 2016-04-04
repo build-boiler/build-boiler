@@ -45,7 +45,6 @@ export default function(config) {
   const context = addbase(srcDir);
 
   const defaultConfig = {
-    alias,
     context,
     resolveLoader: {
       //fallback for Webpack 1
@@ -53,6 +52,7 @@ export default function(config) {
       modules: loaderRoot
     },
     resolve: {
+      alias,
       extensions: [
         '',
         '.js',

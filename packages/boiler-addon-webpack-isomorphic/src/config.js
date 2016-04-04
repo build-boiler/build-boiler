@@ -1,4 +1,3 @@
-import assign from 'lodash/assign';
 import merge from 'lodash/merge';
 import omit from 'lodash/omit';
 import isUndefined from 'lodash/isUndefined';
@@ -99,5 +98,9 @@ export default function(config, data) {
 
   }
 
-  return assign({}, data, {methods});
+  if (methods) {
+    merge(data, methods);
+  }
+
+  return data;
 }

@@ -9,6 +9,8 @@ export default function(config, data) {
   const define = 'DefinePlugin';
   //const provide = 'ProvidePlugin';
   const {plugins} = data;
+  //http://cl.ly/1t0j0e0d2I1x
+  //http://cl.ly/230x1E3Y3x0R
 
   if (SERVER) {
     const definitions = {
