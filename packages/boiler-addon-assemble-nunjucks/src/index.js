@@ -17,5 +17,24 @@ export default function(app, opts = {}) {
   addTags(nunj, app, rest);
   addFilters(nunj, rest);
 
+  const globalFns = [
+    'headScripts',
+    'layouts',
+    'macros',
+    'partials'
+  ];
+
+  const {data} = app.cache || {};
+
+  /**
+   * Expose utility functions globally so they can
+   * be used in the macro context
+   */
+  globalFns.forEach(name => {
+    if (name in data) {
+      nunj.addGlobal(name, data[name]);
+    }
+  });
+
   return nunj;
 }
