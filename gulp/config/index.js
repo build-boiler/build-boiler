@@ -212,6 +212,8 @@ export default {
      * }
      */
     multipleBundles: {
+      //preserve the basename of the multiple entries
+      //preserve: true,
       omitEntry: true,
       glob: path.join('templates', 'pages', '**', '*.{js,jsx}'),
       base: path.join(process.cwd(), 'src'), //default to `templates/pages`

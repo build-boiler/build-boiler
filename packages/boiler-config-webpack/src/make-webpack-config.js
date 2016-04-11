@@ -77,12 +77,17 @@ export default function(config, defaultConfig, opts = {}) {
      */
     const shimFile = addbase(srcDir, scriptDir, 'shims.js');
     const hasShims = fs.existsSync(shimFile);
-    let taskEntry, omitEntry, multiBase, glob, buildMultiBundles;
+    let taskEntry,
+      omitEntry,
+      multiBase,
+      glob,
+      buildMultiBundles,
+      preserve;
 
     taskEntry = omit(entry, globalBundleName);
 
     if (isPlainObject(multipleBundles)) {
-      ({omitEntry, base: multiBase, glob} = multipleBundles);
+      ({omitEntry, base: multiBase, glob, preserve} = multipleBundles);
       buildMultiBundles = true;
     } else {
       buildMultiBundles = multipleBundles;
@@ -121,7 +126,8 @@ export default function(config, defaultConfig, opts = {}) {
 
       const childEntries = glob ? createMultipleEntries(config, {
         glob,
-        cwd: multiBase || context
+        cwd: multiBase || context,
+        preserve
       }) : {};
 
       assign(taskEntry, childEntries);

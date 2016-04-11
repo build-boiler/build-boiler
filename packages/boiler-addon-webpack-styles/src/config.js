@@ -37,13 +37,15 @@ export default function(config, data) {
   };
 
   if (!isMainTask && taskName === globalBundleName) {
-    const globalEntry = [path.join(__dirname, 'global-entry.js')];
     const parentPath = addbase(srcDir, scriptDir, 'global.js');
+    let globalEntry = [path.join(__dirname, 'global-entry.js')];
 
     const exists = tryExists(parentPath, {omitReq: true});
 
     if (exists) {
-      globalEntry.push(parentPath);
+      //HACK: overwrite internal entry, would be better to change the addon to
+      //pass a config from addon array in `boiler.config.js`
+      globalEntry = [parentPath];
     }
 
     if (data.entry && Array.isArray(data.entry[globalBundleName])) {
