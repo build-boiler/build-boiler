@@ -76,8 +76,10 @@ export default class GetAsset {
     const {
       assets = {},
       environment,
+      sources,
       view
     } = ctx;
+    const {globalBundleName} = sources;
     const {
       javascript = {},
       styles = {}
@@ -106,7 +108,7 @@ export default class GetAsset {
 
         tag = this.addLink({
           main,
-          global: styles.global,
+          global: styles[globalBundleName],
           isDev
         });
         break;

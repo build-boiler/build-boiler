@@ -59,7 +59,7 @@ export default function(fp, opts = {}) {
     if (throwOn) throw err;
   }
 
-  if (exists) {
+  if (exists && !omitReq) {
     const mod = require(req);
 
     //HACK: sometimes there is a `default` key
