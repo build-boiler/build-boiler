@@ -27,11 +27,12 @@
   ],
   "dependencies": {
     "boiler-utils": "^1.1.19",
-    "nunjucks": "^2.1.0",
     "cheerio": "^0.20.0",
     "consolidate": "^0.14.0",
     "lodash": "^4.0.0",
+    "nunjucks": "^2.1.0",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "uglify-js": "^2.6.2"
   }
 }
