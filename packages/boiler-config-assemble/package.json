@@ -28,7 +28,7 @@
   "dependencies": {
     "assemble-core": "0.13.0",
     "boiler-addon-isomorphic-tools": "^1.0.1",
-    "boiler-utils": "^1.1.0",
+    "boiler-utils": "^1.1.21",
     "fs-extra": "^0.26.4",
     "js-yaml": "^3.5.2",
     "lodash": "^4.0.0",
