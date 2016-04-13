@@ -11,6 +11,7 @@ import findUp from 'findup-sync';
  * @return {Any|undefined}
  */
 export default function(fp, opts = {}) {
+  const debug = require('./debug')(__filename);
   const {
     omitReq,
     resolve,
@@ -29,6 +30,7 @@ export default function(fp, opts = {}) {
     if (resolve) {
       req = require.resolve(fp);
       exists = true;
+      debug(`require.resolve found ${fp}`);
     }
     /**
      * find the file by looking up directories
@@ -37,6 +39,10 @@ export default function(fp, opts = {}) {
     else if (lookUp) {
       req = findUp(fp);
       exists = !!req;
+
+      if (exists) {
+        debug(`Look up found ${fp}`);
+      }
     }
     /**
      * If not options are passed by default
@@ -48,10 +54,12 @@ export default function(fp, opts = {}) {
 
       if (stat.isFile()) {
         req = fp;
+        debug(`Found File ${req}`);
       }
 
       if (!req && stat.isDirectory()) {
         req = name ? path.join(fp, name) : fp;
+        debug(`Found Directory ${req}`);
       }
 
     }
