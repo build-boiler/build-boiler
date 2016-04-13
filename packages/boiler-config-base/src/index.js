@@ -28,7 +28,7 @@ export default function(boilerConfigFp, opts = {}) {
   //boiler-task-webpack/src/gather-commonjs-modules.js
   //boiler-task-webpack/src/plugins.js
   //boiler-task-karma/src/karma-config.js
-  let isHfa;
+  let isHfa, processedAddons, processedConfig;
 
   /**
    * Config from `boiler.config.js`
@@ -43,17 +43,17 @@ export default function(boilerConfigFp, opts = {}) {
     boilerConfig = tryExists('boiler.config.js', {lookUp: true}) || boilerConfig;
   }
 
+  if (Object.keys(boilerConfig).length) {
+    debug(`Found boiler.config.js ${JSON.stringify(boilerConfig)}`);
+  }
+
   const {extends: ext} = boilerConfig || {};
 
   if (boilerConfig) {
     const {addons = []} = boilerConfig;
     debug(`Found boiler.config.js with addons ${JSON.stringify(addons)}`);
-    const processedAddons = handleAddons(addons, rootDir);
+    processedAddons = handleAddons(addons, rootDir);
     debug(`Processed addons ${JSON.stringify(processedAddons)}`);
-
-    Object.assign(boilerConfig, {
-      addons: processedAddons
-    });
 
     log(`Found boiler config at ${blue(boilerConfigFp || 'boiler.config.js')}`);
   } else {
@@ -248,10 +248,16 @@ export default function(boilerConfigFp, opts = {}) {
     main
   };
 
+  if (processedAddons) {
+    processedConfig = Object.assign({}, boilerConfig, {
+      addons: processedAddons
+    });
+  }
+
   //TODO: pass ENV more intelligently
   return {
     ...cliConfig,
-    boilerConfig,
+    boilerConfig: processedConfig || boilerConfig,
     bsConfig,
     environment,
     pkg,
