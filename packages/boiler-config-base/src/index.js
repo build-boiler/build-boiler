@@ -5,6 +5,7 @@ import {readJsonSync} from 'fs-extra';
 import makeCliConfig from './make-cli-config';
 
 export default function(boilerConfigFp, opts = {}) {
+  const debug = boilerUtils.debug(__filename);
   if (_.isPlainObject(boilerConfigFp)) {
     opts = boilerConfigFp;
     boilerConfigFp = null;
@@ -46,9 +47,14 @@ export default function(boilerConfigFp, opts = {}) {
 
   if (boilerConfig) {
     const {addons = []} = boilerConfig;
+    debug(`Found boiler.config.js with addons ${JSON.stringify(addons)}`);
+    const processedAddons = handleAddons(addons, rootDir);
+    debug(`Processed addons ${JSON.stringify(processedAddons)}`);
+
     Object.assign(boilerConfig, {
-      addons: handleAddons(addons, rootDir)
+      addons: processedAddons
     });
+
     log(`Found boiler config at ${blue(boilerConfigFp || 'boiler.config.js')}`);
   } else {
     const boilerDefaults = {

@@ -9,6 +9,7 @@ import installDeps from './install-peer-dep';
  * @return {Object}
  */
 export default function(addons = [], root) {
+  const debug = require('./debug')(__filename);
   const cwd = process.cwd();
   const prefix = 'boiler-addon-';
 
@@ -44,13 +45,18 @@ export default function(addons = [], root) {
     const split = baseName.split('-');
     const [task, ...rest] = split;
     const name = rest.join('-');
-
-    return {
+    const data = {
       name,
       task,
       fn
     };
+
+    debug(`Created addon: ${JSON.stringify(data)}`);
+
+    return data;
   }
+
+  debug(`Recieved addons: ${JSON.stringify(addons)}`);
 
   return addons.reduce((acc, addon) => {
     const payload = {};

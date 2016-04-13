@@ -27,6 +27,7 @@
   ],
   "dependencies": {
     "app-root-path": "^1.0.0",
+    "debug": "^2.2.0",
     "find-parent-dir": "^0.3.0",
     "findup-sync": "^0.3.0",
     "fs-extra": "^0.26.4",
