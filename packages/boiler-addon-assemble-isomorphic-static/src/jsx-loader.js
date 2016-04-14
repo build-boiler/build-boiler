@@ -52,8 +52,7 @@ export default function(collection) {
         const name = renameKey(fp, {base});
         return addbase(
           outDir,
-          base ? '' : scriptDir,
-          name
+          base ? name : path.join(scriptDir, name.replace(scriptDir, ''))
         );
       });
     } catch (err) {
