@@ -1,3 +1,4 @@
+import path from 'path';
 import jsdom from 'jsdom';
 import boilerUtils from 'boiler-utils';
 import {sync as globSync} from 'globby';
@@ -38,7 +39,6 @@ export default function(collection) {
     const {
       base,
       entries,
-      context: cwd,
       memory,
       output
     } = isomorphic;
@@ -46,7 +46,9 @@ export default function(collection) {
     let files;
 
     try {
-      files = globSync(entries, {cwd}).map(fp => {
+      const entryGlobs = entries.map(e => path.join('**', renameKey(e, {ext: true})));
+
+      files = globSync(entryGlobs, {cwd: outDir}).map(fp => {
         const name = renameKey(fp, {base});
         return addbase(
           outDir,

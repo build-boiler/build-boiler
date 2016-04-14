@@ -21,12 +21,12 @@ export default function(fp, name, opts = {}) {
   const dir = path.dirname(testPath).replace(process.cwd(), '');
   const split = dir.split(sep);
   const len = split && split.filter(str => !!str).length;
-  const {base} = opts;
+  const {base, ext} = opts;
   let renamed;
 
   if (len) {
     const dirname = base ? dir : split.slice(-1)[0];
-    const basename = isString(name) ? name : path.basename(testPath, path.extname(testPath));
+    const basename = isString(name) ? name : path.basename(testPath, ext ? '' : path.extname(testPath));
 
     renamed = path.join(dirname, basename);
   }
