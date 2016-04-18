@@ -1,4 +1,5 @@
 import path from 'path';
+import merge from 'lodash/merge';
 import {PropTypes} from 'react';
 import {provideReactor} from 'nuclear-js-react-addons';
 import {dependencies, devDependencies} from '../../package';
@@ -82,6 +83,28 @@ export default {
       }
     }
   },
+  /**
+   * Config for nodemon task
+   * @param {Object} config gulp config
+   * @param {Object} nodemonConfig see example
+   * @return {Object}
+   * ex.{
+   *   script: 'lib/entry/indes.js',
+   *   env: {
+   *     BRANCH: 'local',
+   *     NODE_ENV: 'development',
+   *     OPEN: 'http:localhost:3031'
+   *  },
+   *  openPath: 'http:localhost:3031',
+   *  open: true,
+   *  watch: [
+   *    'lib/*.js',
+   *    '!' + 'lib/node_modules/**'
+   *  ],
+   *  cwd: 'Users/bleep/bloop/lib'
+   * }
+   */
+  nodemon(config, nodemonConfig) {},
   /**
    * Mocha Task
    * pass `require` see `gulp-mocha`
@@ -497,6 +520,11 @@ export default {
    * }
    */
   cb(config) {
-    return config;
+    return merge(config, {
+      sources: {
+        serverDir: 'lib',
+        serverPort: 3030
+      }
+    });
   }
 };

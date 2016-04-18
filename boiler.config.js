@@ -9,6 +9,7 @@ export default {
     //'eslint',
     //'karma',
     'mocha',
+    'nodemon'
     //'selenium',
     //'webpack'
   ],

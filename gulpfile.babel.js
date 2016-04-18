@@ -98,6 +98,7 @@ if (force || release) {
   gulp.task('lint:build', tasks.eslint);
   gulp.task('lint', ['lint:test', 'lint:build']);
   gulp.task('mocha', tasks.mocha);
+  gulp.task('nodemon', tasks.nodemon);
   gulp.task('selenium', tasks.selenium);
   gulp.task('selenium:tunnel', tasks.selenium);
   gulp.task('webpack:global', tasks.webpack);
