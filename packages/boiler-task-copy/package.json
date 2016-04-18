@@ -27,6 +27,7 @@
   ],
   "dependencies": {
     "boiler-utils": "^1.0.1",
+    "event-stream": "^3.3.2",
     "gulp-rename": "^1.2.2"
   }
 }
