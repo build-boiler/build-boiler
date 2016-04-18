@@ -24,16 +24,21 @@ export default function(gulp, plugins, config) {
   const {buildDir} = sources;
   const {isDev} = environment;
   const {addbase, getTaskName} = utils;
+  const src = [
+    addbase('lib', '**/*.js')
+  ];
+  const dest = addbase(buildDir);
 
   return () => {
     const taskName = getTaskName(gulp.currentTask);
     const isDevTask = taskName === 'dev';
     const baseConfig = {
+      src,
       babelrc: taskRc,
       dev: isDev || isDevTask,
       endpoints: [{
-        src: ['lib/**/*.js'],
-        dest: addbase(buildDir)
+        src,
+        dest
       }]
     };
 
@@ -41,15 +46,19 @@ export default function(gulp, plugins, config) {
     /**
      * Get config from `gulp/config/index.js
      */
-    const babelConfig = callConfigFn(parentConfig, baseConfig);
+    const {src: updatedSrc, ...babelConfig} = callConfigFn(parentConfig, baseConfig);
 
     /**
      * Call the parent gulp task if one exists
      */
     const {
+      src: newSrc,
       data,
       fn
-    } = callParent(arguments, {data: babelConfig});
+    } = callParent(arguments, {
+      src: updatedSrc,
+      data: babelConfig
+    });
     const {
       babelrc,
       dev,
@@ -69,11 +78,18 @@ export default function(gulp, plugins, config) {
     }
 
     const task = () => {
-      const tasks = transformArray(endpoints, isPlainObject).map(data => {
-        const {src, dest} = data;
+      let tasks;
 
-        return makeTask(src, dest);
-      });
+
+      if (newSrc && updatedSrc !== newSrc) {
+        tasks = makeTask(newSrc, dest);
+      } else {
+        tasks = transformArray(endpoints, isPlainObject).map(data => {
+          const {src, dest} = data;
+
+          return makeTask(src, dest);
+        });
+      }
 
       return es.merge(tasks);
     };

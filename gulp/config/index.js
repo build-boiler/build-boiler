@@ -89,6 +89,7 @@ export default {
    * @param {Object} babelConfig see example
    * @return {Object}
    * ex.{
+   *  src: ['lib/*.js'],
    *  babelrc: {
    *    presets: ['es2015']
    *  },
