@@ -22,13 +22,18 @@ export default function(boilerConfigFp, opts = {}) {
   const cliConfig = makeCliConfig(opts);
   const {ENV, browser} = cliConfig;
   const cwd = process.cwd();
-  let boilerConfig = {};
-
+  const {
+    BROWSERSTACK_USERNAME,
+    BROWSERSTACK_API,
+    localIdentifier,
+    TRAVIS_BRANCH,
+    BOILER_ENV
+  } = process.env;
   //TODO: remove all HFA specific references
   //boiler-task-webpack/src/gather-commonjs-modules.js
   //boiler-task-webpack/src/plugins.js
   //boiler-task-karma/src/karma-config.js
-  let isHfa, processedAddons, processedConfig;
+  let clone, boilerConfig, isHfa, ext;
 
   /**
    * Config from `boiler.config.js`
@@ -43,16 +48,28 @@ export default function(boilerConfigFp, opts = {}) {
     boilerConfig = tryExists('boiler.config.js', {lookUp: true}) || boilerConfig;
   }
 
-  if (Object.keys(boilerConfig).length) {
+  if (_.isPlainObject(boilerConfig)) {
     debug(`Found boiler.config.js ${JSON.stringify(boilerConfig)}`);
-  }
+    const {addons} = boilerConfig;
+    ({extends: ext} = boilerConfig);
 
-  const {extends: ext} = boilerConfig || {};
+    //Cloning boiler config because weird issues were happening on Lambda where addons
+    //were being processed and merged back onto the Object, causing some sort of circular
+    //mutation where the original addons passed to `handleAddons` were an Object not an Array
+    if (boilerConfig.env) {
+      const boilerEnv = BOILER_ENV || TRAVIS_BRANCH ? 'production' : 'development';
+      const envConfig = boilerConfig.env[boilerEnv];
+      clone = _.cloneDeep({
+        extends: ext,
+        ...envConfig
+      });
+    } else {
+      clone = _.cloneDeep(boilerConfig);
+    }
 
-  if (boilerConfig) {
-    const {addons = []} = boilerConfig;
     debug(`Found boiler.config.js with addons ${JSON.stringify(addons)}`);
-    processedAddons = handleAddons(addons, rootDir);
+    const processedAddons = handleAddons(addons, rootDir);
+    clone.addons = processedAddons;
     debug(`Processed addons ${JSON.stringify(processedAddons)}`);
 
     log(`Found boiler config at ${blue(boilerConfigFp || 'boiler.config.js')}`);
@@ -65,7 +82,7 @@ export default function(boilerConfigFp, opts = {}) {
       internalHost: 'localhost'
     };
 
-    Object.assign(boilerConfig, boilerDefaults);
+    clone = boilerDefaults;
   }
 
   if (ext) {
@@ -92,11 +109,11 @@ export default function(boilerConfigFp, opts = {}) {
       isHfa = /boiler-config-hfa/.test(ext);
 
       customConfig && Object.keys(customConfig).forEach(key => {
-        const parentVal = boilerConfig[key];
+        const parentVal = clone[key];
         const customVal = customConfig[key];
 
         if (!parentVal) {
-          boilerConfig[key] = customVal;
+          clone[key] = customVal;
         }
       });
 
@@ -114,7 +131,7 @@ export default function(boilerConfigFp, opts = {}) {
     devPath = '', //ex => 'www.hfa.io'
     prodPath = '', //ex => 'www.hillaryclinton.com'
     internalHost = 'localhost'
-  } = boilerConfig;
+  } = clone;
 
   const devUrl = join(devPath, bucketBase);
   const prodUrl = join(prodPath, bucketBase);
@@ -122,7 +139,6 @@ export default function(boilerConfigFp, opts = {}) {
   const isServer = ENV === 'server';
   const isIE = browser === 'ie' || browser === 'internet explorer';
   const scriptDir = 'js';
-  const {BROWSERSTACK_USERNAME, BROWSERSTACK_API, localIdentifier, TRAVIS_BRANCH} = process.env;
   const devBranch = 'devel';
   const isMaster = TRAVIS_BRANCH === 'master';
   const isDevRoot = TRAVIS_BRANCH === devBranch;
@@ -248,16 +264,10 @@ export default function(boilerConfigFp, opts = {}) {
     main
   };
 
-  if (processedAddons) {
-    processedConfig = Object.assign({}, boilerConfig, {
-      addons: processedAddons
-    });
-  }
-
   //TODO: pass ENV more intelligently
   return {
     ...cliConfig,
-    boilerConfig: processedConfig || boilerConfig,
+    boilerConfig: clone,
     bsConfig,
     environment,
     pkg,

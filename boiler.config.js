@@ -1,18 +1,25 @@
 export default {
   'extends': 'configs/boiler-config-hfa/src/index',
-  presets: ['plus'],
-  tasks: [
-    //'assemble',
-    //'browser-sync',
-    //'clean',
-    //'copy',
-    //'eslint',
-    //'karma',
-    'mocha',
-    'nodemon'
-    //'selenium',
-    //'webpack'
-  ],
+  env: {
+    development: {
+      presets: ['plus'],
+      tasks: [
+        'mocha',
+        'nodemon'
+      ]
+    },
+    production: {
+      presets: ['plus'],
+      tasks: [
+        'mocha'
+      ]
+    }
+  },
+  //presets: ['plus'],
+  //tasks: [
+    //'mocha',
+    //'nodemon'
+  //],
   addons: [
     'assemble-isomorphic-static',
     //'assemble-isomorphic-memory',
