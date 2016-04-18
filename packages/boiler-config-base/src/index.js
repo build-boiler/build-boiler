@@ -182,6 +182,8 @@ export default function(boilerConfigFp, opts = {}) {
     scriptDir,
     srcDir: './src',
     templateDir: 'templates',
+    mainBundleName: 'main',
+    globalBundleName: 'global',
     statsFile: 'webpack-main-stats.json',
     globalStatsFile: 'webpack-global-stats.json',
     testDir: './test',

@@ -17,16 +17,19 @@ export default function(baseConfig, taskConfig, opts = {}) {
   const {log, magenta} = buildLogger;
   const {tasks = []} = opts;
   const {environment, sources} = baseConfig;
-  const {buildDir, scriptDir, rootDir} = sources;
+  const {
+    buildDir,
+    mainBundleName,
+    globalBundleName,
+    scriptDir,
+    rootDir
+  } = sources;
   const {isDev, isServer} = environment;
 
   const taskObj = tasks ? tasks.reduce((acc, task) => {
     task = _.camelCase(task);
 
     if (task === 'webpack' && !sources.entry) {
-      const mainBundleName = 'main';
-      const globalBundleName = 'global';
-
       const entry = {
         [mainBundleName]: [`./${scriptDir}/index.js`],
         [globalBundleName]: [
@@ -34,11 +37,7 @@ export default function(baseConfig, taskConfig, opts = {}) {
         ]
       };
 
-      Object.assign(sources, {
-        mainBundleName,
-        globalBundleName,
-        entry
-      });
+      Object.assign(sources, {entry});
     }
 
     return {
