@@ -4,6 +4,7 @@ export default {
     development: {
       presets: ['plus'],
       tasks: [
+        'babel',
         'mocha',
         'nodemon'
       ]
@@ -11,6 +12,7 @@ export default {
     production: {
       presets: ['plus'],
       tasks: [
+        'babel',
         'mocha'
       ]
     }

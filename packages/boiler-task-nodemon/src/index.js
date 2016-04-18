@@ -58,9 +58,9 @@ export default function(gulp, plugins, config) {
      * Call the parent gulp task if one exists
      */
     const {
-      config: processedConfig,
+      data: processedConfig,
       fn
-    } = callParent(arguments, {config: nodemonConfig});
+    } = callParent(arguments, {data: nodemonConfig});
 
     const task = (done) => {
       const {

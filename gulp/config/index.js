@@ -84,6 +84,25 @@ export default {
     }
   },
   /**
+   * Config for babel task
+   * @param {Object} config gulp config
+   * @param {Object} babelConfig see example
+   * @return {Object}
+   * ex.{
+   *  babelrc: {
+   *    presets: ['es2015']
+   *  },
+   *  dev: true,
+   *  endpoints: [
+   *    {
+   *      src: ['lib/*.js'],
+   *      dest: 'dist'
+   *    }
+   *  ]
+   * }
+   */
+  babel(config, babelConfig) {},
+  /**
    * Config for nodemon task
    * @param {Object} config gulp config
    * @param {Object} nodemonConfig see example
