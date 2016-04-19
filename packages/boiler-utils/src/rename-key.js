@@ -22,14 +22,14 @@ export default function(fp, name, opts = {}) {
   const split = dir.split(sep);
   const len = split && split.filter(str => !!str).length;
   const {base, ext} = opts;
-  let renamed;
+  const basename = isString(name) ? name : path.basename(testPath, ext ? '' : path.extname(testPath));
+  let dirname;
 
   if (len) {
-    const dirname = base ? dir : split.slice(-1)[0];
-    const basename = isString(name) ? name : path.basename(testPath, ext ? '' : path.extname(testPath));
-
-    renamed = path.join(dirname, basename);
+    dirname = base ? dir : split.slice(-1)[0];
+  } else {
+    ([dirname] = path.dirname(fp).split(path.sep).slice(-1));
   }
 
-  return renamed;
+  return path.join(dirname, basename);
 }
