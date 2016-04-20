@@ -39,11 +39,9 @@ export default function(boilerConfigFp, opts = {}) {
    * Config from `boiler.config.js`
    */
   if (boilerConfigFp) {
-    boilerConfigFp = boilerConfigFp.indexOf(cwd) === -1 ?
-      path.join(cwd, boilerConfigFp) :
-      boilerConfigFp;
-
-    boilerConfig = tryExists(boilerConfigFp, {resolve: true}) || boilerConfig;
+    //try first the fp passed in then try at `cwd`
+    boilerConfig = tryExists(boilerConfigFp, {resolve: true});
+    boilerConfig = boilerConfig || tryExists(path.join(cwd, boilerConfigFp), {resolve: true});
   } else {
     boilerConfig = tryExists('boiler.config.js', {lookUp: true}) || boilerConfig;
   }
