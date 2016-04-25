@@ -1,6 +1,6 @@
 {
   "name": "boiler-config-base",
-  "version": "1.1.31",
+  "version": "1.1.33",
   "description": "Build Boilerplate Base Config",
   "main": "dist/index.js",
   "author": "DtotheFP",
