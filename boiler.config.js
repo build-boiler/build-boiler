@@ -1,5 +1,6 @@
 export default {
   'extends': 'configs/boiler-config-hfa/src/index',
+  bucketBase: 'bloop',
   env: {
     development: {
       presets: ['plus'],

@@ -58,7 +58,7 @@ export default function(boilerConfigFp, opts = {}) {
       const boilerEnv = BOILER_ENV || TRAVIS_BRANCH ? 'production' : 'development';
       const envConfig = boilerConfig.env[boilerEnv];
       clone = _.cloneDeep({
-        extends: ext,
+        ..._.omit(boilerConfig, ['env']),
         ...envConfig
       });
     } else {
