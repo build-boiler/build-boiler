@@ -73,14 +73,11 @@ export default function(gulp, plugins, config) {
         cwd
       } = processedConfig;
 
-      const serverDir = config.sources.serverDir || cwd || '';
       const dirs = globSync(watchDirs, {cwd});
       const watch = dirs.reduce((list, dir) => {
-        if (dir.indexOf('node_modules') > -1) return list;
-
         list.push(...[
           '--watch',
-          path.join(dir.indexOf(serverDir) === -1 ? serverDir : '', dir)
+          dir
         ]);
 
         return list;
