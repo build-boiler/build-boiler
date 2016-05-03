@@ -1,19 +1,19 @@
 import gutil from 'gulp-util';
-import CustomDots from './dots-reporter';
 import parseNames from '../make-config/parse-browser-names';
+
 
 const {colors, log} = gutil;
 const {magenta, blue} = colors;
-const {TRAVIS_BRANCH, TEST_ENV, WDIO_CONFIG} = process.env;
+const {WDIO_CONFIG} = process.env;
 const options = JSON.parse(WDIO_CONFIG);
-const {local} = JSON.parse(TEST_ENV);
 const {browsers, specs} = parseNames(options);
 
 const baseConfig = {
+  sync: true,
   coloredLogs: true,
   waitforTimeout: 15000,
   framework: 'mocha',
-  reporter: TRAVIS_BRANCH && !local ? CustomDots : 'spec',
+  reporters: ['dot'], // Can only use native DotReporter right now: https://github.com/webdriverio/wdio-spec-reporter/issues/3
   reporterOptions: {
     outputDir: './'
   },
