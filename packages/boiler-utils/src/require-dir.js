@@ -33,8 +33,6 @@ export default function(dirPath, opts = {}) {
       const ignoreThis = isMap || isDot;
       const shouldProceed = ignore.indexOf(name) === -1 && !ignoreThis;
 
-      console.log('********FP****************', ignoreThis, fp);
-
       if (shouldProceed) {
         const fullPath = path.join(passedPath, fp);
         const isDir = fs.statSync(fullPath).isDirectory();
