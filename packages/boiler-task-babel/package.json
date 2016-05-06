@@ -33,8 +33,9 @@
     "boiler-utils": "^1.1.0",
     "event-stream": "^3.3.2",
     "gulp-babel": "^6.1.2",
-    "gulp-if": "^2.0.0",
+    "gulp-if": "^2.0.1",
     "gulp-newer": "^1.1.0",
+    "gulp-sourcemaps": "^1.6.0",
     "lodash": "^4.0.0"
   }
 }

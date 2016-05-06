@@ -12,7 +12,7 @@ export default function(gulp, plugins, config) {
     renameKey,
     transformArray
   } = boilerUtils;
-  const {gulpIf, babel, newer} = plugins;
+  const {gulpIf, babel, newer, sourcemaps} = plugins;
   const {log, colors, blue} = buildLogger;
   const {cyan} = colors;
   const {
@@ -62,7 +62,8 @@ export default function(gulp, plugins, config) {
     const {
       babelrc,
       dev,
-      endpoints
+      endpoints,
+      sourcemaps: enableSourcemaps
     } = data || babelConfig;
 
     function makeTask(src, dest) {
@@ -71,15 +72,16 @@ export default function(gulp, plugins, config) {
         .on('data', (file) => {
           log(`Babel Compiling", '${cyan(renameKey(file.path))}' to ${blue(renameKey(dest))}`);
         })
+        .pipe(gulpIf(enableSourcemaps, sourcemaps.init()))
         .pipe(
           babel(babelrc)
         )
+        .pipe(gulpIf(enableSourcemaps, sourcemaps.write('.')))
         .pipe(gulp.dest(dest));
     }
 
     const task = () => {
       let tasks;
-
 
       if (newSrc && updatedSrc !== newSrc) {
         tasks = makeTask(newSrc, dest);

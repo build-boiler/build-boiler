@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import _ from 'lodash';
+import assign from 'lodash/assign';
+import isString from 'lodash/isString';
+import camelCase from 'lodash/camelCase';
 
 /**
  * Require all files in a directory and place them in an obect
@@ -24,8 +26,14 @@ export default function(dirPath, opts = {}) {
     const fps = fs.readdirSync(passedPath);
 
     return fps.reduce((acc, fp) => {
-      const name = path.basename(fp, path.extname(fp));
-      const shouldProceed = ignore.indexOf(name) === -1;
+      const ext = path.extname(fp);
+      const name = path.basename(fp, ext);
+      const isMap = ext === '.map';
+      const isDot = fp[0] === '.';
+      const ignoreThis = isMap || isDot;
+      const shouldProceed = ignore.indexOf(name) === -1 && !ignoreThis;
+
+      console.log('********FP****************', ignoreThis, fp);
 
       if (shouldProceed) {
         const fullPath = path.join(passedPath, fp);
@@ -34,18 +42,18 @@ export default function(dirPath, opts = {}) {
 
         if (isDir && recurse) {
           data = recurseDirs(fp);
-          dict ? _.assign(acc, data) : acc.push(...data);
+          dict ? assign(acc, data) : acc.push(...data);
         } else {
           data = require(fullPath);
 
-          if (_.isString(dict) && dict === 'basename') {
+          if (isString(dict) && dict === 'basename') {
             const key = path.basename(
               fullPath,
               path.extname(fullPath)
             );
-            _.assign(acc, {[_.camelCase(key)]: data});
+            assign(acc, {[camelCase(key)]: data});
           } else if (dict) {
-            _.assign(acc, {[fullPath]: data});
+            assign(acc, {[fullPath]: data});
           } else {
             acc.push(data);
           }
