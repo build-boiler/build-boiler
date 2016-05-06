@@ -13,7 +13,6 @@ import boilerUtils from 'boiler-utils';
  * @param {Object} config from `boiler-config-base` and potentially `boiler-core`
  * @param {Object} opts options
  * @param {String|Object} opts.data glob to yml/json data or an object of data
- * @param {String} templatePath path to `pages`
  * @param {Function} renameKey
  *
  * @return {Object} `app` the Assemble instance
@@ -37,15 +36,17 @@ export default function(config, opts = {}) {
   } = sources;
   const {addbase} = utils;
   const {renameKey} = boilerUtils;
-  const templatePath = addbase(srcDir, templateDir);
+  //HACK: to dynamically add the branch in the search path
+  const branch = isPlainObject(data) && data.branch || '';
+  const srcPath = addbase(srcDir, branch);
   let parentData = {};
 
   function makeTemplatePath(dir) {
-    return (fp) => `${join(templatePath, dir, fp)}.html`;
+    return (fp) => `${join(srcPath, templateDir, dir, fp)}.html`;
   }
 
   function makeJSPath(dir) {
-    return (fp) => `${join(srcDir, scriptDir, dir, fp)}.js`;
+    return (fp) => `${join(srcPath, scriptDir, dir, fp)}.js`;
   }
 
   plasma.dataLoader('yml', function(fp) {
