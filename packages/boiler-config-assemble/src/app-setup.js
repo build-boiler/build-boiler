@@ -38,11 +38,11 @@ export default function(config, opts = {}) {
   const {renameKey} = boilerUtils;
   //HACK: to dynamically add the branch in the search path
   const branch = isPlainObject(data) && data.branch || '';
-  const srcPath = addbase(srcDir, branch);
+  const srcPath = join(srcDir, branch);
   let parentData = {};
 
   function makeTemplatePath(dir) {
-    return (fp) => `${join(srcPath, templateDir, dir, fp)}.html`;
+    return (fp) => `${addbase(srcPath, templateDir, dir, fp)}.html`;
   }
 
   function makeJSPath(dir) {
