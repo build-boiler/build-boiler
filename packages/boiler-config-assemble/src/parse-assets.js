@@ -38,21 +38,28 @@ export default function(config, opts = {}) {
       );
     });
   } else {
-    prom = new Promise((res, rej) => {
-      const statsPaths = [
-        path.join(statsPath, statsFile),
-        globalStatsPath
-      ];
+    const readStats = () => {
+      return new Promise((res, rej) => {
+        const statsPaths = [
+          path.join(statsPath, statsFile),
+          globalStatsPath
+        ];
 
-      async.map(statsPaths, fsX.readJson, (err, results) => {
-        if (err) return res({});
-        const [main, global] = results;
+        async.map(statsPaths, fsX.readJson, (err, results) => {
+          if (err) return res({});
+          const [main, global] = results;
 
-        res(
-          makeStats(main, global)
-        );
+          res(
+            makeStats(main, global)
+          );
+        });
       });
-    });
+    };
+
+    prom = readStats();
+
+    //HACK: for syncing asset stats on server
+    prom.retry = readStats;
   }
 
   return prom;
