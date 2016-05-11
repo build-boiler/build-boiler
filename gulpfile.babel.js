@@ -14,7 +14,7 @@ if (force || release) {
   let plugins;
 
   try {
-    const build = require('./packages/boiler-core/sc');
+    const build = require('./packages/boiler-core/src');
 
     ({tasks, plugins} = build(gulp));
   } catch (err) {

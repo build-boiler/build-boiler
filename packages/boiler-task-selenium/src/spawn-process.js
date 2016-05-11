@@ -42,12 +42,14 @@ export default function(opts, config, cb) {
     const binPath = join('bin', 'wdio');
     let binaryPath;
 
+    // Try to resolve the path or use the external wdio dependency
     try {
       const webdriverBase = path.dirname(
         require.resolve('webdriverio')
       );
 
-      binaryPath = join(webdriverBase, binPath);
+      // 'webdriverio/build/bin' --> 'webdriver/bin'
+      binaryPath = join(webdriverBase, '..', binPath);
     } catch (err) {
       binaryPath = addroot('node_modules/webdriverio', binPath);
     }
