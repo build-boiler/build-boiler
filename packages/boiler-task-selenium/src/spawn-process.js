@@ -18,7 +18,7 @@ export default function(opts, config, cb) {
     runGen: run
   } = boilerUtils;
   const {log, magenta} = buildLogger;
-  const {fn: parentFn, local, utils} = config;
+  const {fn: parentFn, local, utils, instances} = config;
   const {addroot, logError} = utils;
   const {TRAVIS_BRANCH} = process.env;
 
@@ -35,7 +35,8 @@ export default function(opts, config, cb) {
     log(message);
 
     const env = _.merge({}, process.env, {
-      WDIO_CONFIG: JSON.stringify(opt),
+      // TODO: Make a better way to override wdio options dynamically
+      WDIO_CONFIG: JSON.stringify(Object.assign(opt,  {maxInstances: instances})),
       TEST_ENV: JSON.stringify({local})
     });
 

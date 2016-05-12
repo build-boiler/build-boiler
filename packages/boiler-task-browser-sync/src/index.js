@@ -4,7 +4,7 @@ import boilerUtils from 'boiler-utils';
 
 export default function(gulp, plugins, config) {
   const {browserSync} = plugins;
-  const {browserSync: bsParent, sources, utils} = config;
+  const {browserSync: bsParent, sources, utils, test} = config;
   const {middleware: parentMiddleware, open: parentOpenFn} = bsParent;
   const {internalHost, devPort, buildDir} = sources;
   const {addbase, logError} = utils;
@@ -72,6 +72,11 @@ export default function(gulp, plugins, config) {
       data = {},
       fn
     } = parentConfig;
+
+    if (test) {
+      //disable when Selenium is running multiple instances
+      Object.assign(data, {ghostMode: false});
+    }
 
     const task = (done) => {
       browserSync(data, () => {

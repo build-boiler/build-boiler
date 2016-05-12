@@ -14,9 +14,14 @@ describe('#SampleSync not exporting ANY browsers', () => {
     expect(title).to.eq('Build Boiler');
   });
 
-  // True test of synchronous commands!
   it('should get a div from the DOM', () => {
     const elm = client.element('body');
     expect(elm).to.not.be.null;
+  });
+
+  it('should fill in the inputs', () => {
+    ['givenName', 'lastName', 'whatever'].forEach((fieldName) => {
+      client.element(`[name="${fieldName}"]`).setValue(fieldName);
+    });
   });
 });

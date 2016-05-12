@@ -8,7 +8,7 @@ const config = {
     chrome: {
       // check for more recent versions of chrome driver here:
       // http://chromedriver.storage.googleapis.com/index.html
-      version: '2.20',
+      version: '2.21',
       arch: process.arch,
       baseURL: 'http://chromedriver.storage.googleapis.com'
     }
@@ -28,4 +28,3 @@ export default function(opts, cb) {
   merge(config, opts);
   selenium.install(config, cb);
 }
-

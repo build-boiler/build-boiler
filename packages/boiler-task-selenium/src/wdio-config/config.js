@@ -10,6 +10,7 @@ const {browsers, specs} = parseNames(options);
 
 const baseConfig = {
   sync: true,
+  maxInstances: 1,
   coloredLogs: true,
   waitforTimeout: 15000,
   framework: 'mocha',
