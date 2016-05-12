@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-webpack-karma",
-  "version": "1.1.14",
+  "version": "2.0.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
