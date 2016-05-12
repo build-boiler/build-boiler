@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-clean",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
