@@ -20,6 +20,11 @@ if (!version) throw new Error('No version specified');
 if (version.split('.').length !== 3) throw new Error('Invalid semver version');
 
 const pkgs = glob('packages/*/package.json');
+const ENDS_WITH_NEW_LINE = /\n$/;
+
+function ensureEndsWithNewLine(string) {
+  return ENDS_WITH_NEW_LINE.test(string) ? string : string + '\n';
+}
 
 pkgs.forEach((fp) => {
   const json = require(
@@ -32,6 +37,6 @@ pkgs.forEach((fp) => {
       null,
       '  '
     );
-    write(fp, content);
+    write(fp, ensureEndsWithNewLine(content));
   }
 });
