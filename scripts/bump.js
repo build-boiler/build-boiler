@@ -5,19 +5,23 @@ const write = require('fs').writeFileSync;
 const {argv} = process;
 const versionI = argv.indexOf('-v');
 const force = argv.includes('--force');
+const {version: lernaVersion} = require(
+  path.join(process.cwd(), 'lerna.json')
+);
 let version;
 
 if (versionI > -1) {
   ([version] = argv.slice(versionI + 1, versionI + 2));
 } else {
-  const {version: pkgVersion} = require(
-    path.join(process.cwd(), 'lerna.json')
-  );
-  version = Math.floor(pkgVersion) + 1;
+  version = Math.floor(lernaVersion) + 1;
 }
 
-if (!version) throw new Error('No version specified');
-if (version.split('.').length !== 3) throw new Error('Invalid semver version');
+if (!version)
+    throw new Error('No version specified');
+if (version.split('.').length !== 3)
+  throw new Error('Invalid semver version');
+if (parseFloat(version) < parseFloat(lernaVersion)  && !force)
+  throw new Error('Version must exceed Lerna version');
 
 const pkgs = glob('packages/*/package.json');
 const ENDS_WITH_NEW_LINE = /\n$/;
