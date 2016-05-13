@@ -9,9 +9,13 @@ userName: "BlEEEEEEEEPPPPP" # test for YFM override of app data
 {% extends layouts('default') %}
 {% import macros('isomorphic-comp') as ext %}
 {% from macros('test') import test as testMacro %}
+{% from macros('input') import input as inputMacro %}
 
 {% block main %}
   <div class="container">
+    {{ inputMacro('givenName', 'text') }}
+    {{ inputMacro('lastName', 'text') }}
+    {{ inputMacro('whatever', 'text') }}
     {{ ext.iso(environment, props, 'data-isomorphic', ['sample','another-sample'], 'wrapper') }}
     {{ testMacro('bloop') }}
   </div>

@@ -53,6 +53,16 @@ export default function(opts = {}) {
       alias: 'quick',
       type: 'boolean'
     },
+    // Number of instances to run in parallel (boiler-task-selenium)
+    instances: {
+      type: 'number',
+      default: 1
+    },
+    t: {
+      alias: 'test',
+      type: 'boolean',
+      default: false
+    },
     ...cli
   });
 
@@ -109,4 +119,3 @@ export default function(opts = {}) {
 
   return cliConfig;
 }
-

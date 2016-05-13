@@ -5,7 +5,7 @@ import getTask from './get-task';
 import addCaps from './add-capapabilites';
 
 export default function({config, gulp}) {
-  const SELENIUM_VERSION = '2.48.2';
+  const SELENIUM_VERSION = '2.53.0';
   const {
     bsConfig,
     file,
