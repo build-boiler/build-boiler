@@ -196,7 +196,8 @@ export default function(config, defaultConfig, opts = {}) {
     const prodConfig = development();
 
     if (!quick) {
-      prodConfig.plugins.push(
+      prodConfig.plugins.push(...[
+        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.UglifyJsPlugin({
           output: {
             comments: false
@@ -204,9 +205,8 @@ export default function(config, defaultConfig, opts = {}) {
           compress: {
             warnings: false
           }
-        }),
-        new webpack.optimize.DedupePlugin()
-      );
+        })
+      ]);
     }
 
     return prodConfig;

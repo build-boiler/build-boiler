@@ -1,6 +1,5 @@
 import path from 'path';
 import through from 'through2';
-import {readJsonSync} from 'fs-extra';
 
 export default function(gulp, plugins, config) {
   const {
@@ -13,7 +12,6 @@ export default function(gulp, plugins, config) {
   const {log, colors} = gutil;
   const {cyan} = colors;
   const {release} = config;
-  const babelConfigPath = path.join(process.cwd(), '.babelrc');
   const scripts = './packages/*/src/**/*.js';
   const dest = 'packages';
   let srcEx, libFragment;
@@ -25,7 +23,6 @@ export default function(gulp, plugins, config) {
     srcEx = new RegExp('(packages/[^/]+)/src/');
     libFragment = '$1/dist/';
   }
-  const babelConfig = readJsonSync(babelConfigPath);
 
   return () => {
     return gulp.src(scripts)
@@ -45,9 +42,7 @@ export default function(gulp, plugins, config) {
         cb(null, file);
       }))
       .pipe(babel({
-        babelrc: false,
-        comments: true,
-        ...babelConfig
+        comments: false
       }))
       .pipe(gulp.dest(dest));
   };

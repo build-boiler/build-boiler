@@ -59,7 +59,5 @@ export default function(config, data) {
     }
   }
 
-  assign(data, styleConfig);
-
-  return data;
+  return assign({}, data, styleConfig);
 }
