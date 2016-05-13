@@ -8,14 +8,16 @@ import middleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import makeConfig from 'boiler-config-webpack';
 import webpack from 'webpack';
+import {remove} from 'fs-extra';
+import async from 'async';
+import {sync as glob} from 'globby';
 
 export default function(gulp, plugins, config) {
   const {sources, utils, environment, webpackConfig} = config;
-  const {mainBundleName} = sources;
-  const {isDev, isIE, asset_path: assetPath, branch} = environment;
+  const {isDev, isIE, isMaster, asset_path: assetPath, branch} = environment;
   const {middleware: parentMiddleware, hot} = webpackConfig;
-  const {getTaskName} = utils;
-  const {buildDir, devPort, devHost, hotPort} = sources;
+  const {getTaskName, addbase, logError} = utils;
+  const {mainBundleName, buildDir, devPort, devHost, hotPort} = sources;
   const {gutil} = plugins;
   const {
     runParentFn: callParent,
@@ -107,7 +109,19 @@ export default function(gulp, plugins, config) {
           let gulpCb = done;
           done = null;
 
-          gulpCb();
+          if (isMaster) {
+            //hack to remove SCSS sourcemaps in PROD
+            const maps = glob(
+              addbase(buildDir, 'css', '**/*.css.map')
+            );
+            async.map(maps, remove, (err) => {
+              if (err) logError({err, plugin: '[webpack: delete .map]'});
+
+              gulpCb();
+            });
+          } else {
+            gulpCb();
+          }
         }
       });
 
