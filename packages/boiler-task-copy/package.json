@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-copy",
-  "version": "1.1.28",
+  "version": "1.1.42",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,7 +26,7 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-utils": "^1.0.1",
+    "boiler-utils": "^1.1.42",
     "event-stream": "^3.3.2",
     "gulp-rename": "^1.2.2"
   }

@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-assemble-isomorphic-memory",
-  "version": "1.1.0",
+  "version": "1.1.42",
   "description": "Build Boilerplate Isomorphic Components for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,8 +26,8 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-config-webpack": "^1.1.0",
-    "boiler-utils": "^1.1.0",
+    "boiler-config-webpack": "^1.1.42",
+    "boiler-utils": "^1.1.42",
     "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
     "jsdom": "^8.0.4",
