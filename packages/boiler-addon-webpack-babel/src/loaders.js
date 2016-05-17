@@ -174,7 +174,10 @@ export default function(config, data) {
       return ex;
     },
     loader: 'babel',
-    query: finalBabelQuery
+    query: {
+      babelrc: false,
+      ...finalBabelQuery
+    }
   });
 
   return {

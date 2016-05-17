@@ -149,7 +149,6 @@ export default function(boilerConfigFp, opts = {}) {
         "plugins": [
           "rewire",
           "transform-decorators-legacy",
-          "typecheck",
           ["react-transform",
             {
             "transforms": [{
