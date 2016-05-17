@@ -124,7 +124,20 @@ export default {
    *  cwd: 'Users/bleep/bloop/lib'
    * }
    */
-  nodemon(config, nodemonConfig) {},
+  nodemon(config, nodemonConfig) {
+    const {utils} = config;
+    const {addbase} = utils;
+    const scriptPath = addbase('scripts');
+
+    nodemonConfig.watch.push(scriptPath);
+
+    return Object.assign(nodemonConfig, {
+      script: path.join(scriptPath, 'nodemon-test.js'),
+      env: {
+        DEBUG: 'boiler'
+      }
+    });
+  },
   /**
    * Mocha Task
    * pass `require` see `gulp-mocha`

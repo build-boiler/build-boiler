@@ -1,9 +1,11 @@
-import boilerUtils from 'boiler-utils';
 import path from 'path';
 import {sync as globSync} from 'globby';
+import {fork} from 'child_process';
 import merge from 'lodash/merge';
 import isFunction from 'lodash/isFunction';
 import intersection from 'lodash/intersection';
+import open from 'open';
+import boilerUtils from 'boiler-utils';
 
 export default function(gulp, plugins, config) {
   const {
@@ -36,7 +38,7 @@ export default function(gulp, plugins, config) {
         OPEN: initialOpenPath
       },
       openPath: initialOpenPath,
-      open: true,
+      open: false,
       watch: [
         'lib/**/*.js',
         '!' + 'lib/node_modules/**'
@@ -86,12 +88,9 @@ export default function(gulp, plugins, config) {
       const binaryPath =
         tryExists(binPath, {resolve: true, omitReq: true}) ||
         tryExists(path.resolve(__dirname, '..', `node_modules/${binPath}`), {omitReq: true});
-      const open = require('open');
-      const {spawn} = require('pty.js');
-      const cp = spawn(
-        'node',
+      const cp = fork(
+        binaryPath,
         [
-          binaryPath,
           script,
           ...watch,
           '-d', delay,
@@ -102,30 +101,21 @@ export default function(gulp, plugins, config) {
             ...env,
             ...process.env
           },
+          stdio: 'inherit',
           cwd
         }
       );
-      let hasOpened = !shouldOpen;
 
-      cp.on('data', (data) => {
-        if (data.indexOf(openPath) > -1) {
-          if (!hasOpened) {
-            //only open if not running BrowserSync
-            if (intersection(['watch', 'build', 'serve'], process.argv).length === 0) {
-              hasOpened = true;
-              open(openPath);
-              process.stdout.write(`\nServer started at ${openPath}\n`);
-            }
+      cp.on('message', (event) => {
+        if (event.type === 'start' && isFunction(done)) {
+          const gulpCb = done;
+          done = null;
 
-            if (isFunction(done)) {
-              const gulpCb = done;
-              done = null;
-
-              gulpCb();
-            }
+          if (shouldOpen) {
+            isFunction(shouldOpen) ? shouldOpen(openPath) : open(openPath);
           }
-        } else {
-          process.stdout.write(data);
+
+          gulpCb();
         }
       });
     };

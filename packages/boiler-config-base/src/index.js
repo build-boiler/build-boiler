@@ -48,7 +48,9 @@ export default function(boilerConfigFp, opts = {}) {
 
   if (_.isPlainObject(boilerConfig)) {
     debug(`Found boiler.config.js ${JSON.stringify(boilerConfig)}`);
-    const {addons} = boilerConfig;
+
+    //HACK: somehow `addons` is getting mutated occasionally, not sure of the source??
+    const addons = Array.isArray(boilerConfig.addons) ? boilerConfig.addons : [];
     ({extends: ext} = boilerConfig);
 
     //Cloning boiler config because weird issues were happening on Lambda where addons
