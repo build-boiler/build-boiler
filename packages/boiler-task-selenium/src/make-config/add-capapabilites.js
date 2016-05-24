@@ -93,8 +93,6 @@ export default function(map, config, forceTunnel) {
   };
 
   const localBrowsers = ['chrome', 'firefox'];
-  const setupPath = join(testDir, 'config', 'e2e-initial-script.js');
-  const tearDownPath = join(testDir, 'config', 'e2e-tear-down.js');
 
   /**
    * Discover if tests should be run on
@@ -131,7 +129,7 @@ export default function(map, config, forceTunnel) {
   map.forEach((fps, devices) => {
     const config = capsConfig[testEnv];
 
-    const specs = fps.unshift(setupPath).push(tearDownPath).toJS();
+    const specs = fps.toJS();
     const capabilities = devices.map(device => {
       let defaultCaps;
 
