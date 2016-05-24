@@ -1,6 +1,6 @@
 {
   "name": "boiler-core",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Build Boilerplate Core",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,8 +27,8 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-config-base": "^2.0.2",
-    "boiler-utils": "^2.0.2",
+    "boiler-config-base": "^2.0.3",
+    "boiler-utils": "^2.0.3",
     "globby": "^4.0.0",
     "gulp-load-plugins": "^1.2.0",
     "lodash": "^4.0.0",
