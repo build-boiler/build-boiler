@@ -30,7 +30,6 @@ export default function(map, config, forceTunnel) {
   const {name, version} = pkg;
   const {
     devPort,
-    testDir,
     devUrl,
     internalHost
   } = sources;
