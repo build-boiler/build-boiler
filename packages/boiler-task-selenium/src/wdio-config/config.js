@@ -12,7 +12,7 @@ const baseConfig = {
   sync: true,
   maxInstances: 1,
   coloredLogs: true,
-  waitforTimeout: 15000,
+  waitforTimeout: 30000,
   framework: 'mocha',
   reporters: ['dot'], // Can only use native DotReporter right now: https://github.com/webdriverio/wdio-spec-reporter/issues/3
   reporterOptions: {
@@ -20,7 +20,7 @@ const baseConfig = {
   },
   mochaOpts: {
     ui: 'bdd',
-    timeout: 15000
+    timeout: 60000
   },
 
   /**
