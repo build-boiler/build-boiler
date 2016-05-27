@@ -17,7 +17,7 @@ export default function(gulp, plugins, config) {
   const {isDev, isIE, isMaster, asset_path: assetPath, branch} = environment;
   const {middleware: parentMiddleware, hot} = webpackConfig;
   const {getTaskName, addbase, logError} = utils;
-  const {mainBundleName, buildDir, devPort, devHost, hotPort} = sources;
+  const {mainBundleName, globalBundleName, buildDir, devPort, devHost, hotPort} = sources;
   const {gutil} = plugins;
   const {
     runParentFn: callParent,
@@ -28,6 +28,7 @@ export default function(gulp, plugins, config) {
   return (cb) => {
     const taskName = getTaskName(gulp.currentTask);
     const isMainTask = taskName === mainBundleName;
+    const isGlobalTask = taskName === globalBundleName;
     const isServer = taskName === 'server';
     const runHot = isMainTask && !isIE && hot;
 
@@ -40,7 +41,12 @@ export default function(gulp, plugins, config) {
       publicPath = isUndefined(branch) ?  bsPath : assetPath;
     }
 
-    const baseConfig = assign({}, config, {isMainTask, publicPath, taskName});
+    const baseConfig = assign({}, config, {
+      isMainTask,
+      isGlobalTask,
+      publicPath,
+      taskName
+    });
 
     if (isServer) {
       merge(baseConfig, {

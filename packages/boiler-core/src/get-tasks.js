@@ -64,14 +64,24 @@ export default function(gulp, plugins, config, boilerData) {
     //TODO: figure out why module exports babel plugin isn't working
     const gulpFn = fn.default || fn;
 
+    //lazy load the task so it only calls the function when gulp uses it
+    //HACK: without the `cb` argument the currying causes a gulp cb called too many times error
     if (moduleTask) {
       //pass the addons from `boiler.config.js`
-      ret = gulpFn(gulp, plugins, config, {
-        fn: parentMod,
-        addons: addons[taskPath]
-      });
+      ret = function(cb) {
+        const taskFn = gulpFn(gulp, plugins, config, {
+          fn: parentMod,
+          addons: addons[taskPath]
+        });
+
+        return taskFn.length ? taskFn.call(this, cb) : taskFn.call(this);
+      };
     } else {
-      ret = gulpFn(gulp, plugins, config);
+      ret = function(cb) {
+        const taskFn = gulpFn(gulp, plugins, config);
+
+        return taskFn.length ? taskFn.call(this, cb) : taskFn.call(this);
+      };
     }
 
     return ret;

@@ -11,12 +11,16 @@ export default function(gulp, opts = {}) {
   const babel = require('babel-core');
   const {
     gulpTaskname: addTaskName,
+    debug: runDebug,
     buildLogger,
     tryExists
   } = boilerUtils;
+  const debug = runDebug(__filename);
   const {fp: configFp, include} = opts;
   const {log, blue} = buildLogger;
+  debug('[make-base-config: start]');
   const baseConfig = makeConfig(configFp);
+  debug('[make-base-config: end]');
   /**
    * Config from `boiler.config.js`
    */
@@ -30,12 +34,16 @@ export default function(gulp, opts = {}) {
     babelExclude: excludeRe = baseExclude
   } = boilerConfig;
 
+  debug('[get-boiler-deps: start]');
   const boilerData = getBoilerDeps(rootDir, {
     tasks: boilerTasks,
     presets
   });
+  debug('[get-boiler-deps: end]');
   const taskNames = Object.keys(boilerData || {});
+  debug('[get-gulp-plugins: start]');
   const plugins = getGulpPlugins(baseConfig, taskNames);
+  debug('[get-gulp-plugins: end]');
 
   /**
    * Because in `babelrc` it is very hard to use minimatch to
@@ -90,11 +98,15 @@ export default function(gulp, opts = {}) {
    *   - sources/environment/utils/pkg/boilerConfig etc
    * with the parent config hooks from `gulp/config/index.js`
    */
+  debug('[get-task-config: start]');
   const config  = getTaskConfig(baseConfig, parentConfig, {
     tasks: taskNames
   });
+  debug('[get-task-config: end]');
 
+  debug('[get-tasks: start]');
   const tasks = getTasks(gulp, plugins, config, boilerData);
+  debug('[get-tasks: end]');
 
   hook.unmount();
 

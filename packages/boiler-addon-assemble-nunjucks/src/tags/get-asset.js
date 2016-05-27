@@ -2,7 +2,10 @@ import path from 'path';
 import nunjucks from 'nunjucks';
 import boilerUtils from 'boiler-utils';
 
-const {renameKey} = boilerUtils;
+const {
+  removeEndSlashes,
+  renameKey
+} = boilerUtils;
 
 export default class GetAsset {
   constructor(app) {
@@ -25,7 +28,7 @@ export default class GetAsset {
   script(src) {
     const type = 'type="text/javascript"';
 
-    return `<script src="${src}" ${type}></script>`;
+    return this.addIntegrity(`<script ${type} src="${src}"></script>`, src);
   }
 
   addScript({vendors, main, page}) {
@@ -40,7 +43,9 @@ export default class GetAsset {
 
   addLink({main, global, isDev, src}) {
     const rel = 'rel="stylesheet"';
-    const makeLink = (src) => `<link ${rel} href="${src}">\n`;
+    const makeLink = (src) => {
+      return this.addIntegrity(`<link ${rel} href="${src}">\n`, src);
+    };
     const linkTag = makeLink(src || global);
     let styles = '';
 
@@ -71,6 +76,17 @@ export default class GetAsset {
     return linkTag + styles;
   }
 
+  addIntegrity(tag, fp) {
+    if (this.integrity) {
+      const re = /<((script|link).+?)>/;
+      const hash = this.integrity[removeEndSlashes(fp)];
+
+      return hash ? tag.replace(re, `<$1 integrity="${hash}">`) : tag;
+    }
+
+    return tag;
+  }
+
   run(context, args) {
     const {ctx} = context;
     const {
@@ -81,15 +97,20 @@ export default class GetAsset {
     } = ctx;
     const {globalBundleName} = sources;
     const {
+      integrity: integrityData,
       javascript = {},
       styles = {}
     } = assets;
     const {isDev} = environment;
     const {path: viewPath} = view;
-    const {type, version = '1.0.0'} = args;
+    const {type, version = '1.0.0', integrity} = args;
     const pageKey = renameKey(viewPath, 'main');
     const pageBundle = javascript[pageKey];
     let tag;
+
+    if (!isDev && integrity && integrityData) {
+      this.integrity = integrityData;
+    }
 
     switch (type) {
       case 'pantsuit':

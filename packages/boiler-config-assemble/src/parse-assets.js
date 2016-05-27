@@ -3,6 +3,7 @@ import merge from 'lodash/merge';
 import fsX, {readJsonSync} from 'fs-extra';
 import async from 'async';
 import makeTools from 'boiler-addon-isomorphic-tools';
+import {sync as globSync} from 'globby';
 
 export default function(config, opts = {}) {
   const {environment, sources, utils} = config;
@@ -27,8 +28,21 @@ export default function(config, opts = {}) {
 
   function makeStats(main, global) {
     const {assets: images, ...rest} = global;
+    const integrityGlobs = globSync(
+      addbase(buildDir, '*integrity*.json')
+    );
+    const integrity = integrityGlobs.reduce((acc, fp) => {
+      try {
+        const json = require(fp);
+        Object.assign(acc, json);
+      } catch (err) {
+        return acc;
+      }
 
-    return merge({}, main, rest, {images});
+      return acc;
+    }, {});
+
+    return merge({}, main, rest, {images, integrity});
   }
 
   if (isomorphic) {

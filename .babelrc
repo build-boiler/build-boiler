@@ -2,7 +2,10 @@
   "presets": ["react"],
   "plugins": [
     "add-module-exports",
-    "transform-runtime",
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": false
+    }],
     "transform-es2015-for-of",
     "syntax-object-rest-spread",
     "transform-es2015-parameters",
@@ -12,7 +15,6 @@
     "transform-es2015-spread",
     "transform-es2015-destructuring",
     "transform-es2015-modules-commonjs",
-    "transform-strict-mode",
-    "transform-regenerator"
+    "transform-strict-mode"
   ]
 }
