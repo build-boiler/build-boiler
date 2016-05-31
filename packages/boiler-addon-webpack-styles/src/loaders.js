@@ -9,9 +9,12 @@ export default function(config, data) {
   //disable SCSS/CSS sourcemaps in PROD
   //this will not disable for extract text plugin with `vendors` bundle
   //but it will make the mappings empty
-  const sourceMap = isMaster ? '' : '&sourceMap';
+  const minimize = DEBUG || quick ?
+    '&-autoprefixer&-minimize' :
+    '&-autoprefixer&minimize';
+  const sourceMap = ( isMaster ? '' : '&sourceMap' ) + minimize;
   let sassParams = [
-    `outputStyle=${DEBUG || quick ? 'expanded' : 'compressed'}`
+    'outputStyle=expanded'
   ];
   let sassLoader, cssLoader;
 

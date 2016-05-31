@@ -3,7 +3,6 @@ import nunjucks from 'nunjucks';
 import boilerUtils from 'boiler-utils';
 
 const {
-  removeEndSlashes,
   renameKey
 } = boilerUtils;
 
@@ -79,7 +78,10 @@ export default class GetAsset {
   addIntegrity(tag, fp) {
     if (this.integrity) {
       const re = /<((script|link).+?)>/;
-      const hash = this.integrity[removeEndSlashes(fp)];
+      const split = fp.split(path.sep).filter(dir => !!dir);
+      const len = split.length;
+      const src = len >= 2 ? split.slice(len - 2) : split;
+      const hash = this.integrity[src.join(path.sep)];
 
       return hash ? tag.replace(re, `<$1 integrity="${hash}">`) : tag;
     }
