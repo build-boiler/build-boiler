@@ -2,11 +2,19 @@ import isString from 'lodash/isString';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default function(config, data) {
-  const {DEBUG, isMainTask, quick, webpackConfig} = config;
+  const {DEBUG, environment, isMainTask, quick, webpackConfig} = config;
+  const {isMaster} = environment;
   const {includePaths} = webpackConfig;
   const {loaders} = data;
+  //disable SCSS/CSS sourcemaps in PROD
+  //this will not disable for extract text plugin with `vendors` bundle
+  //but it will make the mappings empty
+  const minimize = DEBUG || quick ?
+    '&-autoprefixer&-minimize' :
+    '&-autoprefixer&minimize';
+  const sourceMap = ( isMaster ? '' : '&sourceMap' ) + minimize;
   let sassParams = [
-    `outputStyle=${DEBUG || quick ? 'expanded' : 'compressed'}`
+    'outputStyle=expanded'
   ];
   let sassLoader, cssLoader;
 
@@ -19,19 +27,21 @@ export default function(config, data) {
     sassParams.push(`includePaths[]=${includePaths}`);
   }
 
-  sassParams.push('sourceMap', 'sourceMapContents=true');
+  if (!!sourceMap) {
+    sassParams.push('sourceMap', 'sourceMapContents=true');
+  }
 
   if (DEBUG) {
     if (isMainTask) {
       sassLoader = [
         'style-loader',
-        'css-loader?sourceMap&importLoaders=2',
+        `css-loader?importLoaders=2${sourceMap}`,
         'postcss-loader',
         `sass-loader?${sassParams.join('&')}`
       ].join('!');
     } else {
       sassLoader = ExtractTextPlugin.extract('style-loader', [
-        'css-loader?sourceMap&importLoaders=2',
+        `css-loader?importLoaders=2${sourceMap}`,
         'postcss-loader',
         `sass-loader?${sassParams.join('&')}`
       ].join('!'));
@@ -39,17 +49,17 @@ export default function(config, data) {
 
     cssLoader = [
       'style-loader',
-      'css-loader?sourceMap&importLoaders=1&modules&localIdentName=[name]__[local]___[hash:base64:5]',
+      `css-loader?importLoaders=1&modules&localIdentName=[name]__[local]___[hash:base64:5]${sourceMap}`,
       'postcss-loader'
     ].join('!');
   } else {
     cssLoader = ExtractTextPlugin.extract('style-loader', [
-      'css-loader?sourceMap&importLoaders=1&modules&localIdentName=[hash:base64:5]',
+      `css-loader?importLoaders=1&modules&localIdentName=[hash:base64:5]${sourceMap}`,
       'postcss-loader'
     ].join('!'));
 
     sassLoader = ExtractTextPlugin.extract('style-loader', [
-      'css-loader?sourceMap&importLoaders=2',
+      `css-loader?importLoaders=2${sourceMap}`,
       'postcss-loader',
       `sass-loader?${sassParams.join('&')}`
     ].join('!'));
