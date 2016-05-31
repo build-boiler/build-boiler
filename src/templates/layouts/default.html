@@ -6,7 +6,7 @@
     <title>{{title}}</title>
 
     {% get_asset type='pantsuit' %}
-    {% get_asset type='css' %}
+    {% get_asset type='css', integrity=true %}
   </head>
   <body>
     <div class="body">
@@ -21,6 +21,6 @@
       {% build_boiler_globals name='_fluxStore', data=globalStore %}
     {% endif %}
 
-    {% get_asset type='js' %}
+    {% get_asset type='js', integrity=true %}
   </body>
 </html>

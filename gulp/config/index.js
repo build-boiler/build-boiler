@@ -210,6 +210,12 @@ export default {
      */
     includePaths: [],
     /**
+     * Whether to use https://github.com/mikechau/sri-stats-webpack-plugin
+     * to write data for subresource integrity
+     * @param {Boolean|String} string specifies sha
+     */
+    integrity: 'sha256',
+    /**
      * add additional paths to webpack `resolve.modulesDirectories`
      * so that can `require/import` without a relative path
      *

@@ -66,7 +66,7 @@ export default function(boilerConfigFp, opts = {}) {
     }
 
     debug(`Found boiler.config.js with addons ${JSON.stringify(addons)}`);
-    const processedAddons = handleAddons(addons, rootDir);
+    const processedAddons = Array.isArray(addons) ? handleAddons(addons, rootDir) : {};
     clone.addons = processedAddons;
     debug(`Processed addons ${JSON.stringify(processedAddons)}`);
 
