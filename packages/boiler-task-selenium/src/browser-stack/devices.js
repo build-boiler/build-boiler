@@ -4,8 +4,7 @@ export default [
   {
     browserName: 'iPhone',
     platform: 'MAC',
-    device: 'iPhone 6',
-    os_version: ''
+    device: 'iPhone 6'
   },
   {
     browserName: 'android',

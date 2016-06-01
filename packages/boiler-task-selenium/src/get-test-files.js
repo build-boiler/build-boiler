@@ -1,28 +1,72 @@
+// Libraries
 import _ from 'lodash';
-import path from 'path';
+import fs from 'fs';
+import {basename, join} from 'path';
 import globby from 'globby';
-import hackRequire from './hack-require';
 import Immutable from 'immutable';
+// Packages
+import boilerUtils from 'boiler-utils';
+// Helpers
+import hackRequire from './hack-require';
+
+
+const {gulpTaskUtils} = boilerUtils;
+const {addbase, logError} = gulpTaskUtils;
+
+/**
+ * Construct a glob that matches all existing spec files, given the intended platform(s)
+ *
+ * @param {Object} config // Task configuration
+ *   @param {String} config.sources // Webpack sources
+ *   @param {String} config.file // Specific test file names
+ *   @param {String} config.mobile // Comma-separated names of mobile browsers
+ *   @param {String} config.desktop // Comma-separated names of desktop browsers
+ * @param {Object} runnerOptions
+ * @return {Array}
+ */
+function makeSpecsGlob({sources, file, mobile, desktop}, runnerOptions = {}) {
+  const specGlob = '*-spec';
+  const {testDir} = sources;
+  const {specsDir} = runnerOptions;
+  const specsBase = specsDir ? specsDir : join(testDir, 'e2e');
+  const hasMobile = fs.existsSync(addbase(testDir, 'e2e', 'mobile')) && mobile;
+  const hasDesktop = fs.existsSync(addbase(testDir, 'e2e', 'desktop')) && desktop;
+  let glob;
+
+  //TODO: remove this conditional once spec files start exporting their browsers/devices
+  if (hasMobile && hasDesktop) {
+    glob = join(specsBase, `**/${file || specGlob}.js`);
+  } else if (hasDesktop) {
+    glob = join(specsBase, `{desktop/**/,,!(mobile)/**/}${file || specGlob}.js`);
+  } else if (hasMobile) {
+    glob = join(specsBase, `{mobile/**/,,!(desktop)/**/}${file || specGlob}.js`);
+  } else {
+    glob = join(specsBase, `**/${file || specGlob}.js`);
+  }
+
+  return glob;
+}
 
 /**
  * Redefine require and recursively require all e2e spec files
- * @param {Object} payload
- * @param {Object} types mobile/desktop
- * @param {String} fp path to spec files
  *
+ * @param {Object} config // Task configuration
+ * @param {Object} runnerOptions // Runner options from test.config.js
  * @return {Map}
  */
-export default function getTestFiles({types, fp, config}) {
-  const {utils, force} = config;
-  const {logError} = utils;
+export default function getTestFiles(config, runnerOptions) {
+  const {force, desktop, mobile} = config;
+
+  const types = {desktop, mobile};
   const specHook = hackRequire.init(/-spec\.js/, 'specs', types);
+  const fp = makeSpecsGlob(config, runnerOptions);
   const globs = globby.sync(fp, {cwd: process.cwd()});
   const filesLen = globs.length;
   const isSingleFile = filesLen === 1;
 
   if (filesLen === 0) {
     logError({
-      err: new Error(`Spec file path not found: ${path.basename(fp)}`),
+      err: new Error(`Spec file path not found: ${basename(fp)}`),
       plugin: '[selenium: get-test-files]'
     });
   }
@@ -102,7 +146,7 @@ export default function getTestFiles({types, fp, config}) {
   }, {});
 
   if (Object.keys(testFiles).length === 0) {
-    const fps = globs.map(fp => path.basename(fp)).join(', ');
+    const fps = globs.map(fp => basename(fp)).join(', ');
     logError({
       err: new Error(`No devices found for : ${fps}. Try specifying the --force option`),
       plugin: '[selenium: get-test-files]'

@@ -1,8 +1,10 @@
+// Packages
 import boilerUtils from 'boiler-utils';
+
 
 /**
  * Parse capabilities for browser/device names to be logged
- * @param {Object} opts test confi
+ * @param {Object} opts test config
  * @return {Object} joined browser/device names and spec file names
  */
 export default function(opts) {

@@ -14,7 +14,7 @@ const config = {
     }
   },
   logger(message) {
-    console.log(message);
+    global.console.log(message);
   }
 };
 

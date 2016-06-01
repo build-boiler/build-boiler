@@ -1,8 +1,8 @@
 import {expect} from 'chai';
-import setup from '../config/e2e-setup';
+
 
 describe('#SampleSync not exporting ANY browsers', () => {
-  const client = setup();
+  const client = global.browser;
   const url = '/';
 
   before(() => {

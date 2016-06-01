@@ -9,4 +9,4 @@ require('babel-register')({
 });
 require('babel-polyfill');
 
-exports.config = require('./config.js');
+exports.config = require('./make-config.js').default();
