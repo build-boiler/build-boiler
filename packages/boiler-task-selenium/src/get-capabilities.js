@@ -1,64 +1,42 @@
+// Libraries
 import _ from 'lodash';
 import Immutable from 'immutable';
 import {join} from 'path';
-import browsers from '../browser-stack/browsers';
-import devices from '../browser-stack/devices';
+// Packages
+import boilerUtils from 'boiler-utils';
+// Configuration
+import browsers from './browser-stack/browsers';
+import devices from './browser-stack/devices';
+// Helpers
+import getBrowserStackOptions from './browser-stack/get-browser-stack-options';
 
-/**
- * construct test runner objects and add appropriate capabilites
- * @param {Map} map
- * @param {Object} config gulp-config
- * @param {Boolean} forceTunnel force a tunnel environment with `gulp selenium:tunnel`
- * @return {Object}
- *
- * ex {
- *   testEnv: {String} //'local', 'tunnel', 'ci'
- *   data: {Array} // array of test configs to be run via child process
- *
- * }
- */
 
-export default function(map, config, forceTunnel) {
-  const {
-    bsConfig: browserSyncKeys,
-    local,
-    sources,
-    environment,
-    pkg = {},
-    utils
-  } = config;
-  const {name, version} = pkg;
-  const {
-    devPort,
-    devUrl,
-    internalHost
-  } = sources;
+const {gulpTaskUtils} = boilerUtils;
+const {logError} = gulpTaskUtils;
+
+export default function getCapabilities(config, runnerOptions, forceTunnel) {
+  const {environment, sources} = config;
   const {branch, isDevRoot, isMaster} = environment;
-  const {logError} = utils;
-  const protocol = branch ? 'https://' : 'http://';
+  const {devPort, devUrl, internalHost} = sources;
 
-  let isLocal,
-    testEnv,
-    baseUrl;
+  const {groupOptions, envOptions, authOptions} = getBrowserStackOptions(config);
 
-  const {BROWSERSTACK_USERNAME, BROWSERSTACK_API, localIdentifier} = browserSyncKeys;
+  let map = Immutable.Map();
+  let isLocal, testEnv, baseUrl;
 
-  const groupConfig = {
-    project: `v${version} [${branch || 'local'}:e2e${local ? ':debug' : ''}]`,
-    build: name
-  };
-
-  const bsConfig = {
-    user: BROWSERSTACK_USERNAME,
-    key: BROWSERSTACK_API,
-    host: 'hub.browserstack.com',
-    port: 80
-  };
+  try {
+    //IMPORTANT: do dynamic require here otherwise `require-hacker` will be
+    //working as soon as the file is `import`ed
+    map = require('./get-test-files')(config, runnerOptions);
+  } catch (err) {
+    logError({err, plugin: '[selenium: get-capabilities]'});
+  }
 
   /**
    * TODO: potentially account for if we want to run tests against prod url
    * right now master & devel will default to "http://www.hfa.io/contribute/donate/"
    */
+  const protocol = branch ? 'https://' : 'http://';
   if (branch) {
     const base = `${protocol}${devUrl}`;
 
@@ -76,30 +54,15 @@ export default function(map, config, forceTunnel) {
     logLevel: 'silent'
   };
 
-  const capsConfig = {
-    tunnel: {
-      'browserstack.local': 'true',
-      'browserstack.debug': 'true',
-      'browserstack.localIdentifier': localIdentifier
-    },
-    ci: {
-      'browserstack.debug': 'true',
-      'browserstack.local': 'true',
-      //TODO: make this property dynamic if we have multiple
-      //instances of BS binary running for VPC
-      'browserstack.localIdentifier': localIdentifier
-    }
-  };
-
-  const localBrowsers = ['chrome', 'firefox'];
-
   /**
-   * Discover if tests should be run on
+   * Determine if tests should be run on
    * a) local selenium server
    * b) tunnel on BS
    * c) remote on BS
    */
   if (_.isUndefined(branch)) {
+    const localBrowsers = ['chrome', 'firefox'];
+
     isLocal = true;
 
     for (const devices of map.keys()) {
@@ -122,11 +85,11 @@ export default function(map, config, forceTunnel) {
   const testConfig = [];
 
   if (!isLocal) {
-    _.assign(baseConfig, bsConfig);
+    _.assign(baseConfig, authOptions);
   }
 
   map.forEach((fps, devices) => {
-    const config = capsConfig[testEnv];
+    const config = envOptions[testEnv];
 
     const specs = fps.toJS();
     const capabilities = devices.map(device => {
@@ -155,7 +118,7 @@ export default function(map, config, forceTunnel) {
        */
       if (!isLocal) {
         const {browserName, device} = defaultCaps;
-        _.assign(defaultCaps, groupConfig, {name: device || browserName});
+        _.assign(defaultCaps, groupOptions, {name: device || browserName});
       }
 
       return _.assign({}, defaultCaps, config, isLocal);

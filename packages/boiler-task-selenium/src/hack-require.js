@@ -1,8 +1,11 @@
+// Libraries
 import fs from 'fs';
 import _ from 'lodash';
 import requireHacker from 'require-hacker';
-import {defaults as defaultBrowsers} from '../browser-stack/browsers';
-import {defaults as defaultDevices} from '../browser-stack/devices.js';
+// Configuration
+import {defaults as defaultBrowsers} from './browser-stack/browsers';
+import {defaults as defaultDevices} from './browser-stack/devices.js';
+
 
 export default {
   /**
@@ -52,6 +55,7 @@ export default {
 
             str += chr;
           }
+
         } else if (desktopCliArg && isDesktop) {
          //add default browsers/devices if test file doesn't export anything
           const defaults = {

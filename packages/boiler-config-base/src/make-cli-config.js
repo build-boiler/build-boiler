@@ -11,7 +11,7 @@ export default function(opts = {}) {
   const devKey = 'development';
   const prodKey = 'production';
   const {argv} = yargs
-  .usage('Usage: $0 <gulp> $1 <gulp_task> [-e <environment> -f <file_to_test>]')
+  .usage('Usage: $0 <gulp> $1 <gulp_task> [-e <environment> -f <file_to_test> --config <config_file>]')
   .options({
     b: {
       alias: 'browser',
@@ -53,15 +53,16 @@ export default function(opts = {}) {
       alias: 'quick',
       type: 'boolean'
     },
-    // Number of instances to run in parallel (boiler-task-selenium)
-    instances: {
-      type: 'number',
-      default: 1
-    },
+    // Disable ghost mode (boiler-task-browser-sync)
     t: {
       alias: 'test',
       type: 'boolean',
       default: false
+    },
+    // Read in a specified configuration file (boiler-task-selenium, can be generalized)
+    config: {
+      alias: 'configFile',
+      type: 'string'
     },
     ...cli
   });

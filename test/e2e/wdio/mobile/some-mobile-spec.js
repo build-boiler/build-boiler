@@ -1,8 +1,7 @@
 import {expect} from 'chai';
-import setup from '../../config/e2e-setup';
 
 describe('Mobile Directory Spec', () => {
-  const client = setup();
+  const client = global.browser;
   const url = '/';
 
   before(() => {

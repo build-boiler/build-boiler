@@ -5,6 +5,7 @@ import boilerUtils from 'boiler-utils';
 export default function(root, opts) {
   const {tryExists, buildLogger} = boilerUtils;
   const {prefix: logP, blue} = buildLogger;
+
   const methods = {
     tasks(task) {
       const prefix = 'boiler-task-';

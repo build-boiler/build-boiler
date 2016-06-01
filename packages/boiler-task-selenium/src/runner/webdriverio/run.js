@@ -1,24 +1,25 @@
+// Libraries
 import _ from 'lodash';
 import path, {join} from 'path';
 import {spawn} from 'child_process';
+// Packages
 import boilerUtils from 'boiler-utils';
-import parseNames from  './make-config/parse-browser-names';
+// Helpers
+import parseNames from  './parse-browser-names';
 
+
+const {buildLogger, thunk, runGen: run} = boilerUtils;
+const {log, magenta} = buildLogger;
 /**
  * Spawn child process/processes and run tests in parallel/concurrently
- * @param {Array} opts all E2E options
- * @param {Object} config gulp config
- * @param {Function} cb callback
- * @return {undefined} use the callback
+ *
+ * @param {Array} testSettings
+ * @param {Object} runnerOptions
+ * @param {Object} config
+ * @param {Function} cb
  */
-export default function(opts, config, cb) {
-  const {
-    buildLogger,
-    thunk,
-    runGen: run
-  } = boilerUtils;
-  const {log, magenta} = buildLogger;
-  const {fn: parentFn, local, utils, instances} = config;
+export default function runWebdriverio(testSettings, runnerOptions, config, cb) {
+  const {fn: parentFn, local, utils} = config;
   const {addroot, logError} = utils;
   const {TRAVIS_BRANCH} = process.env;
 
@@ -30,13 +31,12 @@ export default function(opts, config, cb) {
    */
   function runCp(opt, local, concurrent) {
     const {baseUrl} = opt;
-    const message = `Starting ${concurrent && opts.length > 1 ? 'Concurrent' : 'Parallel'} Tests for [${magenta(baseUrl)}]`;
+    const message = `Starting ${concurrent && testSettings.length > 1 ? 'Concurrent' : 'Parallel'} Tests for [${magenta(baseUrl)}]`;
 
     log(message);
 
     const env = _.merge({}, process.env, {
-      // TODO: Make a better way to override wdio options dynamically
-      WDIO_CONFIG: JSON.stringify(Object.assign(opt,  {maxInstances: instances})),
+      WDIO_CONFIG: JSON.stringify(opt),
       TEST_ENV: JSON.stringify({local})
     });
 
@@ -45,9 +45,7 @@ export default function(opts, config, cb) {
 
     // Try to resolve the path or use the external wdio dependency
     try {
-      const webdriverBase = path.dirname(
-        require.resolve('webdriverio')
-      );
+      const webdriverBase = path.dirname(require.resolve('webdriverio'));
 
       // 'webdriverio/build/bin' --> 'webdriver/bin'
       binaryPath = join(webdriverBase, '..', binPath);
@@ -58,7 +56,7 @@ export default function(opts, config, cb) {
     const cp = _.isFunction(parentFn) ? parentFn.apply(null, arguments) : spawn(
       binaryPath,
       [
-        join(__dirname, 'wdio-config'),
+        path.join(__dirname),
         '--es_staging'
       ],
       {
@@ -74,7 +72,7 @@ export default function(opts, config, cb) {
     if (_.isUndefined(TRAVIS_BRANCH)) {
       let code;
 
-      for (const opt of opts) {
+      for (const opt of testSettings) {
         const thunkedCp = runCp(opt);
         const {browsers, specs} = parseNames(opt);
 
@@ -92,7 +90,7 @@ export default function(opts, config, cb) {
         cb(null, code);
       }
     } else {
-      const cps = opts.reduce((list, opt) => {
+      const cps = testSettings.reduce((list, opt) => {
         const thunkedCp = runCp(opt, local, true);
         const {browsers, specs} = parseNames(opt);
         const data = {
