@@ -1,8 +1,8 @@
 export default function(gulp, plugins, config, opts) {
-  const {utils} = config;
+  const {utils, metaData} = config;
   const {addbase, getTaskName} = utils;
   const {src, data} = opts;
-  const taskName = getTaskName(gulp.currentTask);
+  const taskName = getTaskName(metaData);
 
   if (taskName === 'build') {
     src.push(...[

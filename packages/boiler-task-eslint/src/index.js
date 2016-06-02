@@ -8,13 +8,18 @@ export default function(gulp, plugins, config, parentMod) {
     runCustomTask: runFn
   } = boilerUtils;
   const {eslint} = plugins;
-  const {utils, environment, eslint: eslintParentConfig} = config;
+  const {
+    utils,
+    environment,
+    eslint: eslintParentConfig,
+    metaData
+  } = config;
   const {isDev} = environment;
   const {addbase, addroot, getTaskName} = utils;
   let src;
 
   return () => {
-    const lintEnv = getTaskName(gulp.currentTask);
+    const lintEnv = getTaskName(metaData);
 
     if (lintEnv === 'test') {
       src = [addbase('test', '**/*.js')];
