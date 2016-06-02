@@ -19,6 +19,7 @@ export default function(gulp, plugins, config) {
     babel: parentConfig,
     sources,
     environment,
+    metaData,
     utils
   } = config;
   const {buildDir} = sources;
@@ -30,7 +31,7 @@ export default function(gulp, plugins, config) {
   const dest = addbase(buildDir);
 
   return () => {
-    const taskName = getTaskName(gulp.currentTask);
+    const taskName = getTaskName(metaData);
     const isDevTask = taskName === 'dev';
     const baseConfig = {
       src,

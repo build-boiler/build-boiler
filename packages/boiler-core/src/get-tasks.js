@@ -23,7 +23,7 @@ export default function(gulp, plugins, config, boilerData) {
    */
   function getTask(taskPath, moduleTask, fn) {
     fn = fn || require(taskPath);
-    let parentMod, ret;
+    let parentMod, fnArgs;
 
     if (moduleTask) {
       let foundPath;
@@ -64,29 +64,27 @@ export default function(gulp, plugins, config, boilerData) {
     //TODO: figure out why module exports babel plugin isn't working
     const gulpFn = fn.default || fn;
 
-    //lazy load the task so it only calls the function when gulp uses it
-    //HACK: without the `cb` argument the currying causes a gulp cb called too many times error
     if (moduleTask) {
-      //pass the addons from `boiler.config.js`
-      ret = function(cb) {
-        const taskFn = gulpFn(gulp, plugins, config, {
-          fn: parentMod,
-          addons: addons[taskPath]
-        });
-
-        return taskFn.length ? taskFn.call(this, cb) : taskFn.call(this);
-      };
-    } else {
-      ret = function(cb) {
-        const taskFn = gulpFn(gulp, plugins, config);
-
-        return taskFn.length ? taskFn.call(this, cb) : taskFn.call(this);
+      fnArgs = {
+        fn: parentMod,
+        addons: addons[taskPath]
       };
     }
 
-    return ret;
-  }
+    //lazy load the task so it only calls the function when gulp uses it
+    //HACK: without the `cb` argument the currying causes a gulp cb called too many times error
+    return function(...args) {
+      const taskFn = gulpFn(
+        gulp,
+        plugins,
+        //add `metaData` from `this`
+        Object.assign({}, config, this),
+        fnArgs
+      );
 
+      return taskFn.apply(this, args);
+    };
+  }
 
   /**
    * Creates an object with keys corresponding to the Gulp task name and

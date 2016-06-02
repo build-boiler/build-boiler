@@ -1,7 +1,19 @@
+import DefaultRegistry from 'undertaker-registry';
+
 export default function(gulp) {
-  gulp.Gulp.prototype.__runTask = gulp.Gulp.prototype._runTask;
-  gulp.Gulp.prototype._runTask = function(task) {
-    this.currentTask = task;
-    this.__runTask(task);
-  };
+
+  class TaskMetadataRegistry extends DefaultRegistry {
+    constructor() {
+      super();
+    }
+
+    set(name, fn) {
+      const metaData = {name};
+      const task = this._tasks[name] = fn.bind({metaData});
+
+      return task;
+    }
+  }
+
+  gulp.registry(new TaskMetadataRegistry());
 }

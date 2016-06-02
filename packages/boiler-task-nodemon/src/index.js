@@ -88,6 +88,13 @@ export default function(gulp, plugins, config) {
         tryExists(path.resolve(__dirname, '..', `node_modules/${binPath}`), {omitReq: true});
       const open = require('open');
       const {spawn} = require('pty.js');
+      console.log([
+        binaryPath,
+        script,
+        ...watch,
+        '-d', delay,
+        '--es_staging'
+      ]);
       const cp = spawn(
         'node',
         [

@@ -32,6 +32,6 @@
     "lodash": "^4.0.0",
     "nodemon": "^1.9.1",
     "open": "0.0.5",
-    "pty.js": "^0.3.0"
+    "pty.js": "git+ssh://git@github.com/y13i/pty.js.git#update_nan"
   }
 }
