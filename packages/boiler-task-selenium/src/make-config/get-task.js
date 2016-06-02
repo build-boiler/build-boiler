@@ -1,9 +1,9 @@
 import {isArray} from 'lodash';
 
-export default function({gulp, utils}) {
+export default function({config, utils}) {
   const {getTaskName} = utils;
-  const taskName = gulp.currentTask;
-  let split = getTaskName(taskName);
+  const {metaData} = config;
+  let split = getTaskName(metaData);
   let task, suffix;
 
   if (isArray(split)) {
