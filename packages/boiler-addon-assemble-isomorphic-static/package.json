@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-assemble-isomorphic-static",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Build Boilerplate Isomorphic Components for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-utils": "^2.1.0",
+    "boiler-utils": "^3.0.0",
     "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
     "jsdom": "^8.0.4",

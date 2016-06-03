@@ -1,6 +1,6 @@
 {
   "name": "boiler-config-assemble",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -28,8 +28,8 @@
   "dependencies": {
     "assemble-core": "0.17.1",
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-addon-isomorphic-tools": "^2.0.6",
-    "boiler-utils": "^2.1.0",
+    "boiler-addon-isomorphic-tools": "^3.0.0",
+    "boiler-utils": "^3.0.0",
     "fs-extra": "^0.26.4",
     "globby": "^4.1.0",
     "js-yaml": "^3.6.0",
