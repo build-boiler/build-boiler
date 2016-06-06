@@ -21,6 +21,6 @@
       {% build_boiler_globals name='_fluxStore', data=globalStore %}
     {% endif %}
 
-    {% get_asset type='js', integrity=true %}
+    {% get_asset type='js', integrity=true, cors='use-credentials' %}
   </body>
 </html>

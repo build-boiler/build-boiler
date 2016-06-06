@@ -1,9 +1,12 @@
 import path from 'path';
 import nunjucks from 'nunjucks';
 import boilerUtils from 'boiler-utils';
+import isString from 'lodash/isString';
+import isBoolean from 'lodash/isBoolean';
 
 const {
-  renameKey
+  renameKey,
+  removeEndSlashes
 } = boilerUtils;
 
 export default class GetAsset {
@@ -81,9 +84,20 @@ export default class GetAsset {
       const split = fp.split(path.sep).filter(dir => !!dir);
       const len = split.length;
       const src = len >= 2 ? split.slice(len - 2) : split;
-      const hash = this.integrity[src.join(path.sep)];
+      const hash =
+        this.integrity[removeEndSlashes(fp)] ||
+        this.integrity[src.join(path.sep)];
+      const attrs = [
+        `integrity="${hash}"`
+      ];
 
-      return hash ? tag.replace(re, `<$1 integrity="${hash}">`) : tag;
+      if (this.cors) {
+        attrs.push(
+          `crossorigin="${this.cors}"`
+        );
+      }
+
+      return hash ? tag.replace(re, `<$1 ${attrs.join(' ')}>`) : tag;
     }
 
     return tag;
@@ -105,13 +119,19 @@ export default class GetAsset {
     } = assets;
     const {isDev} = environment;
     const {path: viewPath} = view;
-    const {type, version = '1.0.0', integrity} = args;
+    const {type, version = '1.0.0', integrity, cors = true} = args;
     const pageKey = renameKey(viewPath, 'main');
     const pageBundle = javascript[pageKey];
     let tag;
 
     if (!isDev && integrity && integrityData) {
       this.integrity = integrityData;
+
+      if (isString(cors)) {
+        this.cors = cors;
+      } else if (isBoolean(cors) && cors) {
+        this.cors = 'anonymous';
+      }
     }
 
     switch (type) {
