@@ -28,8 +28,10 @@ export default function(config, opts = {}) {
 
   function makeStats(main, global) {
     const {assets: images, ...rest} = global;
+    const cwdBase = path.basename(process.cwd());
+    const integrityStatsBase = buildDir.indexOf(cwdBase) > -1 ? '' : buildDir;
     const integrityGlobs = globSync(
-      addbase(buildDir, '*integrity*.json')
+      addbase(integrityStatsBase, '*integrity*.json')
     );
     const integrity = integrityGlobs.reduce((acc, fp) => {
       try {
