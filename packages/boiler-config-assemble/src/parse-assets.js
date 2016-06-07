@@ -18,7 +18,11 @@ export default function(config, opts = {}) {
   const {isomorphic} = opts;
   //Allow passing a custom `statsDir` from `sources`, useful for stuff
   //like lambda/server where stats might be copied somewhere other than `dist`
-  const statsPath = addbase(statsDir || buildDir);
+  const statsOutput = statsDir || buildDir;
+  //account for chance that process is started inside of the compiled directory
+  //that holds the stats
+  const isSameDir = path.basename(statsOutput) === path.basename(process.cwd());
+  const statsPath = isSameDir ? process.cwd() : addbase(statsOutput);
   const globalStatsPath = path.join(statsPath, globalStatsFile);
   const tools = makeTools(Object.assign({}, config, {
     isPlugin: false,
@@ -28,10 +32,8 @@ export default function(config, opts = {}) {
 
   function makeStats(main, global) {
     const {assets: images, ...rest} = global;
-    const cwdBase = path.basename(process.cwd());
-    const integrityStatsBase = buildDir.indexOf(cwdBase) > -1 ? '' : buildDir;
     const integrityGlobs = globSync(
-      addbase(integrityStatsBase, '*integrity*.json')
+      path.join(statsPath, '*integrity*.json')
     );
     const integrity = integrityGlobs.reduce((acc, fp) => {
       try {
