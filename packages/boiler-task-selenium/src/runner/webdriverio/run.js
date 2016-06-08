@@ -53,12 +53,18 @@ export default function runWebdriverio(testSettings, runnerOptions, config, cb) 
       binaryPath = addroot('node_modules/webdriverio', binPath);
     }
 
+    const args = [
+      path.join(__dirname),
+      '--es_staging'
+    ];
+    // Signal to make-config to parallelize tests (and use the dot reporter)
+    if (opt.host === 'hub.browserstack.com') {
+      args.push('--tunnel');
+    }
+
     const cp = _.isFunction(parentFn) ? parentFn.apply(null, arguments) : spawn(
       binaryPath,
-      [
-        path.join(__dirname),
-        '--es_staging'
-      ],
+      args,
       {
         stdio: 'inherit',
         env

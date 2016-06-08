@@ -1,5 +1,6 @@
 // Libraries
 import merge from 'lodash/merge';
+import SpecReporter from './reporters/spec';
 
 
 export const wdioDefaults = {
@@ -8,7 +9,7 @@ export const wdioDefaults = {
   coloredLogs: true,
   waitforTimeout: 30000,
   framework: 'mocha',
-  reporters: ['dot'], // Can only use native DotReporter right now: https://github.com/webdriverio/wdio-spec-reporter/issues/3
+  reporters: [SpecReporter],
   reporterOptions: {
     outputDir: './'
   },

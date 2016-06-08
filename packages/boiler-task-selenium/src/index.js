@@ -11,22 +11,23 @@ import spawn from './runner/spawn';
 
 
 const {buildLogger, thunk, runGen, runParentFn, gulpTaskUtils} = boilerUtils;
-const {logError, getTaskName} = gulpTaskUtils;
+const {logError} = gulpTaskUtils;
 const {log} = buildLogger;
 
 export default function(gulp, plugins, config) {
   return (gulpCb) => {
-    const {desktop, mobile, configFile} = config;
+    const {desktop, mobile, configFile, metaData, utils} = config;
+    const {getTaskName} = utils;
 
     function exit(code, cb) {
-      process.exit(code);
-
-      if (typeof cb === 'function') {
-        cb();
+      if (typeof gulpCb === 'function') {
+        gulpCb();
       }
+
+      process.exit(code);
     }
 
-    const taskName = getTaskName(gulp.currentTask);
+    const taskName = getTaskName(metaData);
     const forceTunnel = taskName === 'tunnel';
     const tunnelOnly = forceTunnel && _.isUndefined(desktop) && _.isUndefined(mobile);
     const runnerOptions = getTestConfig(configFile);
