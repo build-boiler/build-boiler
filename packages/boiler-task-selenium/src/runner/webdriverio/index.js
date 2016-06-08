@@ -9,4 +9,11 @@ require('babel-register')({
 });
 require('babel-polyfill');
 
-exports.config = require('./make-config.js').default();
+const opts = {};
+if (process.argv[4] === '--tunnel') {
+  Object.assign(opts, {
+    maxInstances: 5,
+    reporters: '[dot]'
+  });
+}
+exports.config = require('./make-config.js').default(opts);
