@@ -124,7 +124,13 @@ export default {
    *  cwd: 'Users/bleep/bloop/lib'
    * }
    */
-  nodemon(config, nodemonConfig) {},
+  nodemon(config, nodemonConfig) {
+    return merge(nodemonConfig, {
+      env: {
+        DEBUG: 'test'
+      }
+    });
+  },
   /**
    * Mocha Task
    * pass `require` see `gulp-mocha`

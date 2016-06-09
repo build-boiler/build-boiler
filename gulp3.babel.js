@@ -42,7 +42,7 @@ if (force || release) {
     path.join(process.cwd(), 'gulp', 'tasks', 'copy')
   );
 
-  const {eslint} = plugins;
+  const {eslint, sequence} = plugins;
   const eslintConfig = makeEslintConfig({
     basic: false,
     react: true,
@@ -59,21 +59,25 @@ if (force || release) {
   gulp.task('babel', tasks.babel || babelFn(gulp, plugins, config));
   gulp.task('lint', tasks.lint || eslintFn);
   gulp.task('copy', tasks.copy || copyFn(gulp, plugins, config));
-  gulp.task('build', gulp.series(
-    'lint',
-    gulp.parallel('copy', 'babel')
-  ));
-  gulp.task('run-watch', () => {
-    gulp.watch(scripts).on('change', gulp.series('lint', 'babel'));
-    gulp.watch('./packages/*/src/**/*.json').on('change', gulp.series('copy'));
+  gulp.task('build', (cb) => {
+    sequence(
+      'lint',
+      ['copy', 'babel'],
+      cb
+    );
   });
 
-  gulp.task('watch', gulp.series(
-    'lint',
-    gulp.parallel('babel', 'copy'),
-    'run-watch'
-    )
-  );
+  gulp.task('watch', ['lint', 'babel', 'copy'], () => {
+    gulp.watch(scripts, [], (cb) => {
+      sequence(
+        'lint',
+        ['babel'],
+        cb
+      );
+    });
+
+    gulp.watch('./packages/*/src/**/*.json', ['copy']);
+  });
 } else {
   const build = require('./packages/boiler-core/src');
   const {tasks, config, plugins: $} = build(gulp, {
@@ -92,7 +96,7 @@ if (force || release) {
   gulp.task('karma', tasks.karma);
   gulp.task('lint:test', tasks.eslint);
   gulp.task('lint:build', tasks.eslint);
-  gulp.task('lint', gulp.parallel('lint:test', 'lint:build'));
+  gulp.task('lint', ['lint:test', 'lint:build']);
   gulp.task('mocha', tasks.mocha);
   gulp.task('nodemon', tasks.nodemon);
   gulp.task('selenium', tasks.selenium);
@@ -100,60 +104,61 @@ if (force || release) {
   gulp.task('webpack:global', tasks.webpack);
   gulp.task('webpack:main', tasks.webpack);
   gulp.task('webpack:server', tasks.webpack);
-  gulp.task('webpack', gulp.series('webpack:global', 'webpack:main'));
+  gulp.task('webpack', ['webpack:global', 'webpack:main']);
 
-  let task;
+  gulp.task('build', (cb) => {
+    if (isDev) {
+      //gulp watch
+      $.sequence(
+        'clean',
+        'copy',
+        'lint',
+        'webpack',
+        'assemble',
+        'browser-sync',
+        cb
+      );
+    } else if (release) {
+      $.sequence(
+        'clean',
+        'copy',
+        'lint',
+        'babel',
+        cb
+      );
+    } else {
+      $.sequence(
+        'clean',
+        'copy',
+        'lint',
+        'webpack',
+        'webpack:server',
+        'assemble',
+        cb
+      );
+    }
+  });
 
-  if (isDev) {
-    //gulp watch
-    task = gulp.series(
-      'clean',
-      'copy',
-      'lint',
-      'webpack',
-      'assemble',
-      'browser-sync'
+  gulp.task('default', ['build']);
+
+
+  gulp.task('test:integration', (cb) => {
+    $.sequence(
+      ['clean', 'lint'],
+      'karma',
+      cb
     );
-  } else if (release) {
-    task = gulp.series(
-      'clean',
-      'copy',
-      'lint',
-      'babel'
-    );
-  } else {
-    task = gulp.series(
-      'clean',
-      'copy',
-      'lint',
-      'webpack',
-      'webpack:server',
-      'assemble'
-    );
-  }
 
-  gulp.task('build', task);
-  gulp.task('default', gulp.series('build'));
+    gulp.watch([
+      addbase(testDir, '**/*.js')
+    ], ['lint:test']);
+  });
 
-  gulp.task('test:integration', gulp.series(
-    gulp.parallel('clean', 'lint'),
-    'karma',
-    () => {
-      gulp.watch(
-        addbase(testDir, '**/*.js')
-      ).on('change', gulp.series('lint:test'));
-    })
-  );
-  gulp.task('run-watch', () => {
-    gulp.watch(
-      addbase(buildDir, '{js,css}/**/*.{js,css}')
-    ).on('change', $.browserSync.reload);
-
+  gulp.task('watch', ['build'], () => {
+    gulp.watch(addbase(buildDir, '{js,css}/**/*.{js,css}'), $.browserSync.reload);
     gulp.watch([
       addbase(testDir, '**/*.js'),
       addbase(buildDir, '**/*.js')
-    ]).on('change', gulp.series('lint'));
+    ], ['lint']);
   });
-
-  gulp.task('watch', gulp.series('build', 'run-watch'));
 }

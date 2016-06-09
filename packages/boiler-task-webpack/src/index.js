@@ -13,7 +13,7 @@ import async from 'async';
 import {sync as glob} from 'globby';
 
 export default function(gulp, plugins, config) {
-  const {sources, utils, environment, webpackConfig} = config;
+  const {metaData, sources, utils, environment, webpackConfig} = config;
   const {isDev, isIE, isMaster, asset_path: assetPath, branch} = environment;
   const {middleware: parentMiddleware, hot} = webpackConfig;
   const {getTaskName, addbase, logError} = utils;
@@ -26,7 +26,7 @@ export default function(gulp, plugins, config) {
   let publicPath;
 
   return (cb) => {
-    const taskName = getTaskName(gulp.currentTask);
+    const taskName = getTaskName(metaData);
     const isMainTask = taskName === mainBundleName;
     const isGlobalTask = taskName === globalBundleName;
     const isServer = taskName === 'server';
