@@ -90,13 +90,21 @@ export default function getCapabilities(config, runnerOptions, forceTunnel) {
 
   map.forEach((fps, devices) => {
     const config = envOptions[testEnv];
-
     const specs = fps.toJS();
-    const capabilities = devices.map(device => {
-      let defaultCaps;
+
+    let capabilities = Immutable.List();
+    devices.forEach((device) => {
+      const addToCapabilities = (caps) => {
+        if (!isLocal) {
+          const {browserName, device} = caps;
+          _.assign(caps, groupOptions, {name: device || browserName});
+        }
+
+        capabilities = capabilities.push(_.assign({}, caps, config, isLocal));
+      };
 
       if (Immutable.Map.isMap(device)) {
-        defaultCaps = device.toJS();
+        addToCapabilities(device.toJS());
       } else if (_.isString(device)) {
         //normalize the device name and get it from the default devices
         const deviceArr = allBsDevices.filter(bsDevice => {
@@ -104,25 +112,18 @@ export default function getCapabilities(config, runnerOptions, forceTunnel) {
           const re = new RegExp(device, 'i');
 
           //account for desktop/mobile => i.e. browserName/device
-          return re.test(browserName) || re.test(configDevice);
+          return (re.test(browserName) || re.test(configDevice));
         });
 
-        if (deviceArr.length !== 1) {
+        if (deviceArr.length < 1) {
           logError({err: new Error(`${device} is not listed in default devices`), plugin: '[selenium: add-capabilities]'});
         }
-        defaultCaps = isLocal ? {browserName: device} : deviceArr[0];
-      }
 
-      /**
-       * Add the configs for BrowserSync test naming
-       */
-      if (!isLocal) {
-        const {browserName, device} = defaultCaps;
-        _.assign(defaultCaps, groupOptions, {name: device || browserName});
+        deviceArr.forEach((device) => {
+          addToCapabilities(isLocal ? {browserName: device.browserName} : device);
+        });
       }
-
-      return _.assign({}, defaultCaps, config, isLocal);
-    }).toJS();
+    });
 
     testConfig.push(_.assign({}, baseConfig, {
       specs,

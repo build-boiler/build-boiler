@@ -12,7 +12,6 @@ import hackRequire from './hack-require';
 
 const {gulpTaskUtils} = boilerUtils;
 const {addbase, logError} = gulpTaskUtils;
-
 /**
  * Construct a glob that matches all existing spec files, given the intended platform(s)
  *
@@ -29,8 +28,8 @@ function makeSpecsGlob({sources, file, mobile, desktop}, runnerOptions = {}) {
   const {testDir} = sources;
   const {specsDir} = runnerOptions;
   const specsBase = specsDir ? specsDir : join(testDir, 'e2e');
-  const hasMobile = fs.existsSync(addbase(testDir, 'e2e', 'mobile')) && mobile;
-  const hasDesktop = fs.existsSync(addbase(testDir, 'e2e', 'desktop')) && desktop;
+  const hasMobile = fs.existsSync(addbase(specsBase, 'mobile')) && mobile;
+  const hasDesktop = fs.existsSync(addbase(specsBase, 'desktop')) && desktop;
   let glob;
 
   //TODO: remove this conditional once spec files start exporting their browsers/devices
@@ -85,7 +84,7 @@ export default function getTestFiles(config, runnerOptions) {
     function retrieveDevices(specFileData) {
       return typesToTest.reduce((list, key) => {
         const typeData = types[key];
-        const deviceKey = 'browserName';
+        const deviceKey = key === 'desktop' ? 'browserName' : 'device';
         let dataByKey;
 
         //if the cli args want to test something on a "single file" that is not specifically
@@ -118,7 +117,7 @@ export default function getTestFiles(config, runnerOptions) {
             }
 
             if (deviceName) {
-              ret = typeData.filter(device => new RegExp(deviceName.toLowerCase()).test(typeData.join(' '))).length > 0;
+              ret = typeData.filter((device) => new RegExp(deviceName.toLowerCase()).test(typeData.join(' ')));
             }
           }
 

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import boilerUtils from 'boiler-utils';
 // Helpers
 import getTestConfig from './get-test-config';
-import getSeleniumStandaloneOptions from './selenium-standalone/get-selenium-standalone-options';
+import seleniumOptions from './selenium-standalone/options';
 import getBrowserStackOptions from './browser-stack/get-browser-stack-options';
 import getCapabilities from './get-capabilities';
 import spawn from './runner/spawn';
@@ -32,7 +32,6 @@ export default function(gulp, plugins, config) {
     const tunnelOnly = forceTunnel && _.isUndefined(desktop) && _.isUndefined(mobile);
     const runnerOptions = getTestConfig(configFile);
     const {testEnv, testConfig} = getCapabilities(config, runnerOptions, forceTunnel);
-    const seleniumOptions = getSeleniumStandaloneOptions();
     const browserStackOptions = getBrowserStackOptions(config);
 
     const testData = {

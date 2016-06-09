@@ -10,7 +10,8 @@ require('babel-register')({
 require('babel-polyfill');
 
 const opts = {};
-if (process.argv[4] === '--tunnel') {
+// Speed things up even more if we're running parallel tests :)
+if (process.argv.indexOf('--parallel') !== -1) {
   Object.assign(opts, {
     maxInstances: 5,
     reporters: '[dot]'

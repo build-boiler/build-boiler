@@ -3,21 +3,18 @@ import path from 'path';
 import fs from 'fs-extra';
 import merge from 'lodash/merge';
 import {spawn} from 'child_process';
+import EventEmitter from 'events';
+// Packages
+import boilerUtils from 'boiler-utils';
 // Helpers
 import {nightwatchDefaults} from './make-config';
 
 
-/**
- * Spawn child process/processes and run tests in parallel/concurrently
- *
- * @param {Array} testConfig
- * @param {Object} runnerOptions
- * @param {Object} config
- * @param {Function} cb
- */
-export default function runNightwatch(testConfig, runnerOptions, config, cb) {
-  const {file} = config;
+const {thunk} = boilerUtils;
+export default function runNightwatch({opt, concurrent, config, runnerOptions, tmpDir}) {
   const {specsDir, commandsDir} = runnerOptions;
+  // Prepare the temp directory for nightwatch-*.json files
+  fs.mkdirsSync(tmpDir);
 
   const addSeleniumKeys = (seleniumConfig) => {
     /*eslint dot-notation:0*/
@@ -63,48 +60,55 @@ export default function runNightwatch(testConfig, runnerOptions, config, cb) {
     }, {});
   };
 
-  const proms = testConfig.reduce((list, seleniumConfig) => {
-    const {capabilities, specs} = seleniumConfig;
-    const testSettings = addCaps(seleniumConfig);
-    const testTargets = capabilities.map(({browserName}) => browserName);
-    const fps = specs.map(fp => path.basename(fp, path.extname(fp)));
+  const {capabilities, specs} = opt;
+  const testSettings = addCaps(opt);
+  const testTargets = capabilities.map(({browserName}) => browserName);
+  const fps = specs.map((fp) => path.basename(path.relative(specsDir, fp), path.extname(fp)));
 
-    testTargets.forEach((target, i) => {
-      const configFp = path.resolve(__dirname, `nightwatch-${i}.json`);
-      const json = {
-        src_folders: [specsDir],
-        custom_commands_path: commandsDir,
-        output_folder: false,
-        test_settings: { [target]: testSettings[target] }
-      };
-      fs.writeJsonSync(configFp, json);
+  // EventEmitter wrapper around multiple Nightwatch child processes to mimic single-cp interface
+  const emitter = new EventEmitter();
+  function onPromisesDone(code) {
+    emitter.emit('close', code);
+  }
 
-      const args = {
-        config: configFp,
-        env: target
-      };
-      if (file && fps && fps.length) {
-        Object.assign(args, {filter: fps.length > 1 ? `{${fps.join(',')}}.js` : `${fps[0]}.js`});
-      }
+  const promises = [];
+  testTargets.forEach((target) => {
+    const configFp = path.resolve(tmpDir, `nightwatch-${target}-${new Date().getTime()}.json`);
+    const json = {
+      src_folders: [specsDir],
+      custom_commands_path: commandsDir,
+      output_folder: false,
+      test_settings: {[target]: testSettings[target]}
+    };
+    fs.writeJsonSync(configFp, json);
 
-      const prom = new Promise((res, rej) => {
-        const child = spawn('node', [
-          path.resolve(__dirname, 'runner.js'),
-          JSON.stringify(args)
-        ], {
-          stdio: 'inherit'
-        });
-        child.on('close', (code) => {
-          code ? rej(code) : res(code);
-        });
+    const args = {
+      config: configFp,
+      env: target
+    };
+
+    if (fps && fps.length) {
+      Object.assign(args, {filter: fps.length > 1 ? `{${fps.join(',')}}.js` : `${fps[0]}.js`});
+    }
+
+    const promise = new Promise((res, rej) => {
+      const cp = spawn('node', [
+        path.resolve(__dirname, 'runner.js'),
+        JSON.stringify(args)
+      ], {
+        stdio: 'inherit'
       });
-      list.push(prom);
+      cp.on('close', (code) => {
+        code ? rej(code) : res(code);
+      });
     });
-
-    return list;
-  }, []);
-
-  return Promise.all(proms).then(cb).catch((err) => {
-    process.exit(1);
+    promises.push(promise);
   });
+
+
+  Promise.all(promises)
+    .then(() => onPromisesDone(0))
+    .catch((code) => onPromisesDone(code));
+
+  return thunk(emitter.on, emitter);
 }
