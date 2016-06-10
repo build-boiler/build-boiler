@@ -1,10 +1,10 @@
 import boilerUtils from 'boiler-utils';
 import isPlainObject from 'lodash/isPlainObject';
-import es from 'event-stream';
 
 export default function(gulp, plugins, config) {
   const {
     callAndReturn: initParentFn,
+    mergeStream,
     runParentFn: callParent,
     runCustomTask: runFn,
     transformArray
@@ -64,7 +64,7 @@ export default function(gulp, plugins, config) {
         });
       }
 
-      return es.merge(tasks);
+      return mergeStream(tasks);
     };
 
     return runFn(task, fn);
