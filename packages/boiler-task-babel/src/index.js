@@ -1,12 +1,12 @@
 import boilerUtils from 'boiler-utils';
 import isPlainObject from 'lodash/isPlainObject';
-import es from 'event-stream';
 import {babelrc as taskRc} from './config';
 
 export default function(gulp, plugins, config) {
   const {
     buildLogger,
     callAndReturn: initParentFn,
+    mergeStream,
     runParentFn: callParent,
     runCustomTask: runFn,
     renameKey,
@@ -94,7 +94,7 @@ export default function(gulp, plugins, config) {
         });
       }
 
-      return es.merge(tasks);
+      return mergeStream(tasks);
     };
 
     return runFn(task, fn);

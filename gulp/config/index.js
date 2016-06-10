@@ -102,7 +102,39 @@ export default {
    *  ]
    * }
    */
-  babel(config, babelConfig) {},
+  babel(config, babelConfig) {
+    babelConfig.endpoints = [
+     {
+       src: ['lib/*.js'],
+       dest: 'dist/bloop'
+     },
+     {
+       src: ['src/js/*.js'],
+       dest: 'dist/src'
+     }
+    ];
+
+    return babelConfig;
+  },
+  copy(config, copyConfig) {
+    const {sources, utils} = config;
+    const {srcDir, scriptDir, templateDir, buildDir} = sources;
+    const {addbase} = utils;
+
+    copyConfig.endpoints = [
+      //static src
+      {
+        src: addbase(srcDir, '**', templateDir, '**/*.html'),
+        dest: path.join(buildDir, 'copy-html-test')
+      },
+      {
+        src: addbase(srcDir, scriptDir, '*.js'),
+        dest: path.join(buildDir, 'copy-js-test')
+      }
+    ];
+
+    return copyConfig;
+  },
   /**
    * Config for nodemon task
    * @param {Object} config gulp config
