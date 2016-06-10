@@ -32,4 +32,3 @@ export default [
     os_version: 'El Capitan'
   }
 ];
-

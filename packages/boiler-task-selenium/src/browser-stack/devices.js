@@ -1,20 +1,21 @@
-export const defaults = ['iphone'];
+export const defaults = ['iphone', 'android'];
 
 export default [
   {
-    browserName: 'iPhone',
+    browserName: 'iPhone6',
     platform: 'MAC',
     device: 'iPhone 6',
-    os_version: ''
+    browser_version: '8.0'
+  },
+  {
+    browserName: 'iPhone6S',
+    platform: 'MAC',
+    device: 'iPhone 6S',
+    browser_version: '9.0'
   },
   {
     browserName: 'android',
     platform: 'ANDROID',
     device: 'Samsung Galaxy S5'
-  },
-  {
-    browserName: 'android',
-    platform: 'ANDROID',
-    device: 'Google Nexus 5'
   }
 ];
