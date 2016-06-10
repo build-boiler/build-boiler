@@ -17,7 +17,7 @@ export default function({config, gulp}) {
   const {devHost, devPort, hotPort, testDir} = sources;
   const {addbase, logError} = utils;
   const specGlob = '*-spec';
-  const {task} = getTask({gulp, utils});
+  const {task} = getTask({gulp, config});
   const {localIdentifier} = bsConfig;
   const spawnOpts = {
     version: SELENIUM_VERSION,
