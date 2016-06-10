@@ -18,6 +18,7 @@ export default function getCapabilities(config, runnerOptions, forceTunnel) {
   const {environment, sources} = config;
   const {branch, isDevRoot, isMaster} = environment;
   const {devPort, devUrl, internalHost} = sources;
+  const {devUrl: devUrlOverride} = runnerOptions;
 
   const {groupOptions, envOptions, authOptions} = getBrowserStackOptions(config);
 
@@ -38,7 +39,7 @@ export default function getCapabilities(config, runnerOptions, forceTunnel) {
    */
   const protocol = branch ? 'https://' : 'http://';
   if (branch) {
-    const base = `${protocol}${devUrl}`;
+    const base = devUrlOverride ? devUrlOverride : `${protocol}${devUrl}`;
 
     if (isDevRoot || isMaster) {
       baseUrl = base;

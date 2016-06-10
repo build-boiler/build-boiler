@@ -13,6 +13,7 @@ import {nightwatchDefaults} from './make-config';
 const {thunk} = boilerUtils;
 export default function runNightwatch({opt, concurrent, config, runnerOptions, tmpDir}) {
   const {specsDir, commandsDir} = runnerOptions;
+  const {customSettings = {}} = runnerOptions;
   // Prepare the temp directory for nightwatch-*.json files
   fs.mkdirsSync(tmpDir);
 
@@ -78,7 +79,7 @@ export default function runNightwatch({opt, concurrent, config, runnerOptions, t
       src_folders: [specsDir],
       custom_commands_path: commandsDir,
       output_folder: false,
-      test_settings: {[target]: testSettings[target]}
+      test_settings: {[target]: Object.assign({}, testSettings[target], customSettings)}
     };
     fs.writeJsonSync(configFp, json);
 
