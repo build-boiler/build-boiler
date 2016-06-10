@@ -1,6 +1,6 @@
 {
   "name": "boiler-preset-plus",
-  "version": "1.1.42",
+  "version": "1.1.43",
   "description": "Build Boilerplate Plus",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -26,8 +26,8 @@
     "webpack"
   ],
   "dependencies": {
-    "boiler-preset-base": "^1.1.42",
-    "boiler-task-karma": "^1.1.42",
-    "boiler-task-selenium": "^1.1.42"
+    "boiler-preset-base": "^1.1.43",
+    "boiler-task-karma": "^1.1.43",
+    "boiler-task-selenium": "^1.1.43"
   }
 }
