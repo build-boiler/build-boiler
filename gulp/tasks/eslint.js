@@ -9,6 +9,8 @@ export default function(gulp, plugins, config, opts) {
       addbase('packages/*/src/**/*.js'),
       addbase('scripts/**/*.js')
     ]);
+  } else if (taskName === 'test') {
+    data.rules['no-console'] = 0;
   }
 
   return {

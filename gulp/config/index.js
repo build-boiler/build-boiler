@@ -104,14 +104,14 @@ export default {
    */
   babel(config, babelConfig) {
     babelConfig.endpoints = [
-     {
-       src: ['lib/*.js'],
-       dest: 'dist/bloop'
-     },
-     {
-       src: ['src/js/*.js'],
-       dest: 'dist/src'
-     }
+      {
+        src: ['lib/*.js'],
+        dest: 'dist/bloop'
+      },
+      {
+        src: ['src/js/*.js'],
+        dest: 'dist/src'
+      }
     ];
 
     return babelConfig;
