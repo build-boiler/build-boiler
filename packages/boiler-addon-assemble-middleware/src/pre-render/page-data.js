@@ -8,7 +8,15 @@ import {readFileSync} from 'fs';
 import Plasma from 'plasma';
 import boilerUtils from 'boiler-utils';
 
-export default function(config) {
+
+/**
+ * @param {Object} middlewareConfig
+ *   @param {Object} middlewareConfig.config
+ *   @param {Object} middlewareConfig.app
+ * @return {Function}
+ */
+export default function(middlewareConfig) {
+  const {config, app} = middlewareConfig;
   const {sources, utils} = config;
   const {
     srcDir,
@@ -16,6 +24,8 @@ export default function(config) {
   } = sources;
   const {addbase} = utils;
   const {renameKey} = boilerUtils;
+  const branch = app.cache.data.branch || '';
+
   const plasma = new Plasma();
 
   /**
@@ -54,7 +64,7 @@ export default function(config) {
   return (file, next) => {
     try {
       const pageData = plasma.load(
-        addbase(srcDir, templateDir, '**/*.{json,yml}'),
+        addbase(srcDir, branch, templateDir, '**/*.{json,yml}'),
         {namespace: false}
       );
 

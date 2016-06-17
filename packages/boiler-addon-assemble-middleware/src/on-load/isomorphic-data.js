@@ -2,21 +2,29 @@ import isPlainObject from 'lodash/isPlainObject';
 import {readJsonSync} from 'fs-extra';
 import Plasma from 'plasma';
 
-export default function(config) {
+/**
+ * @param {Object} middlewareConfig
+ *   @param {Object} middlewareConfig.config
+ *   @param {Object} middlewareConfig.app
+ * @return {Function}
+ */
+export default function(middlewareConfig) {
+  const {config, app} = middlewareConfig;
   const {sources, utils} = config;
   const {
     srcDir,
     scriptDir
   } = sources;
   const {addbase} = utils;
-  const plasma = new Plasma();
+  const branch = app.cache.data.branch || '';
 
+  const plasma = new Plasma();
   plasma.dataLoader('json', (fp) => readJsonSync(fp));
 
   return (file, next) => {
     try {
       const jsonData = plasma.load(
-        addbase(srcDir, scriptDir, '**/*.json'), {namespace: true}
+        addbase(srcDir, branch, scriptDir, '**/*.json'), {namespace: true}
       );
 
       if (isPlainObject(jsonData)) {
@@ -29,4 +37,3 @@ export default function(config) {
     }
   };
 }
-
