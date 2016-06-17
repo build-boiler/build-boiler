@@ -18,8 +18,11 @@ export default function(app, opts = {}) {
     middleware = {}
   } = parentConfig;
 
+  // Prepare data for middleware hooks to add more context without mutating config!
+  const middlewareConfig = {config, app};
+
   function callFns(fn, ...rest) {
-    fn.length === 1 ? fn(config).apply(null, rest) : fn.apply(null, rest);
+    fn.length === 1 ? fn(middlewareConfig).apply(null, rest) : fn.apply(null, rest);
   }
 
   const ignore = addonConfig.ignore || opts.ignore || {};
