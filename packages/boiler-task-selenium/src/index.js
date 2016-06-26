@@ -40,6 +40,7 @@ export default function(gulp, plugins, config) {
       ...browserStackOptions,
       ...testConfig
     };
+    //TODO: fix data coming from parent
     const {data} = runParentFn(arguments, {data: testData});
     Object.assign(testData, data);
 

@@ -49,8 +49,13 @@ export default function(gulp, plugins, config) {
     } = parentConfig;
 
     const task = () => {
+      process.env.BOILER_LOG = false;
+
       return gulp.src(newSrc)
-        .pipe(mocha(mochaConfig));
+        .pipe(mocha(mochaConfig))
+        .on('end', () => {
+          process.env.BOILER_LOG = true;
+        });
     };
 
     return runFn(task, fn);

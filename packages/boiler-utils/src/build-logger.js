@@ -8,7 +8,14 @@ export const blue = _blue;
 export const magenta = _magenta;
 export const prefix = `${magenta('[build-boiler]')}:`;
 
+/**
+ * Log some stuff with colors. By default the prefix is `[build-boiler]`
+ * but external applications can pass in their own
+ * @param {Any} args arguments to log
+ * @return undefined it just logs ¯\_(ツ)_/¯
+ */
 export function log(...args) {
+  const {BOILER_LOG} = process.env;
   const [last] = args.slice(-1);
   let modArgs, prepend;
 
@@ -20,5 +27,8 @@ export function log(...args) {
     modArgs = args;
   }
 
-  args.length && _log.apply(gutil, [prepend, ...modArgs]);
+  //Enable logging by setting process.env.BOILER_LOG
+  if (BOILER_LOG && BOILER_LOG !== 'false' && args.length) {
+    _log.apply(gutil, [prepend, ...modArgs]);
+  }
 }

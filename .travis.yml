@@ -32,6 +32,7 @@ cache:
   - packages/boiler-preset-base/node_modules
   - packages/boiler-preset-plus/node_modules
   - packages/boiler-task-assemble/node_modules
+  - packages/boiler-task-babel/node_modules
   - packages/boiler-task-browser-sync/node_modules
   - packages/boiler-task-clean/node_modules
   - packages/boiler-task-copy/node_modules
@@ -51,7 +52,8 @@ before_install:
   - npm install -g npm@^3
 install:
   - npm i
-  - npm run lerna:bootstrap
+  - 'npm run lerna:bootstrap'
   - npm run compile
 script:
   - npm start
+  - npm test

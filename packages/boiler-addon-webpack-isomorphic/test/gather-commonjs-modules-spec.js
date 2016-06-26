@@ -1,10 +1,12 @@
 import {expect} from 'chai';
 import rewire from 'rewire';
 import sinon from 'sinon';
+import {dynamicRequire} from 'boiler-utils';
 
 describe('#gatherCommonjsModules', () => {
-  const gather = rewire('../src/utils/gather-commonjs-modules');
-  const oldRequire = gather.__get__('require');
+  const gatherMod = rewire('../src/utils/gather-commonjs-modules');
+  const oldRequire = gatherMod.__get__('require');
+  const gather = dynamicRequire(gatherMod);
 
   before(() => {
     const mock = (fp) => require(fp);
@@ -19,11 +21,11 @@ describe('#gatherCommonjsModules', () => {
       return fp;
     }
 
-    gather.__set__('require', mock);
+    gatherMod.__set__('require', mock);
   });
 
   after(() => {
-    gather.__set__('require', oldRequire)
+    gatherMod.__set__('require', oldRequire)
     require.resolve = oldRequire;
   });
 

@@ -4,7 +4,6 @@ import {expect} from 'chai';
 import makeMockConfig from './config/make-mock-config';
 import getCapabilities from '../src/get-capabilities';
 
-
 describe(`#getCapabilities()`, () => {
   it('should return the correct capabilities for chrome', () => {
     const config = makeMockConfig({
