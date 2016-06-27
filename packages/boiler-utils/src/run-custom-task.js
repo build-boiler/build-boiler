@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import isStream from './is-stream';
+import {isStream} from 'gulp-util';
 
 /**
  * Utility for calling parent function

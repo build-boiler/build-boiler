@@ -34,18 +34,11 @@ export default function(gulp, plugins, config) {
     const {testEnv, testConfig} = getCapabilities(config, runnerOptions, forceTunnel);
     const browserStackOptions = getBrowserStackOptions(config);
 
-    const testData = {
-      testEnv,
-      ...seleniumOptions,
-      ...browserStackOptions,
-      ...testConfig
-    };
     //TODO: fix data coming from parent
-    const {data} = runParentFn(arguments, {data: testData});
-    Object.assign(testData, data);
+    const {data} = runParentFn(arguments, {data: testConfig});
 
     function startRunner(cb) {
-      spawn(testConfig, runnerOptions, config, cb);
+      spawn(data, runnerOptions, config, cb);
     }
 
     /**

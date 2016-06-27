@@ -9,7 +9,7 @@ import boilerUtils from 'boiler-utils';
 const {gulpTaskUtils, thunk} = boilerUtils;
 const {addroot} = gulpTaskUtils;
 export default function runWebdriverio({opt, concurrent, config, runnerOptions}) {
-  const {local, fn: parentFn} = config;
+  const {local} = config;
 
   const env = _.merge({}, process.env, {
     WDIO_CONFIG: JSON.stringify(opt),
@@ -38,7 +38,7 @@ export default function runWebdriverio({opt, concurrent, config, runnerOptions})
     args.push('--parallel');
   }
 
-  const cp = _.isFunction(parentFn) ? parentFn.apply(null, arguments) : spawn(
+  const cp = spawn(
     binaryPath,
     args,
     {

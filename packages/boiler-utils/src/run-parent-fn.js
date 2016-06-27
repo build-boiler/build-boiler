@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import isStream from './is-stream';
+import {isStream} from 'gulp-util';
 
 /**
  * Utility to call parent module from process.cwd() + gulp/tasks/*
@@ -33,7 +33,7 @@ export default function(args, opts = {}) {
       }
 
       acc.src = badSrc ? opts.src : src;
-      acc.data = _.isPlainObject(data) ? data : opts.data;
+      acc.data = _.isUndefined(data) ? opts.data : data;
     }
 
     return acc;
