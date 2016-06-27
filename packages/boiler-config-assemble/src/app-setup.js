@@ -4,9 +4,9 @@ import isFunction from 'lodash/isFunction';
 import assemble from 'assemble-core';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
-import {join} from 'path';
 import Plasma from 'plasma';
 import boilerUtils from 'boiler-utils';
+import getTemplateFns from './utils/template-fns';
 
 /**
  * Setup the Assemble `app` and add data/utility functions
@@ -29,40 +29,22 @@ export default function(config, opts = {}) {
     utils,
     webpackConfig = {}
   } = config;
-  const {
-    srcDir,
-    scriptDir,
-    templateDir
-  } = sources;
   const {addbase} = utils;
   const {renameKey} = boilerUtils;
-  //HACK: to dynamically add the branch in the search path
-  const branch = isPlainObject(data) && data.branch || '';
-  const srcPath = join(srcDir, branch);
   let parentData = {};
-
-  function makeTemplatePath(dir) {
-    return (fp) => `${addbase(srcPath, templateDir, dir, fp)}.html`;
-  }
-
-  function makeJSPath(dir) {
-    return (fp) => `${join(srcPath, scriptDir, dir, fp)}.js`;
-  }
 
   plasma.dataLoader('yml', function(fp) {
     const str = readFileSync(fp, 'utf8');
     return safeLoad(str);
   });
 
+  const templateFns = getTemplateFns(config, data);
+
   const defaultData = {
     sources,
     environment,
     webpackConfig,
-    join,
-    headScripts: makeJSPath('head-scripts'),
-    layouts: makeTemplatePath('layouts'),
-    macros: makeTemplatePath('macros'),
-    partials: makeTemplatePath('partials')
+    ...templateFns
   };
 
   const makeDataPath = (fp) => {

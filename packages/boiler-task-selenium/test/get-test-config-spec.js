@@ -3,9 +3,15 @@
 import {expect} from 'chai';
 // Helpers
 import getTestConfig from '../src/get-test-config';
+import SpecReporter from '../src/runner/webdriverio/reporters/spec';
 
 
 const nightwatchConfig = {
+  customSettings: {
+    globals: {
+      waitForConditionTimeout: 20000
+    }
+  },
   globals: {
     waitForConditionTimeout: 10000
   },
@@ -36,7 +42,7 @@ const wdioConfig = {
   coloredLogs: true,
   waitforTimeout: 30000,
   framework: 'mocha',
-  reporters: ['dot'],
+  reporters: [SpecReporter],
   reporterOptions: {
     outputDir: './'
   },

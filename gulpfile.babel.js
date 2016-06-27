@@ -80,7 +80,7 @@ if (force || release) {
     //fp: 'boiler.custom.config.js'
   });
   const {sources, utils, environment, release} = config;
-  const {isDev} = environment;
+  const {isDev, branch} = environment;
   const {testDir, buildDir} = sources;
   const {addbase} = utils;
 
@@ -120,6 +120,15 @@ if (force || release) {
       'copy',
       'lint',
       'babel'
+    );
+  } else if (branch) {
+    task = gulp.series(
+      'copy',
+      'lint',
+      'babel',
+      'webpack',
+      'webpack:server',
+      'assemble'
     );
   } else {
     task = gulp.series(

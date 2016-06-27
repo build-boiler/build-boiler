@@ -11,10 +11,10 @@ import devices from './browser-stack/devices';
 import getBrowserStackOptions from './browser-stack/get-browser-stack-options';
 
 
-const {gulpTaskUtils} = boilerUtils;
+const {gulpTaskUtils, dynamicRequire} = boilerUtils;
 const {logError} = gulpTaskUtils;
 
-export default function getCapabilities(config, runnerOptions, forceTunnel) {
+export default function getCapabilities(config, runnerOptions = {}, forceTunnel) {
   const {environment, sources} = config;
   const {branch, isDevRoot, isMaster} = environment;
   const {devPort, devUrl, internalHost} = sources;
@@ -28,7 +28,11 @@ export default function getCapabilities(config, runnerOptions, forceTunnel) {
   try {
     //IMPORTANT: do dynamic require here otherwise `require-hacker` will be
     //working as soon as the file is `import`ed
-    map = require('./get-test-files')(config, runnerOptions);
+    const makeTestFiles = dynamicRequire(
+      require('./get-test-files')
+    );
+    map = makeTestFiles(config, runnerOptions);
+
   } catch (err) {
     logError({err, plugin: '[selenium: get-capabilities]'});
   }
@@ -128,7 +132,7 @@ export default function getCapabilities(config, runnerOptions, forceTunnel) {
 
     testConfig.push(_.assign({}, baseConfig, {
       specs,
-      capabilities
+      capabilities: _.isFunction(capabilities.toJS) ? capabilities.toJS() : capabilities
     }));
   });
 

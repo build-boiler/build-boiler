@@ -1,4 +1,5 @@
 import path, {join} from 'path';
+import isUndefined from 'lodash/isUndefined';
 import hacker from 'require-hacker';
 import boilerUtils from 'boiler-utils';
 import makeConfig from 'boiler-config-base';
@@ -7,8 +8,25 @@ import getGulpPlugins from './get-gulp-plugins';
 import getTaskConfig from './get-boiler-task-config';
 import getTasks from './get-tasks';
 
+/**
+ * Core function passing in `gulp` from the consumer modules node_modules
+ * This way Boiler works with Gulp 3 or 4
+ * @param {Object} gulp the gulp instance
+ * @param {Object} opts options
+ * @param {Boolean} opts.log enable boiler logging
+ * @return {Object} tasks, config, and gulp plugins
+ */
 export default function(gulp, opts = {}) {
   const babel = require('babel-core');
+  const loggingEnabled = opts.log;
+
+  //By default logging from boiler-utils is disabled
+  //because it is annoying when using boiler modules
+  //outside of `boiler-core`
+  if (isUndefined(loggingEnabled) || loggingEnabled) {
+    process.env.BOILER_LOG = process.env.BOILER_LOG || true;
+  }
+
   const {
     gulpTaskname: addTaskName,
     debug: runDebug,
