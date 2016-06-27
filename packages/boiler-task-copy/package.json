@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-copy",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-utils": "^3.0.8",
+    "boiler-utils": "^3.0.9",
     "gulp-rename": "^1.2.2"
   }
 }
