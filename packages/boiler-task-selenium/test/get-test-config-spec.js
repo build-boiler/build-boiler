@@ -1,56 +1,12 @@
-
 // Libraries
 import {expect} from 'chai';
+// Mocks
+// Mocks
+import wdioConfig from './mocks/wdio.config';
+import nightwatchConfig from './mocks/nightwatch.config';
 // Helpers
 import getTestConfig from '../src/get-test-config';
-import SpecReporter from '../src/runner/webdriverio/reporters/spec';
 
-
-const nightwatchConfig = {
-  customSettings: {
-    globals: {
-      waitForConditionTimeout: 20000
-    }
-  },
-  globals: {
-    waitForConditionTimeout: 10000
-  },
-  output_folder: false,
-  selenium_port: 4444,
-  selenium_host: 'localhost',
-  silent: true,
-  screenshots: {
-    enabled: false,
-    path: ''
-  },
-  launch_url: '/',
-  desiredCapabilities: {
-    javascriptEnabled: true,
-    acceptSslCerts: true
-  },
-  specsDir: './test/e2e/nightwatch',
-  commandsDir: './test/e2e/nightwatch/commands',
-  runner: 'nightwatch'
-};
-
-const wdioConfig = {
-  specsDir: './test/e2e/wdio',
-  commandsDir: './test/e2e/wdio/commands',
-  runner: 'wdio',
-  sync: true,
-  maxInstances: 1,
-  coloredLogs: true,
-  waitforTimeout: 30000,
-  framework: 'mocha',
-  reporters: [SpecReporter],
-  reporterOptions: {
-    outputDir: './'
-  },
-  mochaOpts: {
-    ui: 'bdd',
-    timeout: 60000
-  }
-};
 
 describe('#getTestConfig()', () => {
   it(`should return the WebdriverIO configuration from test.config.js if none is specified`, () => {

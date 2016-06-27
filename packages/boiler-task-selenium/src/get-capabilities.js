@@ -1,7 +1,6 @@
 // Libraries
 import _ from 'lodash';
 import Immutable from 'immutable';
-import {join} from 'path';
 // Packages
 import boilerUtils from 'boiler-utils';
 // Configuration
@@ -20,10 +19,42 @@ export default function getCapabilities(config, runnerOptions = {}, forceTunnel)
   const {devPort, devUrl, internalHost} = sources;
   const {devUrl: devUrlOverride} = runnerOptions;
 
+  /**
+   * Return the base URL for all tests to be run against
+   *
+   * @return {String}
+   */
+  function getDevUrl() {
+    if (typeof devUrlOverride === 'function') {
+      return devUrlOverride(config);
+    }
+
+    let baseUrl;
+
+    /**
+     * TODO: potentially account for if we want to run tests against prod url
+     * right now master & devel will default to "http://www.hfa.io/contribute/donate/"
+     */
+    const protocol = branch ? 'https://' : 'http://';
+    if (branch) {
+      const base = devUrlOverride ? devUrlOverride : `${protocol}${devUrl}`;
+
+      if (isDevRoot || isMaster) {
+        baseUrl = base;
+      } else {
+        baseUrl = `${base}/${branch}`;
+      }
+    } else {
+      baseUrl = `${protocol}${internalHost}:${devPort}`;
+    }
+
+    return baseUrl;
+  }
+
   const {groupOptions, envOptions, authOptions} = getBrowserStackOptions(config);
 
   let map = Immutable.Map();
-  let isLocal, testEnv, baseUrl;
+  let isLocal, testEnv;
 
   try {
     //IMPORTANT: do dynamic require here otherwise `require-hacker` will be
@@ -37,25 +68,8 @@ export default function getCapabilities(config, runnerOptions = {}, forceTunnel)
     logError({err, plugin: '[selenium: get-capabilities]'});
   }
 
-  /**
-   * TODO: potentially account for if we want to run tests against prod url
-   * right now master & devel will default to "http://www.hfa.io/contribute/donate/"
-   */
-  const protocol = branch ? 'https://' : 'http://';
-  if (branch) {
-    const base = devUrlOverride ? devUrlOverride : `${protocol}${devUrl}`;
-
-    if (isDevRoot || isMaster) {
-      baseUrl = base;
-    } else {
-      baseUrl = join(base, branch);
-    }
-  } else {
-    baseUrl = `${protocol}${internalHost}:${devPort}`;
-  }
-
   const baseConfig = {
-    baseUrl,
+    baseUrl: getDevUrl(),
     logLevel: 'silent'
   };
 
