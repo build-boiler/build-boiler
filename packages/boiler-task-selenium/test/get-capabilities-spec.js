@@ -23,6 +23,7 @@ describe(`#getCapabilities()`, () => {
         baseUrl: 'http://localhost:8000',
         logLevel: 'silent',
         specs: [
+          'test/e2e/wdio/desktop/all-browsers-spec.js',
           'test/e2e/wdio/desktop/some-desktop-spec.js',
           'test/e2e/wdio/desktop/wait-desktop-spec.js',
           'test/e2e/wdio/sample-spec.js',
@@ -45,6 +46,7 @@ describe(`#getCapabilities()`, () => {
         baseUrl: 'http://localhost:8000',
         logLevel: 'silent',
         specs: [
+          'test/e2e/wdio/desktop/all-browsers-spec.js',
           'test/e2e/wdio/desktop/some-desktop-spec.js',
           'test/e2e/wdio/desktop/wait-desktop-spec.js',
           'test/e2e/wdio/sample-spec.js',
