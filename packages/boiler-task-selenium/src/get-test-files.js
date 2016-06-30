@@ -4,29 +4,27 @@ import fs from 'fs';
 import {basename, join} from 'path';
 import globby from 'globby';
 import Immutable from 'immutable';
-// Packages
-import boilerUtils from 'boiler-utils';
 // Helpers
 import hackRequire from './hack-require';
 
 
-const {gulpTaskUtils} = boilerUtils;
-const {addbase, logError} = gulpTaskUtils;
 /**
  * Construct a glob that matches all existing spec files, given the intended platform(s)
  *
  * @param {Object} config // Task configuration
  *   @param {String} config.sources // Webpack sources
+ *   @param {Object} config.utils // Task utility functions
  *   @param {String} config.file // Specific test file names
  *   @param {String} config.mobile // Comma-separated names of mobile browsers
  *   @param {String} config.desktop // Comma-separated names of desktop browsers
  * @param {Object} runnerOptions
  * @return {Array}
  */
-function makeSpecsGlob({sources, file, mobile, desktop}, runnerOptions = {}) {
+export function makeSpecsGlob({sources, utils, file, mobile, desktop}, runnerOptions = {}) {
   const specGlob = '*-spec';
   const {testDir} = sources;
   const {specsDir} = runnerOptions;
+  const {addbase} = utils;
   const specsBase = specsDir ? specsDir : join(testDir, 'e2e');
   const hasMobile = fs.existsSync(addbase(specsBase, 'mobile')) && mobile;
   const hasDesktop = fs.existsSync(addbase(specsBase, 'desktop')) && desktop;
@@ -51,17 +49,18 @@ function makeSpecsGlob({sources, file, mobile, desktop}, runnerOptions = {}) {
  *
  * @param {Object} config // Task configuration
  * @param {Object} runnerOptions // Runner options from test.config.js
+ *
  * @return {Map}
  */
-export default function getTestFiles(config, runnerOptions) {
-  const {force, desktop, mobile} = config;
+export default function getTestFiles(config, runnerOptions = {}) {
+  const {force, desktop, mobile, utils} = config;
+  const {logError} = utils;
 
   const types = {desktop, mobile};
   const specHook = hackRequire.init(/-spec\.js/, 'specs', types);
   const fp = makeSpecsGlob(config, runnerOptions);
   const globs = globby.sync(fp, {cwd: process.cwd()});
   const filesLen = globs.length;
-  const isSingleFile = filesLen === 1;
 
   if (filesLen === 0) {
     logError({
@@ -83,26 +82,26 @@ export default function getTestFiles(config, runnerOptions) {
 
     function retrieveDevices(specFileData) {
       return typesToTest.reduce((list, key) => {
-        const typeData = types[key];
+        const cliDataByKey = types[key];
         const deviceKey = key === 'desktop' ? 'browserName' : 'device';
         let dataByKey;
 
-        //if the cli args want to test something on a "single file" that is not specifically
-        //exported then add it
-        if (isSingleFile) {
-          const cliDataByKey = types[key];
-          dataByKey = _.union(specFileData[key], _.isArray(cliDataByKey) ? cliDataByKey : []);
+        if (_.isBoolean(cliDataByKey)) {
+          //if --desktop or --mobile
+          dataByKey = cliDataByKey && specFileData[key] ? specFileData[key] : [];
+        } else if (specFileData[key]) {
+          dataByKey = _.intersection(specFileData[key], _.isArray(cliDataByKey) ? cliDataByKey : []);
         } else {
-          dataByKey = specFileData[key] || [];
+          dataByKey = [];
         }
 
         const data = dataByKey.filter(data => {
           let ret = false;
 
-          if (_.isUndefined(typeData) || typeData === true) {
+          if (_.isUndefined(cliDataByKey) || cliDataByKey === true) {
             //if there is type data for one type, say desktop, omit the other type
             ret = true;
-          } else if (typeData) {
+          } else if (cliDataByKey) {
             let deviceName;
 
             if (_.isPlainObject(data)) {
@@ -117,7 +116,7 @@ export default function getTestFiles(config, runnerOptions) {
             }
 
             if (deviceName) {
-              ret = typeData.filter((device) => new RegExp(deviceName.toLowerCase()).test(typeData.join(' ')));
+              ret = cliDataByKey.filter((device) => new RegExp(deviceName.toLowerCase()).test(cliDataByKey.join(' ')));
             }
           }
 
@@ -160,7 +159,6 @@ export default function getTestFiles(config, runnerOptions) {
      */
     const devices = Immutable.fromJS(testFiles[fp]);
     const accumulator = new Map();
-
 
     if (map.size) {
 
