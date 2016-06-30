@@ -2,7 +2,7 @@
 import reduce from 'lodash/reduce';
 import {expect} from 'chai';
 // Helpers
-import makeMockConfig from './config/make-mock-config';
+import makeMockConfig from '../../../test/config/make-mock-config';
 import makeMockTestConfig from './config/make-mock-test-config';
 import getCapabilities from '../src/get-capabilities';
 

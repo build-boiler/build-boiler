@@ -1,7 +1,9 @@
 // Libraries
 import path from 'path';
 import merge from 'lodash/merge';
-import makeConfig from '../../../boiler-config-base/src/index';
+// Mocks
+import makeConfig from '../../packages/boiler-config-base/src/index';
+
 
 export default function(mixin = {}) {
   const mockPath = path.resolve(__dirname, '..', 'mocks');
