@@ -1,16 +1,20 @@
+// Libraries
 import isPlainObject from 'lodash/isPlainObject';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import Plasma from 'plasma';
 
+
 /**
  * @param {Object} middlewareConfig
  *   @param {Object} middlewareConfig.config
  *   @param {Object} middlewareConfig.app
+ *   @param {String} middlewareConfig.glob // Optional glob for retrieving data files
  * @return {Function}
  */
-export default function(middlewareConfig) {
-  const {config, app} = middlewareConfig;
+export default function getGlobalDataFn(middlewareConfig) {
+  // NOTE: This default glob is repeated in index.js and page-data.js (for easier testing :/)
+  const {config, app, glob = '**/*.yml'} = middlewareConfig;
   const {sources, utils} = config;
   const {srcDir} = sources;
   const {addbase} = utils;
@@ -26,7 +30,7 @@ export default function(middlewareConfig) {
   return (file, next) => {
     try {
       const globalData = plasma.load(
-        addbase(srcDir, branch, 'config', '**/*.yml'),
+        addbase(srcDir, branch, 'config', glob),
         {namespace: () => 'global_data'}
       );
 

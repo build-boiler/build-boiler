@@ -1,8 +1,11 @@
+// Libraries
 import camelCase from 'lodash/camelCase';
 import isBoolean from 'lodash/isBoolean';
 import isFunction from 'lodash/isFunction';
 import path from 'path';
+// Packages
 import boilerUtils from 'boiler-utils';
+
 
 export default function(app, opts = {}) {
   const {
@@ -17,15 +20,15 @@ export default function(app, opts = {}) {
   const {
     middleware = {}
   } = parentConfig;
+  // NOTE: This default glob is repeated in pre-render/global-data.js and pre-render/page-data.js (for easier testing :/)
+  const {glob = '**/*.yml', ignore = opts.ignore || {}} = addonConfig;
 
   // Prepare data for middleware hooks to add more context without mutating config!
-  const middlewareConfig = {config, app};
+  const middlewareConfig = {config, app, glob};
 
   function callFns(fn, ...rest) {
     fn.length === 1 ? fn(middlewareConfig).apply(null, rest) : fn.apply(null, rest);
   }
-
-  const ignore = addonConfig.ignore || opts.ignore || {};
 
   const hooks = [
     'on-load',
@@ -55,6 +58,5 @@ export default function(app, opts = {}) {
         callFns(fn, file, next);
       });
     });
-
   });
 }

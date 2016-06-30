@@ -1,3 +1,4 @@
+// Libraries
 import isPlainObject from 'lodash/isPlainObject';
 import merge from 'lodash/merge';
 import path from 'path';
@@ -6,6 +7,7 @@ import {readJsonSync} from 'fs-extra';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import Plasma from 'plasma';
+// Packages
 import boilerUtils from 'boiler-utils';
 
 
@@ -13,10 +15,12 @@ import boilerUtils from 'boiler-utils';
  * @param {Object} middlewareConfig
  *   @param {Object} middlewareConfig.config
  *   @param {Object} middlewareConfig.app
+ *   @param {String} middlewareConfig.glob // Optional glob for retrieving data files
  * @return {Function}
  */
-export default function(middlewareConfig) {
-  const {config, app} = middlewareConfig;
+export default function getPageDataFn(middlewareConfig) {
+  // NOTE: This default glob is repeated in index.js and global-data.js (for easier testing :/)
+  const {config, app, glob = '**/*.yml'} = middlewareConfig;
   const {sources, utils} = config;
   const {
     srcDir,
@@ -64,7 +68,7 @@ export default function(middlewareConfig) {
   return (file, next) => {
     try {
       const pageData = plasma.load(
-        addbase(srcDir, branch, templateDir, '**/*.{json,yml}'),
+        addbase(srcDir, branch, templateDir, glob),
         {namespace: false}
       );
 
