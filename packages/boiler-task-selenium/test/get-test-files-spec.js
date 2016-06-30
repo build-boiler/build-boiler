@@ -2,7 +2,7 @@
 import Immutable from 'immutable';
 import {expect} from 'chai';
 // Helpers
-import makeMockConfig from './config/make-mock-config';
+import makeMockConfig from '../../../test/config/make-mock-config';
 import getTestFiles, {makeSpecsGlob} from '../src/get-test-files';
 
 
