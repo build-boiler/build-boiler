@@ -3,6 +3,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import {safeLoad} from 'js-yaml';
 import {readFileSync} from 'fs';
 import Plasma from 'plasma';
+import merge from 'lodash/merge';
 
 
 /**
@@ -35,7 +36,7 @@ export default function getGlobalDataFn(middlewareConfig) {
       );
 
       if (isPlainObject(globalData)) {
-        Object.assign(file.data, globalData);
+        merge(file.data, globalData);
       }
 
       next(null, file);
