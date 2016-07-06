@@ -52,8 +52,8 @@ export default function(gulp, plugins, config) {
           }
 
           //hack for karma exit issues https://github.com/karma-runner/karma/issues/1035
-          process.exit(code);
           gulpCb();
+          process.exit(code);
         }
       });
 

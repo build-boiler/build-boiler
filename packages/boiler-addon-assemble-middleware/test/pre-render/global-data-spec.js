@@ -9,9 +9,9 @@ import getGlobalDataFn from '../../src/pre-render/global-data';
 
 describe(`#getGlobalDataFn`, () => {
   const config = makeMockConfig();
-  const mockFile = { data: {} };
 
   it(`should merge data from all files if no glob is specified`, () => {
+    const mockFile = { data: {} };
     const middlewareConfig = {
       config,
       app: { cache: { data: {} } }
@@ -31,6 +31,7 @@ describe(`#getGlobalDataFn`, () => {
   });
 
   it(`should merge data from specified files if a glob is provided`, () => {
+    const mockFile = { data: {} };
     const middlewareConfig = {
       config,
       app: { cache: { data: {} } },
