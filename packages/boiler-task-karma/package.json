@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-karma",
-  "version": "3.0.9",
+  "version": "3.1.2",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",

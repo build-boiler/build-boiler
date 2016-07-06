@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-assemble-middleware",
-  "version": "3.1.0",
+  "version": "3.1.2",
   "description": "Build Boilerplate Nunjucks Tags and Filters for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
