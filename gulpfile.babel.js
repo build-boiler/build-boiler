@@ -14,7 +14,7 @@ if (force || release) {
   let plugins;
 
   try {
-    const build = require('./packages/boiler-core/src');
+    const build = require('./packages/boiler-core');
 
     ({tasks, plugins} = build(gulp));
   } catch (err) {
@@ -75,7 +75,7 @@ if (force || release) {
     )
   );
 } else {
-  const build = require('./packages/boiler-core/src');
+  const build = require('./packages/boiler-core');
   const {tasks, config, plugins: $} = build(gulp, {
     //fp: 'boiler.custom.config.js'
   });

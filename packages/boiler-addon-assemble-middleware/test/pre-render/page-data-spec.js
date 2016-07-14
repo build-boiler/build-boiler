@@ -11,6 +11,7 @@ import getPageDataFn from '../../src/pre-render/page-data';
 describe(`#getPageDataFn`, () => {
   const config = makeMockConfig();
   const mockFile = {
+    path: '/Users/bleep/bloop/src/templates/pages/index',
     key: 'pages/index',
     data: {}
   };

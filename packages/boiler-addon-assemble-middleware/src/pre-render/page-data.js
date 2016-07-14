@@ -2,13 +2,7 @@
 import isPlainObject from 'lodash/isPlainObject';
 import merge from 'lodash/merge';
 import path from 'path';
-import {sync as globSync} from 'globby';
-import {readJsonSync} from 'fs-extra';
-import {safeLoad} from 'js-yaml';
-import {readFileSync} from 'fs';
-import Plasma from 'plasma';
-// Packages
-import boilerUtils from 'boiler-utils';
+import plasma from '../utils/plasma';
 
 
 /**
@@ -27,49 +21,36 @@ export default function getPageDataFn(middlewareConfig) {
     templateDir
   } = sources;
   const {addbase} = utils;
-  const {renameKey} = boilerUtils;
   const branch = app.cache.data.branch || '';
 
-  const plasma = new Plasma();
-
-  /**
-   * Namespace the page and mock data
-   */
-  function addNamespaceData(fp, data) {
-    const baseDir = path.dirname(fp);
-    const html = globSync(path.join(baseDir, '*.html'));
-
-    return html.reduce((acc, htmlPath) => ({
-      ...acc,
-      [renameKey(htmlPath)]: data
-    }), {});
-  }
-
-  plasma.dataLoader('yml', function(fp) {
-    const ymlStr = readFileSync(fp, 'utf8');
-
-    const data = {
-      page_data: safeLoad(ymlStr)
-    };
-
-    return addNamespaceData(fp, data);
-  });
-
-  plasma.dataLoader('json', function(fp) {
-    const jsonData = readJsonSync(fp);
-
-    const data = {
-      page_json: jsonData
-    };
-
-    return addNamespaceData(fp, data);
-  });
-
   return (file, next) => {
+    const {key, path: fp} = file;
+    //TODO: this probably isn't necessary anymore ¯\_(ツ)_/¯
+    const addNamespaceData = (fp, data) => {
+      return {
+        [key]: data
+      };
+    };
+    const namespace = {
+      key: {
+        json: 'page_json',
+        yml: 'page_data'
+      },
+      fn: addNamespaceData
+    };
+    const load = plasma({
+      ext: ['yml', 'json'],
+      namespace
+    });
+    const pagesDir = 'pages';
+    const [suffix] = fp.split(path.join(templateDir, pagesDir) + path.sep).slice(-1);
+    const dirname = path.dirname(suffix);
+    const pageKey = path.join(pagesDir, dirname);
+    const pageGlob = glob.replace('**', pageKey);
+
     try {
-      const pageData = plasma.load(
-        addbase(srcDir, branch, templateDir, glob),
-        {namespace: false}
+      const pageData = load(
+        addbase(srcDir, branch, templateDir, pageGlob)
       );
 
       if (isPlainObject(pageData)) {
