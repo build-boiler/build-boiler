@@ -1,6 +1,6 @@
 import path from 'path';
 import merge from 'lodash/merge';
-import fsX, {readJsonSync} from 'fs-extra';
+import {readJson} from 'fs-extra';
 import async from 'async';
 import makeTools from 'boiler-addon-isomorphic-tools';
 import {sync as globSync} from 'globby';
@@ -23,62 +23,59 @@ export default function(config, opts = {}) {
   //that holds the stats
   const isSameDir = path.basename(statsOutput) === path.basename(process.cwd());
   const statsPath = isSameDir ? process.cwd() : addbase(statsOutput);
+  const mainStatsPath = path.join(statsPath, statsFile);
   const globalStatsPath = path.join(statsPath, globalStatsFile);
-  const tools = makeTools(Object.assign({}, config, {
-    isPlugin: false,
-    isMainTask: true
-  }));
+  const integrityGlobs = globSync(
+    path.join(statsPath, '*integrity*.json')
+  ) || [];
+  const statsPaths = [
+    globalStatsPath,
+    ...integrityGlobs
+  ];
   let prom;
 
-  function makeStats(main, global) {
-    const {assets: images, ...rest} = global;
-    const integrityGlobs = globSync(
-      path.join(statsPath, '*integrity*.json')
-    );
-    const integrity = integrityGlobs.reduce((acc, fp) => {
-      try {
-        const json = require(fp);
-        Object.assign(acc, json);
-      } catch (err) {
-        return acc;
-      }
+  function readStats(fps, tools) {
+    return new Promise((res, rej) => {
+      async.map(fps, readJson, (err, results) => {
+        if (err) return res({});
 
-      return acc;
-    }, {});
+        let main, global, integrityData;
 
-    return merge({}, main, rest, {images, integrity});
+        if (tools) {
+          main = tools.assets();
+          ([global, ...integrityData] = results);
+        } else {
+          ([main, global, ...integrityData] = results);
+        }
+
+        const {assets: images, ...rest} = global;
+        const integrity = integrityData.reduce((acc, json) => ({
+          ...acc,
+          ...json
+        }), {});
+        const assets = merge({}, main, rest, {images, integrity});
+
+        res(assets);
+      });
+    });
   }
 
   if (isomorphic) {
+    const tools = makeTools(Object.assign({}, config, {
+      isPlugin: false,
+      isMainTask: true
+    }));
+
     prom = tools.development(isDev).server(statsPath).then(() => {
       return Promise.resolve(
-        makeStats(tools.assets(), readJsonSync(globalStatsPath))
+        readStats(statsPaths, tools)
       );
     });
   } else {
-    const readStats = () => {
-      return new Promise((res, rej) => {
-        const statsPaths = [
-          path.join(statsPath, statsFile),
-          globalStatsPath
-        ];
-
-        async.map(statsPaths, fsX.readJson, (err, results) => {
-          if (err) return res({});
-          const [main, global] = results;
-
-          res(
-            makeStats(main, global)
-          );
-        });
-      });
-    };
-
-    prom = readStats();
-
-    //HACK: for syncing asset stats on server
-    prom.retry = readStats;
+    prom = readStats([mainStatsPath, ...statsPaths]);
   }
+
+  prom.retry = readStats;
 
   return prom;
 }

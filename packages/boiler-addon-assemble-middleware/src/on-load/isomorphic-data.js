@@ -1,6 +1,5 @@
 import isPlainObject from 'lodash/isPlainObject';
-import {readJsonSync} from 'fs-extra';
-import Plasma from 'plasma';
+import plasma from '../utils/plasma';
 
 /**
  * @param {Object} middlewareConfig
@@ -17,14 +16,15 @@ export default function(middlewareConfig) {
   } = sources;
   const {addbase} = utils;
   const branch = app.cache.data.branch || '';
-
-  const plasma = new Plasma();
-  plasma.dataLoader('json', (fp) => readJsonSync(fp));
+  const load = plasma({
+    ext: 'json',
+    namespace: true
+  });
 
   return (file, next) => {
     try {
-      const jsonData = plasma.load(
-        addbase(srcDir, branch, scriptDir, '**/*.json'), {namespace: true}
+      const jsonData = load(
+        addbase(srcDir, branch, scriptDir, '**/*.json')
       );
 
       if (isPlainObject(jsonData)) {

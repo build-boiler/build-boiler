@@ -1,0 +1,2 @@
+nested_some_local_stuff: "Stuff from src/templates/pages/local.yml"
+nested_en_key: "english"

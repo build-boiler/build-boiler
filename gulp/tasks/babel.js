@@ -1,5 +1,7 @@
 import path from 'path';
 import through from 'through2';
+import omit from 'lodash/omit';
+import {readJsonSync} from 'fs-extra';
 
 export default function(gulp, plugins, config) {
   const {
@@ -42,7 +44,12 @@ export default function(gulp, plugins, config) {
         cb(null, file);
       }))
       .pipe(babel({
-        comments: false
+        babelrc: false,
+        comments: false,
+        ...omit(
+          readJsonSync(path.join(process.cwd(), '.babelrc')),
+          'ignore'
+        )
       }))
       .pipe(gulp.dest(dest));
   };

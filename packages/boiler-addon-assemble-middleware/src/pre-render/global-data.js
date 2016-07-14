@@ -1,9 +1,7 @@
 // Libraries
 import isPlainObject from 'lodash/isPlainObject';
-import {safeLoad} from 'js-yaml';
-import {readFileSync} from 'fs';
-import Plasma from 'plasma';
 import merge from 'lodash/merge';
+import plasma from '../utils/plasma';
 
 
 /**
@@ -20,19 +18,17 @@ export default function getGlobalDataFn(middlewareConfig) {
   const {srcDir} = sources;
   const {addbase} = utils;
   const branch = app.cache.data.branch || '';
-
-  const plasma = new Plasma();
-  plasma.dataLoader('yml', function(fp) {
-    const ymlStr = readFileSync(fp, 'utf8');
-
-    return safeLoad(ymlStr);
+  const load = plasma({
+    ext: 'yml',
+    namespace() {
+      return 'global_data';
+    }
   });
 
   return (file, next) => {
     try {
-      const globalData = plasma.load(
-        addbase(srcDir, branch, 'config', glob),
-        {namespace: () => 'global_data'}
+      const globalData = load(
+        addbase(srcDir, branch, 'config', glob)
       );
 
       if (isPlainObject(globalData)) {

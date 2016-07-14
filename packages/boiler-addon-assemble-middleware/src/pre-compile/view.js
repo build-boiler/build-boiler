@@ -3,6 +3,11 @@
  * https://github.com/jonschlinkert/templates/issues/17
  */
 export default (file, next) => {
-  file.data.view = file;
-  next(null, file);
+  const fallback = {
+    key: file.key,
+    path: file.path
+  };
+
+  file.data.view = file.data.view || fallback;
+  next();
 };

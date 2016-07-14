@@ -26,7 +26,13 @@ export default {
   addons: [
     'assemble-isomorphic-static',
     //'assemble-isomorphic-memory',
-    'assemble-middleware',
+    ['assemble-middleware', {
+      all: 'onLoad',
+      glob: '**/!(es-)*.{json,yml}',
+      ignore: {
+        //onLoad: 'isomorphic-data'
+      }
+    }],
     'assemble-nunjucks',
     'webpack-loaders-base',
     'webpack-loaders-optimize',

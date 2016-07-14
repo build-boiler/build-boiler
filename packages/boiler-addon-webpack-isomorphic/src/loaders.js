@@ -26,7 +26,10 @@ export default function(config, data) {
       ...babelPlugins.filter(plugin => !/typecheck/.test(plugin) && !/rewire/.test(plugin))
     ];
 
-    assign(babelQuery, {plugins});
+    assign(babelQuery, {
+      babelrc: false,
+      plugins
+    });
 
     const mockAssetLoader = path.join(__dirname, 'utils', 'iso-tools-stats-loader');
 

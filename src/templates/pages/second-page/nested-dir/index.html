@@ -1,0 +1,15 @@
+---
+title: Second Page Title
+isomorphic_data:
+  data: 'mock_data'
+  name: 'sample'
+  wrapper: 'provider'
+  selector: 'data-isomorphic'
+---
+
+{% extends layouts('default') %}
+{% import macros('isomorphic-comp') as ext %}
+
+{% block main %}
+  {% include partials('snippet-wrapper') %}
+{% endblock %}
