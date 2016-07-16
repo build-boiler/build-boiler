@@ -27,11 +27,24 @@ export default function(gulp, plugins, config) {
       process.exit(code);
     }
 
+    const tunnelKey = 'tunnel';
     const taskName = getTaskName(metaData);
-    const forceTunnel = taskName === 'tunnel';
-    const tunnelOnly = forceTunnel && _.isUndefined(desktop) && _.isUndefined(mobile);
+    const forceTunnel = taskName === tunnelKey;
+    const noDevices = _.isUndefined(desktop) && _.isUndefined(mobile);
+    const tunnelOnly = forceTunnel && noDevices;
+
+    //HACK: running `gulp selenium` defaults to run everything
+    if (noDevices && !tunnelOnly) {
+      config.desktop = true;
+      config.mobile = true;
+    }
+
     const runnerOptions = getTestConfig(configFile);
-    const {testEnv, testConfig} = getCapabilities(config, runnerOptions, forceTunnel);
+    //if wanting to only preview on BrowserStack then short circuit
+    const {
+      testEnv = tunnelKey,
+      testConfig = []
+    } = tunnelOnly ? {} : getCapabilities(config, runnerOptions, forceTunnel);
     const browserStackOptions = getBrowserStackOptions(config);
 
     //TODO: fix data coming from parent
@@ -46,9 +59,10 @@ export default function(gulp, plugins, config) {
      * a) `testEnv === 'tunnel'` Browser tests must be run on BrowserStack
      * b) `task === 'tunnel'` the command was `gulp selenium:tunnel` for "Live" preview on BrowserStack
      */
-    if (testEnv === 'tunnel' || taskName === 'tunnel') {
+    if (testEnv === 'tunnel') {
       const BrowserStackTunnel = require('browserstacktunnel-wrapper');
       const browserStackTunnel = new BrowserStackTunnel(browserStackOptions.spawnTunnelOptions);
+
       browserStackTunnel.on('started', () => log(browserStackTunnel.stdoutData));
 
       runGen(function *() {
