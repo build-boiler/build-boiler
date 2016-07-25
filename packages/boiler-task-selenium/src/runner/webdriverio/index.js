@@ -2,8 +2,15 @@
  * Bootstrap the es6 process here for test files and config
  */
 require('babel-register')({
-  presets: ['es2015', 'stage-0'],
-  plugins: ['add-module-exports'],
+  babelrc: false,
+  presets: [require.resolve('babel-preset-es2015-node4')],
+  plugins: [
+    'add-module-exports',
+    'syntax-async-functions',
+    'transform-async-to-generator',
+    'transform-class-properties',
+    'transform-object-rest-spread'
+  ],
   //tell babel to compile @hfa node_modules
   ignore: /^.+\/node_modules\/(?!@hfa\/).+\.jsx?$/
 });
