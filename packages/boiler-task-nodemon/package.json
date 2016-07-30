@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-nodemon",
-  "version": "3.0.9",
+  "version": "3.2.3",
   "description": "Build Boilerplate Task for Nodemon",
   "main": "dist/index.js",
   "author": "DtotheFP",
