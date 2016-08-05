@@ -10,7 +10,7 @@ export default [
   {
     browserName: 'android',
     platform: 'ANDROID',
-    device: 'Google Nexus 5',
-    browser_version: '5'
+    device: 'Samsung Galaxy S5',
+    browser_version: '4.4'
   }
 ];
