@@ -83,17 +83,16 @@ describe(`#getCapabilities()`, () => {
   });
 
   const mobileVariations = [{
-    browserName: 'iPhone6',
-    browser_version: '8.0',
-    device: 'iPhone 6'
-  }, {
     browserName: 'iPhone6S',
-    browser_version: '9.0',
-    device: 'iPhone 6S'
-  }, {
+    platform: 'MAC',
+    device: 'iPhone 6S',
+    browser_version: '9.3'
+  },
+  {
     browserName: 'android',
-    device: 'Samsung Galaxy S5',
-    platform: 'ANDROID'
+    platform: 'ANDROID',
+    device: 'Google Nexus 5',
+    browser_version: '5'
   }];
   const mobileCaps = reduce(mobileVariations, (acc, obj) => {
     acc.push({
