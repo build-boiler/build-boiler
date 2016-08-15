@@ -32,6 +32,13 @@
     "lodash": "^4.0.0",
     "nodemon": "^1.9.1",
     "open": "0.0.5",
-    "pty.js": "^0.3.1"
-  }
+    "pty.js": "^0.3.1",
+    "snyk": "^1.18.0"
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }

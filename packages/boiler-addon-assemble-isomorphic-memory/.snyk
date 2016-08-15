@@ -1,0 +1,53 @@
+version: v1.5.2
+ignore: {}
+patch:
+  'npm:minimatch:20160620':
+    - chokidar > fsevents > node-pre-gyp > tar-pack > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - chokidar > fsevents > node-pre-gyp > tar-pack > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - chokidar > fsevents > node-pre-gyp > tar-pack > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - chokidar > fsevents > node-pre-gyp > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - chokidar > fsevents > node-pre-gyp > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+    - chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > minimatch:
+        patched: '2016-08-15T15:56:18.009Z'
+  'npm:tough-cookie:20160722':
+    - webpack > watchpack > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-08-15T15:56:18.009Z'
+    - chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-08-15T15:56:18.009Z'
+    - watchpack > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-08-15T15:56:18.009Z'

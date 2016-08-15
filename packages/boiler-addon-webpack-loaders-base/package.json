@@ -35,9 +35,16 @@
     "imports-loader": "^0.6.4",
     "json-loader": "^0.5.2",
     "lodash": "^4.0.0",
-    "style-loader": "^0.13.0"
+    "style-loader": "^0.13.0",
+    "snyk": "^1.18.0"
   },
   "peerDependencies": {
     "webpack": "1.x"
-  }
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }

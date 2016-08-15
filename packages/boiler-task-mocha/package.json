@@ -31,7 +31,13 @@
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.3.13",
     "boiler-utils": "^3.0.9",
-    "gulp-mocha": "^2.2.0",
+    "gulp-mocha": "^3.0.0",
     "lodash": "^4.0.0"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }

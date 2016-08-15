@@ -30,9 +30,16 @@
     "boiler-utils": "^3.0.9",
     "img-loader": "^1.2.2",
     "lodash": "^4.0.0",
-    "url-loader": "^0.5.6"
+    "url-loader": "^0.5.6",
+    "snyk": "^1.18.0"
   },
   "peerDependencies": {
     "webpack": "1.x"
-  }
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }

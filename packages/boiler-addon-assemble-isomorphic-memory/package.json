@@ -33,9 +33,16 @@
     "globby": "^4.0.0",
     "jsdom": "^8.0.4",
     "lodash": "^4.0.0",
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "snyk": "^1.18.0"
   },
   "peerDependencies": {
     "webpack": "1.x"
-  }
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }

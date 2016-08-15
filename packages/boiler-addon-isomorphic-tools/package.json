@@ -29,5 +29,11 @@
     "babel-plugin-transform-runtime": "^6.8.0",
     "lodash": "^4.0.0",
     "webpack-isomorphic-tools": "^2.2.14"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }

@@ -33,5 +33,11 @@
     "boiler-task-copy": "^3.0.9",
     "boiler-task-eslint": "^3.0.9",
     "boiler-task-webpack": "^3.0.9"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }

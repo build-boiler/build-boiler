@@ -33,5 +33,11 @@
     "jsdom": "^8.0.4",
     "lodash": "^4.0.0",
     "through2": "^2.0.0"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }

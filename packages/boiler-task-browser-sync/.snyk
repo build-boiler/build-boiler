@@ -1,0 +1,37 @@
+version: v1.5.2
+ignore:
+  'npm:connect:20130701':
+    - browser-sync > browser-sync-ui > weinre > express > connect:
+        reason: None given
+        expires: '2016-09-14T16:00:12.911Z'
+  'npm:express:20140912':
+    - browser-sync > browser-sync-ui > weinre > express:
+        reason: None given
+        expires: '2016-09-14T16:00:12.911Z'
+  'npm:qs:20140806':
+    - browser-sync > browser-sync-ui > weinre > express > qs:
+        reason: None given
+        expires: '2016-09-14T16:00:12.911Z'
+  'npm:qs:20140806-1':
+    - browser-sync > browser-sync-ui > weinre > express > qs:
+        reason: None given
+        expires: '2016-09-14T16:00:12.911Z'
+patch:
+  'npm:negotiator:20160616':
+    - browser-sync > socket.io > engine.io > accepts > negotiator:
+        patched: '2016-08-15T15:59:50.169Z'
+    - browser-sync > serve-index > accepts > negotiator:
+        patched: '2016-08-15T15:59:50.169Z'
+  'npm:request:20160119':
+    - browser-sync > localtunnel > request:
+        patched: '2016-08-15T15:59:50.169Z'
+  'npm:tough-cookie:20160722':
+    - browser-sync > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-08-15T15:59:50.169Z'
+    - browser-sync > localtunnel > request > tough-cookie:
+        patched: '2016-08-15T15:59:50.169Z'
+  'npm:ws:20160624':
+    - browser-sync > socket.io > engine.io > ws:
+        patched: '2016-08-15T15:59:50.169Z'
+    - browser-sync > socket.io > socket.io-client > engine.io-client > ws:
+        patched: '2016-08-15T15:59:50.169Z'

@@ -34,6 +34,13 @@
     "nunjucks": "^2.1.0",
     "react": "15.1.0",
     "react-dom": "15.1.0",
-    "uglify-js": "^2.6.2"
-  }
+    "uglify-js": "^2.6.2",
+    "snyk": "^1.18.0"
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
