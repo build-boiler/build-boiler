@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-karma",
-  "version": "3.1.2",
+  "version": "3.3.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,8 +27,8 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-config-webpack": "^3.0.9",
-    "boiler-utils": "^3.0.9",
+    "boiler-config-webpack": "^3.3.0",
+    "boiler-utils": "^3.3.0",
     "browser-sync": "^2.14.0",
     "istanbul-cobertura-badger": "^1.2.1",
     "karma": "^0.13.21",
