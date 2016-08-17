@@ -1,0 +1,16 @@
+version: v1.5.2
+ignore: {}
+patch:
+  'npm:hawk:20160119':
+    - selenium-standalone > request > hawk:
+        patched: '2016-08-15T16:04:44.975Z'
+  'npm:minimatch:20160620':
+    - nightwatch > minimatch:
+        patched: '2016-08-15T16:04:44.975Z'
+    - nightwatch > mocha-nightwatch > glob > minimatch:
+        patched: '2016-08-15T16:04:44.975Z'
+    - wdio-mocha-framework > mocha > glob > minimatch:
+        patched: '2016-08-15T16:04:44.975Z'
+  'npm:request:20160119':
+    - selenium-standalone > request:
+        patched: '2016-08-15T16:04:44.975Z'

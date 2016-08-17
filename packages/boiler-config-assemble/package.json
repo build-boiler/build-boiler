@@ -35,5 +35,11 @@
     "js-yaml": "^3.6.0",
     "lodash": "^4.0.0",
     "plasma": "^0.9.1"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }

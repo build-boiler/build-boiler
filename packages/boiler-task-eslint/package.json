@@ -34,5 +34,11 @@
     "eslint-friendly-formatter": "^1.1.0",
     "eslint-plugin-react": "^3.16.1",
     "gulp-eslint": "^1.1.1"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }

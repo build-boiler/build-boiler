@@ -41,9 +41,16 @@
     "lodash": "^4.0.0",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
-    "redbox-react": "^1.2.0"
+    "redbox-react": "^1.2.0",
+    "snyk": "^1.18.0"
   },
   "peerDependencies": {
     "webpack": "1.x"
-  }
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }

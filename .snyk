@@ -1,0 +1,49 @@
+version: v1.5.2
+ignore: {}
+patch:
+  'npm:minimatch:20160620':
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > rimraf > glob > minimatch:
+        patched: '2016-08-15T00:11:59.571Z'
+      glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T00:11:59.571Z'
+      glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T00:11:59.571Z'
+      glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > rimraf > glob > minimatch:
+        patched: '2016-08-15T00:11:59.571Z'
+      gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T00:11:59.571Z'
+      gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T00:11:59.571Z'
+      gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar > fstream > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > rimraf > glob > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > tar-pack > fstream-ignore > minimatch:
+        patched: '2016-08-15T15:55:24.390Z'
+  'npm:tough-cookie:20160722':
+    - glob-watcher > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-08-15T15:55:24.390Z'
+    - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-08-15T15:55:24.390Z'

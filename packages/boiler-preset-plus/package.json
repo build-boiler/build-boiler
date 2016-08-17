@@ -30,5 +30,11 @@
     "boiler-preset-base": "^3.2.0",
     "boiler-task-karma": "^3.1.2",
     "boiler-task-selenium": "^3.2.5"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }

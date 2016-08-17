@@ -32,5 +32,11 @@
     "fs-extra": "^0.26.5",
     "lodash": "^4.0.0",
     "yargs": "^4.1.0"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
   }
 }
