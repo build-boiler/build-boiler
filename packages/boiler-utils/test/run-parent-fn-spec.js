@@ -36,7 +36,7 @@ describe('#runParentFn()', () => {
       const newSrc = '/bloop.js';
       const opts = {
         fn(gulp, plugins, config, {src, data}) {
-          src.push(newSrc)
+          src.push(newSrc);
 
           return { src, data };
         }
@@ -144,6 +144,3 @@ describe('#runParentFn()', () => {
     });
   });
 });
-
-
-

@@ -1,0 +1,19 @@
+{
+  "javascript":{
+    "vendors":"/js/vendors-f54eef436c462bfe6eaf.js",
+    "article/main":"/js/article/main-b9a13fe31aa47a4a71be.js",
+    "basic/main":"/js/basic/main-2f2aea9baae2170a005c.js",
+    "login/main":"/js/login/main-e410cf5777f51744a026.js",
+    "pages/main":"/js/pages/main-cbf1eb6962fdbbf0d908.js",
+    "states/main":"/js/states/main-c12997f41c82ceb065db.js",
+    "blog/main":"/js/blog/main-4327198ef1ba9858b810.js",
+    "unsubscribe/main":"/js/unsubscribe/main-cb815db7093c5d3cb0ac.js",
+    "issues/main":"/js/issues/main-9485b365b9f043187201.js",
+    "health/main":"/js/health/main-3094b60169bb0d2a8c85.js",
+    "about/main":"/js/about/main-28e6677ff387932da914.js"
+  },
+  "styles":{},
+  "assets":{
+    "./brand/mark-h.svg":"/brand/mark-h.svg"
+  }
+}

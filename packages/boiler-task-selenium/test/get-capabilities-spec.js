@@ -82,18 +82,20 @@ describe(`#getCapabilities()`, () => {
     });
   });
 
-  const mobileVariations = [{
-    browserName: 'iPhone6S',
-    platform: 'MAC',
-    device: 'iPhone 6S',
-    browser_version: '9.3'
-  },
-  {
-    browserName: 'android',
-    platform: 'ANDROID',
-    device: 'Samsung Galaxy S5',
-    browser_version: '4.4'
-  }];
+  const mobileVariations = [
+    {
+      browserName: 'iPhone6S',
+      platform: 'MAC',
+      device: 'iPhone 6S',
+      browser_version: '9.3'
+    },
+    {
+      browserName: 'android',
+      platform: 'ANDROID',
+      device: 'Samsung Galaxy S5',
+      browser_version: '4.4'
+    }
+  ];
   const mobileCaps = reduce(mobileVariations, (acc, obj) => {
     acc.push({
       'browserstack.debug': 'true',
@@ -194,7 +196,7 @@ describe(`#getCapabilities()`, () => {
       },
       environment: {
         branch
-      },
+      }
     });
     const config = makeMockConfig({ desktop: ['chrome'] });
 

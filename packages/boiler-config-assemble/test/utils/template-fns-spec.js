@@ -66,7 +66,7 @@ describe('#templateFns', () => {
       let fp2;
 
       expect(join.bind(null, fp1, fp2)).to.throw(Error);
-    })
+    });
   });
 
   describe('with a branch', () => {

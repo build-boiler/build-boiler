@@ -56,6 +56,7 @@
     "babel-preset-stage-0": "^6.1.18",
     "babel-register": "^6.3.13",
     "chai": "^3.5.0",
+    "cheerio": "^0.20.0",
     "debug": "^2.2.0",
     "deps": "^0.1.2",
     "eslint": "^1.10.3",
