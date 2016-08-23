@@ -58,7 +58,7 @@ describe(`#getTestFiles`, () => {
   ];
   const desktopTests = generalTests.concat([
     'test/e2e/wdio/desktop/some-desktop-spec.js',
-    'test/e2e/wdio/desktop/wait-desktop-spec.js',
+    'test/e2e/wdio/desktop/wait-desktop-spec.js'
   ]).sort();
   const mobileTests = generalTests.concat([
     'test/e2e/wdio/mobile/some-mobile-spec.js'
@@ -98,7 +98,7 @@ describe(`#getTestFiles`, () => {
     const config = makeMockConfig({desktop: ['safari', 'ie']});
     const suite = getTestFiles(config, runnerOptions);
     compareMaps(suite, new Map([
-      [['safari', 'ie'], getTests(desktopTests, tunnelTests)],
+      [['safari', 'ie'], getTests(desktopTests, tunnelTests)]
     ]));
   });
 

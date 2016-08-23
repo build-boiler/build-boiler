@@ -6,6 +6,10 @@ import formatter from 'eslint-friendly-formatter';
 import makeEslintConfig from 'eslint-config';
 
 const scripts = './packages/*/src/**/*.js';
+const tests = [
+  './packages/*/test/**/*.js',
+  './test/**/*.js'
+];
 const release = process.argv.indexOf('--release') !== -1;
 const force = process.argv.indexOf('--force') !== -1;
 
@@ -43,28 +47,34 @@ if (force || release) {
   );
 
   const {eslint} = plugins;
-  const eslintConfig = makeEslintConfig({
-    basic: false,
-    react: true,
-    isDev: true,
-    lintEnv: 'build'
-  });
-  const eslintFn = () => {
-    return gulp.src(scripts)
-      .pipe(eslint(eslintConfig))
-      .pipe(eslint.format(formatter));
+  const eslintFn = (lintEnv) => {
+    const eslintConfig = makeEslintConfig({
+      basic: false,
+      react: true,
+      isDev: true,
+      lintEnv
+    });
+
+    return () => {
+      return gulp.src(scripts)
+        .pipe(eslint(eslintConfig))
+        .pipe(eslint.format(formatter));
+    };
   };
   const config = {force, release};
 
   gulp.task('babel', tasks.babel || babelFn(gulp, plugins, config));
-  gulp.task('lint', tasks.lint || eslintFn);
+  gulp.task('lint:build', tasks.lint || eslintFn('build'));
+  gulp.task('lint:test', tasks.lint || eslintFn('test'));
+  gulp.task('lint', gulp.parallel('lint:test', 'lint:build'));
   gulp.task('copy', tasks.copy || copyFn(gulp, plugins, config));
   gulp.task('build', gulp.series(
     'lint',
     gulp.parallel('copy', 'babel')
   ));
   gulp.task('run-watch', () => {
-    gulp.watch(scripts).on('change', gulp.series('lint', 'babel'));
+    gulp.watch(scripts).on('change', gulp.series('lint:build', 'babel'));
+    gulp.watch(tests).on('change', gulp.series('lint:test'));
     gulp.watch('./packages/*/src/**/*.json').on('change', gulp.series('copy'));
   });
 

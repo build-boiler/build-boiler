@@ -11,6 +11,9 @@ export default function(gulp, plugins, config, opts) {
     ]);
   } else if (taskName === 'test') {
     data.rules['no-console'] = 0;
+    src.push(
+      addbase('packages/*/test/**/*.js')
+    );
   }
 
   return {

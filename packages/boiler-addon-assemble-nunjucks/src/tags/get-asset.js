@@ -82,11 +82,11 @@ export default class GetAsset {
     if (this.integrity) {
       const re = /<((script|link).+?)>/;
       const split = fp.split(path.sep).filter(dir => !!dir);
-      const len = split.length;
-      const src = len >= 2 ? split.slice(len - 2) : split;
+      const typeI = split.indexOf(this.type);
+      const src = typeI !== -1 ? split.slice(typeI) : split;
       const hash =
-        this.integrity[removeEndSlashes(fp)] ||
-        this.integrity[src.join(path.sep)];
+        this.integrity[removeEndSlashes(fp)] || //remove preceding slash to match keys in 'subresource-integrity-*.json'
+        this.integrity[src.join(path.sep)]; //case for '{css,js}/{**/,}<filename>-<hash>.{css,js}'
       const attrs = [
         `integrity="${hash}"`
       ];
@@ -133,6 +133,8 @@ export default class GetAsset {
         this.cors = 'anonymous';
       }
     }
+
+    this.type = type; //used in the `addIntegrity` method
 
     switch (type) {
       case 'pantsuit':

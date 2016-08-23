@@ -19,13 +19,13 @@ describe('#gatherCommonjsModules', () => {
       //}
 
       return fp;
-    }
+    };
 
     gatherMod.__set__('require', mock);
   });
 
   after(() => {
-    gatherMod.__set__('require', oldRequire)
+    gatherMod.__set__('require', oldRequire);
     require.resolve = oldRequire;
   });
 
@@ -63,7 +63,7 @@ describe('#gatherCommonjsModules', () => {
       'gulp-newer': '^1.1.0',
       'gulp-plumber': '^1.1.0',
       'gulp-util': '^3.0.7',
-      'gutil': '^1.6.4',
+      'gutil': '^1.6.4'
     }
   };
   const {dependencies} = pkg;
@@ -106,4 +106,4 @@ describe('#gatherCommonjsModules', () => {
 
     expect(externals).to.have.all.keys(filteredKeys);
   });
-})
+});

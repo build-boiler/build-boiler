@@ -1,0 +1,15 @@
+{
+  "javascript":{
+    "global":"/js/global-dc519ee4fc295f8c5940.js"
+  },
+  "styles":{
+    "global":"/css/global-dc519ee4fc295f8c5940.css"
+  },
+  "assets":{
+    "favicon.png":"/brand/favicon.png",
+    "mark-h-white.png":"/brand/mark-h-white.png",
+    "mark-h-white.svg":"/brand/mark-h-white.svg",
+    "mark-h.png":"/brand/mark-h.png",
+    "mark-h.svg":"/brand/mark-h.svg"
+  }
+}
