@@ -1,6 +1,6 @@
 {
   "name": "boiler-config-eslint",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Linting Config",
   "main": "dist/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "dependencies": {
     "app-root-path": "^1.0.0",
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-utils": "^3.3.0",
+    "boiler-utils": "^3.3.1",
     "findup-sync": "^0.3.0",
     "object-assign": "^4.0.1"
   },
