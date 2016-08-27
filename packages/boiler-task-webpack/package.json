@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-webpack",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -28,8 +28,8 @@
   "dependencies": {
     "async": "^2.0.0-rc.4",
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-config-webpack": "^3.3.1",
-    "boiler-utils": "^3.3.1",
+    "boiler-config-webpack": "^3.4.0",
+    "boiler-utils": "^3.4.0",
     "express": "^4.13.4",
     "fs-extra": "^0.30.0",
     "globby": "^4.0.0",
