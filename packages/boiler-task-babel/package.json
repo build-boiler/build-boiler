@@ -5,13 +5,13 @@
   "main": "dist/index.js",
   "author": "DtotheFP",
   "license": "Copyright 2016",
-  "homepage": "https://github.com/dtothefp/build-boiler",
+  "homepage": "https://github.com/build-boiler/build-boiler",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dtothefp/build-boiler/build-boiler.git"
+    "url": "git://github.com/build-boiler/build-boiler/build-boiler.git"
   },
   "bugs": {
-    "url": "https://github.com/dtothefp/build-boiler/issues"
+    "url": "https://github.com/build-boiler/build-boiler/issues"
   },
   "engines": {
     "node": ">=5.0.0"
