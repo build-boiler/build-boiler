@@ -124,6 +124,7 @@ export default function(boilerConfigFp, opts = {}) {
   const {
     //if a "project" not a "module" turn on file reving
     bucketBase = '',
+    bucketSuffix = '', // used for disabling automatic appending of non-devel/non-master branch name
     devAssets = '/',
     prodAssets = '/',
     devPath = '', //ex => 'www.hfa.io'
@@ -221,8 +222,9 @@ export default function(boilerConfigFp, opts = {}) {
     const bucketPath = !!bucketBase ? bucketBase + '/' : '';
     let devAssetPath = `${trim(devAssets)}/${bucketPath}`;
     const prodAssetPath = `${trim(prodAssets)}/${bucketPath}`;
+
     // if branch is not `devel` or `master` add the branch name to the asset path
-    if (!isDevRoot && !isMaster) {
+    if (!isDevRoot && !isMaster && bucketSuffix !== null) {
       devAssetPath += `${TRAVIS_BRANCH}/`;
     }
 
