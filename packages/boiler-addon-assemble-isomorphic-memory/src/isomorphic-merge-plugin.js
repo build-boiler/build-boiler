@@ -46,13 +46,6 @@ export default function(app, config) {
 
       const registerData = data[key] || app.cache.data[key];
 
-      if (!registerData) {
-        logError({
-          err: new Error('No data was found to register'),
-          plugin: '[assemble: iso-merge]'
-        });
-      }
-
       try {
         const props = fluxBootstrap(registerData);
         const {fluxStore: reactor} = props;

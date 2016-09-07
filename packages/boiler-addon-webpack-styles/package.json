@@ -32,13 +32,13 @@
     "css-loader": "^0.23.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "lodash": "^4.0.0",
-    "node-sass": "^3.7.0",
+    "node-sass": "3.8.0",
     "postcss": "^5.0.0",
     "postcss-loader": "^0.8.0",
     "postcss-reporter": "^1.0.0",
     "sass-loader": "^3.0.0",
-    "style-loader": "^0.13.0",
-    "snyk": "^1.18.0"
+    "snyk": "^1.18.0",
+    "style-loader": "^0.13.0"
   },
   "peerDependencies": {
     "webpack": "1.x"

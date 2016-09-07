@@ -11,7 +11,13 @@ export default function(content, key = 'default') {
   const compileTarget = _.isFunction(content.toString) ? content.toString() : content;
   const m = new module.constructor();
   m.paths = module.paths;
-  m._compile(compileTarget);
+
+  try {
+    m._compile(compileTarget);
+  } catch (err) {
+    //Node 6 need to pass the filepath as a second argument
+    m._compile(compileTarget, key);
+  }
 
   return m.exports[key] || m.exports;
 }
