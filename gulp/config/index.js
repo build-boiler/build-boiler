@@ -533,7 +533,7 @@ export default {
    */
   isomorphic: {
     //base: true,
-    //memory: true, //=> use with `boiler-addon-assemble-isomorphic-memory`
+    memory: true, //=> use with `boiler-addon-assemble-isomorphic-memory`
     output: 'dist/server',
     context: process.cwd(),
     entries: [

@@ -24,8 +24,8 @@ export default {
     //'nodemon'
   //],
   addons: [
-    'assemble-isomorphic-static',
-    //'assemble-isomorphic-memory',
+    // 'assemble-isomorphic-static',
+    'assemble-isomorphic-memory',
     ['assemble-middleware', {
       all: 'onLoad',
       glob: '**/!(es-)*.{json,yml}',

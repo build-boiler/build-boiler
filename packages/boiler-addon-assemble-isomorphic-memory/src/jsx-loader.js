@@ -95,7 +95,7 @@ export default function(collection) {
 
         if (memory) {
           contents = fs.readFileSync(fp);
-          fn = compile(contents);
+          fn = compile(contents, fp);
         } else {
           contents = '';
           fn = require(fp);
