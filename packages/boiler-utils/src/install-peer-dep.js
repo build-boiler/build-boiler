@@ -25,7 +25,19 @@ export default function(rootDir, addon) {
     const version = peerDependencies[name];
     const exists = tryExists(name, {resolve: true, omitReq: true});
 
-    return exists ? list : [...list, `${name}@${version}`];
+    if (exists) {
+      const re = new RegExp(`^(.*/node_modules/${name}/).*$`);
+      const modulePath = exists.replace(re, '$1package.json');
+      const {version: installedVersion} = require(modulePath);
+
+      if (installedVersion !== version) {
+        list.push(`${name}@${version}`);
+      }
+    } else {
+      list.push(`${name}@${version}`);
+    }
+
+    return list;
   }, []).join(' ');
   const installed = [];
 

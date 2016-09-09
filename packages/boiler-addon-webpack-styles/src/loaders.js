@@ -40,11 +40,14 @@ export default function(config, data) {
         `sass-loader?${sassParams.join('&')}`
       ].join('!');
     } else {
-      sassLoader = ExtractTextPlugin.extract('style-loader', [
-        `css-loader?importLoaders=2${sourceMap}`,
-        'postcss-loader',
-        `sass-loader?${sassParams.join('&')}`
-      ].join('!'));
+      sassLoader = ExtractTextPlugin.extract({
+        fallbackLoader: 'style-loader',
+        loader: [
+          `css-loader?importLoaders=2${sourceMap}`,
+          'postcss-loader',
+          `sass-loader?${sassParams.join('&')}`
+        ].join('!')
+      });
     }
 
     cssLoader = [
@@ -53,16 +56,22 @@ export default function(config, data) {
       'postcss-loader'
     ].join('!');
   } else {
-    cssLoader = ExtractTextPlugin.extract('style-loader', [
-      `css-loader?importLoaders=1&modules&localIdentName=[hash:base64:5]${sourceMap}`,
-      'postcss-loader'
-    ].join('!'));
+    cssLoader = ExtractTextPlugin.extract({
+      fallbackLoader: 'style-loader',
+      loader: [
+        `css-loader?importLoaders=1&modules&localIdentName=[hash:base64:5]${sourceMap}`,
+        'postcss-loader'
+      ].join('!')
+    });
 
-    sassLoader = ExtractTextPlugin.extract('style-loader', [
-      `css-loader?importLoaders=2${sourceMap}`,
-      'postcss-loader',
-      `sass-loader?${sassParams.join('&')}`
-    ].join('!'));
+    sassLoader = ExtractTextPlugin.extract({
+      fallbackLoader: 'style-loader',
+      loader: [
+        `css-loader?importLoaders=2${sourceMap}`,
+        'postcss-loader',
+        `sass-loader?${sassParams.join('&')}`
+      ].join('!')
+    });
   }
 
   loaders.push(...[
