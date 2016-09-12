@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-assemble-nunjucks",
-  "version": "3.4.3",
+  "version": "4.0.0",
   "description": "Build Boilerplate Middleware for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,15 +27,15 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-utils": "^3.4.3",
+    "boiler-utils": "^4.0.0",
     "cheerio": "^0.20.0",
     "consolidate": "^0.14.0",
     "lodash": "^4.0.0",
     "nunjucks": "^2.1.0",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
-    "uglify-js": "^2.6.2",
-    "snyk": "^1.18.0"
+    "snyk": "^1.18.0",
+    "uglify-js": "^2.6.2"
   },
   "scripts": {
     "test": "snyk test",
