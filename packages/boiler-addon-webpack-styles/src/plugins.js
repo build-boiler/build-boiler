@@ -18,7 +18,8 @@ export default function(config, data) {
 
   if (extractCss || extractScss) {
     plugins.push(
-      new ExtractTextPlugin(cssBundleName, {
+      new ExtractTextPlugin({
+        filename: cssBundleName,
         allChunks: true
       })
     );
