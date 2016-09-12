@@ -1,5 +1,8 @@
 // Libraries
 import _ from 'lodash';
+import BrowserStack from 'browserstack-local';
+import {unlink} from 'fs';
+import del from 'del';
 // Packages
 import boilerUtils from 'boiler-utils';
 // Helpers
@@ -8,6 +11,7 @@ import seleniumOptions from './selenium-standalone/options';
 import getBrowserStackOptions from './browser-stack/get-browser-stack-options';
 import getCapabilities from './get-capabilities';
 import spawn from './runner/spawn';
+import readLines from './util/read-lines';
 
 
 const {buildLogger, thunk, runGen, runParentFn, gulpTaskUtils} = boilerUtils;
@@ -60,15 +64,23 @@ export default function(gulp, plugins, config) {
      * b) `task === 'tunnel'` the command was `gulp selenium:tunnel` for "Live" preview on BrowserStack
      */
     if (testEnv === 'tunnel') {
-      const BrowserStackTunnel = require('browserstacktunnel-wrapper');
-      const browserStackTunnel = new BrowserStackTunnel(browserStackOptions.spawnTunnelOptions);
+      // Delete all existing BrowserStack logs
+      const thunkedReadLines = thunk(readLines);
+      const thunkedUnlink = thunk(unlink);
 
-      browserStackTunnel.on('started', () => log(browserStackTunnel.stdoutData));
-
+      const browserStackTunnel = new BrowserStack.Local();
       runGen(function *() {
+        // Remove all existing BrowserStack logs
+        try {
+          del.sync(['.bslog-*.txt']);
+        } catch (err) {
+          logError({err, plugin: '[remove bslogs]'});
+        }
+
+        const logFp = `.bslog-${new Date().getTime()}.txt`;
         let startTunnel = thunk(browserStackTunnel.start, browserStackTunnel);
         try {
-          yield startTunnel();
+          yield startTunnel(Object.assign(browserStackOptions.spawnTunnelOptions, {force: true, logfile: logFp}));
         } catch (err) {
           logError({err, plugin: '[tunnel start]'});
         }
@@ -84,6 +96,17 @@ export default function(gulp, plugins, config) {
             yield stopTunnel();
           } catch (err) {
             logError({err, plugin: '[tunnel stop]'});
+          }
+
+          try {
+            if (code) {
+              yield thunkedReadLines(logFp, 50);
+            } else {
+              // Otherwise, remove the log file because it is USELESS TO US NOW
+              yield thunkedUnlink(logFp);
+            }
+          } catch (err) {
+            logError({err, plugin: '[tunnel log]'});
           }
 
           exit(code);
