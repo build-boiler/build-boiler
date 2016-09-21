@@ -1,0 +1,13 @@
+version: v1.5.2
+ignore: {}
+patch:
+  'npm:minimatch:20160620':
+    - nightwatch > mocha-nightwatch > glob > minimatch:
+        patched: '2016-09-21T21:49:23.662Z'
+    - nightwatch > minimatch:
+        patched: '2016-09-21T21:49:23.662Z'
+  'npm:tough-cookie:20160722':
+    - documentation > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-09-21T21:49:23.662Z'
+    - documentation > remark > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2016-09-21T21:49:23.662Z'

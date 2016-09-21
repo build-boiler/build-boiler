@@ -1,0 +1,51 @@
+{
+  "name": "boiler-task-documentation",
+  "version": "4.1.0",
+  "description": "Build Boilerplate Documentation Generation",
+  "main": "dist/index.js",
+  "author": "stephenkao",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/build-boiler/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/build-boiler/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/build-boiler/build-boiler/issues"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  },
+  "keywords": [
+    "assemble",
+    "browser-sync",
+    "eslint",
+    "gulp",
+    "nunjucks",
+    "react",
+    "webpack"
+  ],
+  "dependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-syntax-async-functions": "^6.8.0",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-plugin-transform-runtime": "^6.8.0",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015-node4": "^2.1.0",
+    "babel-register": "^6.3.13",
+    "boiler-utils": "^4.0.2",
+    "browserstack-local": "^1.1.0",
+    "documentation": "^4.0.0-beta10",
+    "mocha": "^3.0.0",
+    "nightwatch": "^0.9.1",
+    "snyk": "^1.18.0"
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
+}
