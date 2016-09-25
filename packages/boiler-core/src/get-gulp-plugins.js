@@ -33,7 +33,6 @@ export default function(config, tasks = []) {
     });
 
     Object.assign(acc, plugins);
-
     return acc;
   }, {}) : {};
 

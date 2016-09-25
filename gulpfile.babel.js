@@ -111,6 +111,7 @@ if (force || release) {
   gulp.task('webpack:main', tasks.webpack);
   gulp.task('webpack:server', tasks.webpack);
   gulp.task('webpack', gulp.series('webpack:global', 'webpack:main'));
+  gulp.task('documentation', tasks.documentation);
 
   let task;
 

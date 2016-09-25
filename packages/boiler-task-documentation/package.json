@@ -38,6 +38,7 @@
     "boiler-utils": "^4.0.2",
     "browserstack-local": "^1.1.0",
     "documentation": "^4.0.0-beta10",
+    "gulp-documentation": "^2.2.0",
     "mocha": "^3.0.0",
     "nightwatch": "^0.9.1",
     "snyk": "^1.18.0"
