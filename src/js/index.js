@@ -1,7 +1,3 @@
-/**
- * Hello
- * @public
- */
 import './local-main.scss';
 
 /*eslint no-console:0*/

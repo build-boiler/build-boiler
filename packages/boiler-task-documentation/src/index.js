@@ -1,11 +1,9 @@
 // Libraries
 import documentation from 'gulp-documentation';
-import reduce from 'lodash/reduce';
 // Packages
 import boilerUtils from 'boiler-utils';
 
 
-console.log(documentation);
 /**
  * Generate documentation for a given project
  *
@@ -17,7 +15,6 @@ console.log(documentation);
 export default function(gulp, plugins, config) {
   const {
     runParentFn: callParent,
-    runCustomTask: runFn,
     buildLogger
   } = boilerUtils;
   const {log} = buildLogger;
@@ -25,14 +22,6 @@ export default function(gulp, plugins, config) {
   const {addbase, logError} = utils;
 
   return (gulpCb) => {
-    function exit(code) {
-      if (typeof gulpCb === 'function') {
-        gulpCb();
-      }
-
-      process.exit(code);
-    }
-
     const defaultConfig = {
       files: addbase('src', '**/*.js'),
       docs: addbase('docs'),
@@ -43,7 +32,7 @@ export default function(gulp, plugins, config) {
 
     const parentConfig = callParent(arguments, defaultConfig);
 
-    const {data: documentationConfig, fn} = parentConfig;
+    const {data: documentationConfig} = parentConfig;
 
     const {files, docs, format} = documentationConfig;
 

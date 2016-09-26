@@ -6,7 +6,7 @@
   "scripts": {
     "bs": "node ./scripts/install.js && lerna bootstrap",
     "compile": "gulp build --release",
-    "document": "gulp document",
+    "documentation": "gulp documentation",
     "lerna:bootstrap": "lerna bootstrap",
     "lerna:diff": "lerna diff",
     "lerna:help": "lerna --help",
@@ -15,9 +15,9 @@
     "lerna:publish": "lerna publish",
     "lerna:run": "lerna run",
     "lerna:updated": "lerna updated",
-    "prepublish": "npm run snyk-protect",
-    "publish": "gulp build --release && gulp mocha &&  lerna publish",
-    "publish:all": "gulp build --release && gulp mocha && lerna publish --force-publish=* --yes",
+    "prepublish": "npm run snyk-protect && gulp build --release && gulp mocha && npm run documentation",
+    "publish": "npm run prepublish && lerna publish",
+    "publish:all": "npm run prepublish && lerna publish --force-publish=* --yes",
     "snyk-protect": "snyk protect",
     "start": "gulp",
     "test": "gulp mocha"
