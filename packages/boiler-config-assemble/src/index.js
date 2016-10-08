@@ -23,7 +23,8 @@ export default function(config) {
   const {
     data,
     registerTags,
-    middleware: parentMiddlware = {}
+    middleware: parentMiddlware = {},
+    minify = true
   } = assembleParentConfig;
   const app = setup(config, {data});
   const assets = getAssets(config, {isomorphic});
@@ -39,6 +40,7 @@ export default function(config) {
   return {
     app,
     assets,
-    data: addonData
+    data: addonData,
+    minify
   };
 }
