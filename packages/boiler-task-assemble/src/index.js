@@ -2,6 +2,8 @@ import isFunction from 'lodash/isFunction';
 import {join} from 'path';
 import boilerUtils from 'boiler-utils';
 import makeConfig from 'boiler-config-assemble';
+import minifyHtml from 'gulp-htmlmin';
+
 
 export default function(gulp, plugins, config, {addons}) {
   const {browserSync, gulpIf} = plugins;
@@ -31,7 +33,8 @@ export default function(gulp, plugins, config, {addons}) {
     const {
       app,
       assets: prom,
-      data: addonData = {}
+      data: addonData = {},
+      minify
     } = makeConfig(config);
 
     if (isDev) {
@@ -95,6 +98,7 @@ export default function(gulp, plugins, config, {addons}) {
               gulpIf(mergeFluxData, fluxPlugin)
             )
             .pipe(app.renderFile())
+            .pipe(gulpIf(minify, minifyHtml({collapseWhitespace: true})))
             .pipe(app.dest(buildDir))
             .on('data', (file) => {
               log(`Rendered ${blue(renameKey(file.path))}`);
