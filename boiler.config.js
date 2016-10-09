@@ -27,7 +27,7 @@ export default {
     // 'assemble-isomorphic-static',
     'assemble-isomorphic-memory',
     ['assemble-middleware', {
-      all: 'onLoad',
+      // all: 'onLoad',
       glob: '**/!(es-)*.{json,yml}',
       ignore: {
         //onLoad: 'isomorphic-data'
