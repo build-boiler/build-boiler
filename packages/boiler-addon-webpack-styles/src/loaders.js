@@ -13,7 +13,7 @@ export default function(config, data) {
     '&-autoprefixer&-minimize' :
     '&-autoprefixer&minimize';
   const sourceMap = ( isMaster ? '' : '&sourceMap' ) + minimize;
-  let sassParams = [
+  const sassParams = [
     'outputStyle=expanded'
   ];
   let sassLoader, cssLoader;

@@ -20,7 +20,7 @@ describe('#runParentFn()', () => {
       }
     };
     const taskData = {src, data};
-    const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+    const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
     const [first, second, third, fourth] = spy.getCall(0).args;
 
     expect(first).to.eql(gulpMock);
@@ -41,7 +41,7 @@ describe('#runParentFn()', () => {
           return { src, data };
         }
       };
-      const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+      const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
 
       expect(ret.data).to.eql(taskData.data);
       expect(ret.src).to.include.members([
@@ -60,7 +60,7 @@ describe('#runParentFn()', () => {
           return { src, data };
         }
       };
-      const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+      const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
 
       expect(ret.data).to.eql(taskData.data);
       expect(ret.src).to.equal(newSrc);
@@ -73,7 +73,7 @@ describe('#runParentFn()', () => {
           return { src: 2, data };
         }
       };
-      const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+      const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
 
       expect(ret.data).to.eql(taskData.data);
       expect(ret.src).to.eql(src);
@@ -90,7 +90,7 @@ describe('#runParentFn()', () => {
           return { src, data: Object.assign({}, data, newData) };
         }
       };
-      const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+      const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
 
       expect(ret.src).to.eql(taskData.src);
       expect(ret.data).to.eql(
@@ -107,7 +107,7 @@ describe('#runParentFn()', () => {
           return { src, data: undefined };
         }
       };
-      const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+      const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
 
       expect(ret.src).to.eql(taskData.src);
       expect(ret.data).to.eql(data);
@@ -124,7 +124,7 @@ describe('#runParentFn()', () => {
           return noop;
         }
       };
-      const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+      const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
 
       expect(ret).to.eql({fn: noop});
     });
@@ -138,7 +138,7 @@ describe('#runParentFn()', () => {
           return throughObj;
         }
       };
-      const ret = runParent([ gulpMock, pluginsMock, configMock, opts ], taskData);
+      const ret = runParent([gulpMock, pluginsMock, configMock, opts], taskData);
 
       expect(ret).to.eql({fn: throughObj});
     });

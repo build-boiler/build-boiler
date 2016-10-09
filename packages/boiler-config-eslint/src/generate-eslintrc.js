@@ -1,63 +1,46 @@
-/**
- * Script to generate a .eslintrc file for use in editors or wherever outside of
- * your application.
- */
 import path from 'path';
 import fs from 'fs';
-import assign from 'object-assign';
-import {path as appPath} from 'app-root-path';
 import findUp from 'findup-sync';
-
-import config from './eslint-config';
-import makeBaseRules from './base-rules';
-import makeReactRules from './react-rules';
+import merge from 'lodash/merge';
+import config from './config/web-dev';
 import boilerUtils from 'boiler-utils';
 
 const {buildLogger} = boilerUtils;
 const {log, blue} = buildLogger;
 const packageDir = 'packages';
 const localPath = findUp(packageDir);
-let rcPath;
 
-if (localPath) {
-  const [base] = localPath.split(path.sep + packageDir);
-  rcPath = path.join(base, '.eslintrc');
-} else {
-  rcPath = path.join(appPath, '.eslintrc');
-}
-
+/**
+ * Script to generate a .eslintrc file for use in editors or wherever outside of
+ * your application.
+ */
 export default function(opts) {
-  const {react} = opts;
-  const baseRules = makeBaseRules({
-    ...opts,
-    isDev: true
-  });
-  let exists = false;
+  const {
+    rootPath,
+    rules = {}
+  } = opts;
+  let rcPath;
 
-  try {
-    const stats = fs.statSync(rcPath);
+  if (localPath) {
+    const [base] = localPath.split(path.sep + packageDir);
 
-    exists = stats.isFile();
-  } catch (err) {
-    exists = false;
+    rcPath = path.join(base, '.eslintrc');
+  } else {
+    rcPath = rootPath || path.join(process.cwd(), '.eslintrc');
   }
 
-  if (!exists) {
-    log(`Generating .eslintrc to ${blue(rcPath)}`);
+  log(`Generating .eslintrc to ${blue(rcPath)}`);
 
-    const reactRules = react ? makeReactRules({isDev: true}) : {};
-    const rules = assign({}, baseRules, reactRules);
-    const content = JSON.stringify(
-      assign(config, {rules})
-      , null
-      , '\t'
-    );
+  merge(config, {
+    rules: rules.web || rules
+  });
 
-    try {
-      fs.writeFileSync(rcPath, content);
-    } catch (err) {
-      log('Error generating .eslintrc');
-      throw err;
-    }
+  const content = JSON.stringify(config, null, '\t');
+
+  try {
+    fs.writeFileSync(rcPath, content);
+  } catch (err) {
+    log('Error generating .eslintrc');
+    throw err;
   }
 }

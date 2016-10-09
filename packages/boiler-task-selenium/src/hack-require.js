@@ -4,7 +4,7 @@ import _ from 'lodash';
 import requireHacker from 'require-hacker';
 // Configuration
 import {defaults as defaultBrowsers} from './browser-stack/browsers';
-import {defaults as defaultDevices} from './browser-stack/devices.js';
+import {defaults as defaultDevices} from './browser-stack/devices';
 
 
 export default {

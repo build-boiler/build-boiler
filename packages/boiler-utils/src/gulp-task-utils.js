@@ -2,7 +2,7 @@ import path from 'path';
 import {PluginError} from 'gulp-util';
 import {log, blue, magenta} from './build-logger';
 
-export default  {
+export default {
   /**
    * Create a file path from the base/root
    * @param {String|undefined} root

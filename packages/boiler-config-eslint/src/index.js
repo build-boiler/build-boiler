@@ -1,7 +1,4 @@
 import path from 'path';
-import assign from 'object-assign';
-import baseRules from './base-rules';
-import reactRules from './react-rules';
 import generateEslint from './generate-eslintrc';
 
 /**
@@ -12,20 +9,36 @@ import generateEslint from './generate-eslintrc';
  * @return {Object}
  */
 export default function(opts) {
-  const {generate, react} = opts;
-  const rules = baseRules(opts);
+  const {
+    generate,
+    isDev,
+    lintEnv,
+    rules = {}
+  } = opts;
+  const resolve = path.resolve.bind(path, __dirname, 'config');
+  let configFile;
 
-  if (react) {
-    assign(rules, reactRules(opts));
-  }
+  switch (lintEnv) {
+    case 'build':
+      if (generate) {
+        generateEslint(opts);
+      }
 
-  if (generate) {
-    generateEslint(opts);
+      configFile = resolve('build.js');
+      break;
+    case 'test':
+      configFile = resolve('test.js');
+      break;
+    case 'web':
+    // fallthrough
+    default:
+      configFile = resolve(`web-${isDev ? 'dev' : 'prod'}.js`);
+      break;
   }
 
   return {
-    rules,
-    configFile: path.join(__dirname, 'eslint-config.json'),
+    rules: rules[lintEnv] || rules,
+    configFile,
     useEslintrc: false
   };
 }

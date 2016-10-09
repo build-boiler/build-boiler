@@ -26,14 +26,13 @@
     "webpack"
   ],
   "dependencies": {
-    "babel-eslint": "^5.0.0",
     "babel-plugin-transform-runtime": "^6.8.0",
     "boiler-config-eslint": "^4.3.0",
     "boiler-utils": "^4.3.0",
-    "eslint": "^1.10.3",
+    "eslint": "^3.4.0",
     "eslint-friendly-formatter": "^1.1.0",
-    "eslint-plugin-react": "^3.16.1",
-    "gulp-eslint": "^1.1.1"
+    "gulp-eslint": "^3.0.1",
+    "gulp-if": "^2.0.1"
   },
   "scripts": {
     "test": "snyk test"

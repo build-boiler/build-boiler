@@ -62,7 +62,7 @@ export default function(gulpConfig) {
           parser(m, options, log) {
             const {publicPath} = options.webpack_stats;
             const [fullName] = m.assets;
-            return process.env.TRAVIS_BRANCH ? publicPath  +  fullName : `/${fullName}`;
+            return process.env.TRAVIS_BRANCH ? publicPath + fullName : `/${fullName}`;
           },
           path(m, options, log) {
             const {name} = m;

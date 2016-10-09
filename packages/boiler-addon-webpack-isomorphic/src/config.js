@@ -53,7 +53,7 @@ export default function(config, data) {
         const {devPort, devHost} = sources;
         const {branch, asset_path: assetPath} = environment;
         const bsPath = `http://${devHost}:${devPort}/`;
-        const publicPath = isUndefined(branch) ?  bsPath : `${assetPath}/`;
+        const publicPath = isUndefined(branch) ? bsPath : `${assetPath}/`;
         const {modules = {}} = isomorphic;
         const {target} = modules;
 

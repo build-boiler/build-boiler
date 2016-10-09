@@ -36,9 +36,9 @@ export default function(gulp, plugins, config) {
     const bsPath = isDev ? `http://${devHost}:${devPort}/` : '/';
 
     if (runHot) {
-      publicPath = isUndefined(branch) ?  devPath : assetPath;
+      publicPath = isUndefined(branch) ? devPath : assetPath;
     } else {
-      publicPath = isUndefined(branch) ?  bsPath : assetPath;
+      publicPath = isUndefined(branch) ? bsPath : assetPath;
     }
 
     const baseConfig = assign({}, config, {
@@ -91,7 +91,7 @@ export default function(gulp, plugins, config) {
           const {errors, warnings} = stats.toJson({errorDetails: true});
 
           [errors, warnings].forEach((stat, i) => {
-            let type = i ? 'warning' : 'error';
+            const type = i ? 'warning' : 'error';
             if (stat.length) {
               const [statStr] = stat;
               /*eslint-disable*/
@@ -112,7 +112,7 @@ export default function(gulp, plugins, config) {
 
         //avoid multiple calls of gulp callback
         if (isFunction(done)) {
-          let gulpCb = done;
+          const gulpCb = done;
           done = null;
 
           if (isMaster) {

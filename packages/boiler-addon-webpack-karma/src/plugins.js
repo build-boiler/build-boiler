@@ -11,7 +11,7 @@ export default function(config, data) {
     const provide = 'ProvidePlugin';
     const tools = 'Webpack_isomorphic_tools_plugin';
     const testDefine = {
-      ['process.env']: {
+      'process.env': {
         TEST_FILE: file ? JSON.stringify(file) : null
       }
     };

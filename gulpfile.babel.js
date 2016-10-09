@@ -3,7 +3,6 @@ import path from 'path';
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 import formatter from 'eslint-friendly-formatter';
-import makeEslintConfig from 'eslint-config';
 
 const scripts = './packages/*/src/**/*.js';
 const tests = [
@@ -15,10 +14,11 @@ const force = process.argv.indexOf('--force') !== -1;
 
 if (force || release) {
   let tasks = {};
-  let plugins;
+  let plugins, makeEslintConfig;
 
   try {
     const build = require('./packages/boiler-core');
+    makeEslintConfig = require('./packages/boiler-config-eslint');
 
     ({tasks, plugins} = build(gulp));
   } catch (err) {
@@ -48,6 +48,8 @@ if (force || release) {
 
   const {eslint} = plugins;
   const eslintFn = (lintEnv) => {
+    if (!makeEslintConfig) return cb => cb();
+
     const eslintConfig = makeEslintConfig({
       basic: false,
       react: true,
@@ -64,8 +66,9 @@ if (force || release) {
   const config = {force, release};
 
   gulp.task('babel', tasks.babel || babelFn(gulp, plugins, config));
-  gulp.task('lint:build', tasks.lint || eslintFn('build'));
-  gulp.task('lint:test', tasks.lint || eslintFn('test'));
+  gulp.task('clean', tasks.clean);
+  gulp.task('lint:build', tasks.eslint || eslintFn('build'));
+  gulp.task('lint:test', tasks.eslint || eslintFn('test'));
   gulp.task('lint', gulp.parallel('lint:test', 'lint:build'));
   gulp.task('copy', tasks.copy || copyFn(gulp, plugins, config));
   gulp.task('build', gulp.series(

@@ -35,7 +35,7 @@ export default function(config, data) {
 
     const isoLoaders = loaders.map(data => {
       const {test, loader} = data;
-      let ret = data;
+      const ret = data;
 
       if (test.toString() === re || /css/.test(loader)) {
         data.loader = mockAssetLoader;

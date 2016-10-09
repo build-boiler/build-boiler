@@ -6,7 +6,7 @@ import boilerUtils from 'boiler-utils';
 // Helpers
 import runWebdriverio from './webdriverio/run';
 import runNightwatch from './nightwatch/run';
-import parseNames from  './parse-browser-names';
+import parseNames from './parse-browser-names';
 
 
 // Temp directory for nightwatch-*.json files (deleted after test runs)
