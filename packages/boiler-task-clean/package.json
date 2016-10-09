@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-clean",
-  "version": "4.0.2",
+  "version": "4.2.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-utils": "^4.0.2",
+    "boiler-utils": "^4.2.0",
     "del": "^2.2.0"
   },
   "scripts": {
