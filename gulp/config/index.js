@@ -42,6 +42,7 @@ export default {
         });
       }
     },
+    minify: true,
     /**
      * Add and omit custom tags
      * @param {Object} nunj Nunjucks instance

@@ -34,7 +34,8 @@ export default function(app, opts = {}) {
   const hooks = [
     'on-load',
     'pre-render',
-    'pre-compile'
+    'pre-compile',
+    'post-render'
   ];
 
   hooks.forEach(hook => {
