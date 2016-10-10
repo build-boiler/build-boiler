@@ -12,37 +12,38 @@ addons:
     packages:
       - g++-4.8
 cache:
-  - node_modules
-  - packages/boiler-addon-assemble-isomorphic-memory/node_modules
-  - packages/boiler-addon-assemble-isomorphic-static/node_modules
-  - packages/boiler-addon-assemble-middleware/node_modules
-  - packages/boiler-addon-assemble-nunjucks/node_modules
-  - packages/boiler-addon-isomorphic-tools/node_modules
-  - packages/boiler-addon-webpack-babel/node_modules
-  - packages/boiler-addon-webpack-isomorphic/node_modules
-  - packages/boiler-addon-webpack-karma/node_modules
-  - packages/boiler-addon-webpack-loaders-base/node_modules
-  - packages/boiler-addon-webpack-loaders-optimize/node_modules
-  - packages/boiler-addon-webpack-styles/node_modules
-  - packages/boiler-config-assemble/node_modules
-  - packages/boiler-config-base/node_modules
-  - packages/boiler-config-eslint/node_modules
-  - packages/boiler-config-webpack/node_modules
-  - packages/boiler-core/node_modules
-  - packages/boiler-preset-base/node_modules
-  - packages/boiler-preset-plus/node_modules
-  - packages/boiler-task-assemble/node_modules
-  - packages/boiler-task-babel/node_modules
-  - packages/boiler-task-browser-sync/node_modules
-  - packages/boiler-task-clean/node_modules
-  - packages/boiler-task-copy/node_modules
-  - packages/boiler-task-eslint/node_modules
-  - packages/boiler-task-karma/node_modules
-  - packages/boiler-task-mocha/node_modules
-  - packages/boiler-task-nodemon/node_modules
-  - packages/boiler-task-selenium/node_modules
-  - packages/boiler-task-webpack/node_modules
-  - packages/boiler-utils/node_modules
+  directories:
+    - node_modules
+    - packages/boiler-addon-assemble-isomorphic-memory/node_modules
+    - packages/boiler-addon-assemble-isomorphic-static/node_modules
+    - packages/boiler-addon-assemble-middleware/node_modules
+    - packages/boiler-addon-assemble-nunjucks/node_modules
+    - packages/boiler-addon-isomorphic-tools/node_modules
+    - packages/boiler-addon-webpack-babel/node_modules
+    - packages/boiler-addon-webpack-isomorphic/node_modules
+    - packages/boiler-addon-webpack-karma/node_modules
+    - packages/boiler-addon-webpack-loaders-base/node_modules
+    - packages/boiler-addon-webpack-loaders-optimize/node_modules
+    - packages/boiler-addon-webpack-styles/node_modules
+    - packages/boiler-config-assemble/node_modules
+    - packages/boiler-config-base/node_modules
+    - packages/boiler-config-eslint/node_modules
+    - packages/boiler-config-webpack/node_modules
+    - packages/boiler-core/node_modules
+    - packages/boiler-preset-base/node_modules
+    - packages/boiler-preset-plus/node_modules
+    - packages/boiler-task-assemble/node_modules
+    - packages/boiler-task-babel/node_modules
+    - packages/boiler-task-browser-sync/node_modules
+    - packages/boiler-task-clean/node_modules
+    - packages/boiler-task-copy/node_modules
+    - packages/boiler-task-eslint/node_modules
+    - packages/boiler-task-karma/node_modules
+    - packages/boiler-task-mocha/node_modules
+    - packages/boiler-task-nodemon/node_modules
+    - packages/boiler-task-selenium/node_modules
+    - packages/boiler-task-webpack/node_modules
+    - packages/boiler-utils/node_modules
 notifications:
   email:
     on_success: never

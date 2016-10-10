@@ -77,7 +77,7 @@
     "js-cookie": "^2.1.0",
     "js-yaml": "^3.5.5",
     "key-mirror": "^1.0.1",
-    "lerna": "2.0.0-beta.28",
+    "lerna": "2.0.0-beta.30",
     "lodash": "^4.0.0",
     "meow": "^3.7.0",
     "mockery": "^1.7.0",
@@ -90,7 +90,7 @@
     "run-sequence": "^1.1.5",
     "semver": "^5.1.0",
     "sinon": "^1.17.3",
-    "webpack": "^2.1.0-beta.22"
+    "webpack": "2.1.0-beta.22"
   },
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",

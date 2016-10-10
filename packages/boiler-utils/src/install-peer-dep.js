@@ -1,5 +1,6 @@
 import path from 'path';
 import {execSync} from 'child_process';
+import {readJsonSync} from 'fs-extra';
 import {log, blue, magenta} from './build-logger';
 import tryExists from './try-exists';
 
@@ -28,7 +29,7 @@ export default function(rootDir, addon) {
     if (exists) {
       const re = new RegExp(`^(.*/node_modules/${name}/).*$`);
       const modulePath = exists.replace(re, '$1package.json');
-      const {version: installedVersion} = require(modulePath);
+      const {version: installedVersion} = readJsonSync(modulePath);
 
       if (installedVersion !== version) {
         list.push(`${name}@${version}`);
@@ -44,7 +45,7 @@ export default function(rootDir, addon) {
   if (deps.length) {
     try {
       log(`Addon ${blue(addon)} Installing  ${magenta(deps)} to devDependencies`);
-      execSync(`npm i -D ${deps}`, {cwd, stdio: 'inherit'});
+      execSync(`npm config set save-exact true && npm i -S ${deps}`, {cwd, stdio: 'inherit'});
       installed.push(...depNames);
     } catch (err) {
       const message = `Error installing ${deps}, please install in your project`;
