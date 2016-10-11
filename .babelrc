@@ -1,19 +1,12 @@
 {
-  "presets": ["react"],
+  "presets": ["es2015-node4", "es2017", "react"],
   "plugins": [
     "add-module-exports",
+    "transform-class-properties",
+    "transform-object-rest-spread",
     ["transform-runtime", {
       "polyfill": false,
       "regenerator": false
-    }],
-    "transform-es2015-for-of",
-    "syntax-object-rest-spread",
-    "transform-es2015-parameters",
-    "transform-object-rest-spread",
-    "transform-async-to-generator",
-    "transform-es2015-spread",
-    "transform-es2015-destructuring",
-    "transform-es2015-modules-commonjs",
-    "transform-strict-mode"
+    }]
   ]
 }

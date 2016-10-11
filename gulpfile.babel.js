@@ -3,6 +3,7 @@ import path from 'path';
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 import formatter from 'eslint-friendly-formatter';
+import del from 'del';
 
 const scripts = './packages/*/src/**/*.js';
 const tests = [
@@ -64,9 +65,10 @@ if (force || release) {
     };
   };
   const config = {force, release};
+  const clean = () => del(path.join(process.cwd(), 'packages/*/dist'));
 
   gulp.task('babel', tasks.babel || babelFn(gulp, plugins, config));
-  gulp.task('clean', tasks.clean);
+  gulp.task('clean', tasks.clean || clean);
   gulp.task('lint:build', tasks.eslint || eslintFn('build'));
   gulp.task('lint:test', tasks.eslint || eslintFn('test'));
   gulp.task('lint', gulp.parallel('lint:test', 'lint:build'));
