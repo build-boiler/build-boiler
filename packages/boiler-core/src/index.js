@@ -117,7 +117,7 @@ export default function(gulp, opts = {}) {
    * with the parent config hooks from `gulp/config/index.js`
    */
   debug('[get-task-config: start]');
-  const config  = getTaskConfig(baseConfig, parentConfig, {
+  const config = getTaskConfig(baseConfig, parentConfig, {
     tasks: taskNames
   });
   debug('[get-task-config: end]');

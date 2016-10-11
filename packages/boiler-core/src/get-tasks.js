@@ -100,7 +100,7 @@ export default function(gulp, plugins, config, boilerData) {
   function recurseTasks(basePath, dirs, isModule) {
     return dirs.reduce((acc, name) => {
       const taskPath = join(basePath, name);
-      let isDir = stat(taskPath).isDirectory();
+      const isDir = stat(taskPath).isDirectory();
       let taskName;
       if (isDir) {
         if ( !exists(join(taskPath, 'index.js')) ) {

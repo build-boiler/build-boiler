@@ -109,7 +109,7 @@ export default class GetSnippet {
           <Wrapper
             reactor={reactor}
             {...rest}
-            >
+          >
             {children}
           </Wrapper>
         );

@@ -215,13 +215,21 @@ export default {
   /**
    * Config for `boiler-config-eslint` to lint build files (gulp-eslint)
    * and client files in webpack (eslint-loader)
-   * basic => only basic rules for linting
-   * react => use react rules
-   * generate => generate an
+   * rules => will be written to .eslintrc, can have a 'env' key or be top level
+   * generate => generate a .eslintrc
    */
   eslint: {
-    basic: false,
-    react: true,
+    rules: {
+      web: {
+
+      },
+      build: {
+
+      },
+      test: {
+
+      }
+    },
     generate: true
   },
   /**

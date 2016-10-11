@@ -5,7 +5,7 @@ export default function(gulp, plugins, config, opts) {
 
   if (release) {
     src.push(
-      addbase('packages/*/dist/**/*.js')
+      addbase('packages/*/dist')
     );
   }
 

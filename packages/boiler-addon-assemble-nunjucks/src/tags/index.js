@@ -14,7 +14,9 @@ export default function(nunj, app, opts = {}) {
   const {nunjucks: registerFn} = fn;
   const ignore = ['index'];
   const isomorphicTags = ['get-snippet'];
-  const add = (Tag) => nunj.addExtension(Tag.name, new Tag(app));
+  const add = (Tag) => {
+    nunj.addExtension(Tag.name, new Tag(app));
+  };
   const {
     requireDir,
     transformArray

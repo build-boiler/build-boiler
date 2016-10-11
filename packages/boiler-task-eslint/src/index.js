@@ -7,7 +7,7 @@ export default function(gulp, plugins, config, parentMod) {
     runParentFn: callParent,
     runCustomTask: runFn
   } = boilerUtils;
-  const {eslint} = plugins;
+  const {eslint, gulpIf} = plugins;
   const {
     utils,
     environment,
@@ -54,7 +54,8 @@ export default function(gulp, plugins, config, parentMod) {
     const task = () => {
       return gulp.src(newSrc)
         .pipe(eslint(eslintConfig))
-        .pipe(eslint.format(formatter));
+        .pipe(eslint.format(formatter))
+        .pipe(gulpIf(!isDev, eslint.failAfterError()));
     };
 
     return runFn(task, fn);

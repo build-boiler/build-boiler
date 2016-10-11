@@ -46,7 +46,7 @@ export default function runNightwatch({opt, concurrent, config, runnerOptions, t
   };
 
   const addCaps = (seleniumConfig) => {
-    const {baseUrl, specs, capabilities, ...selenium} = seleniumConfig;
+    const {baseUrl, capabilities, ...selenium} = seleniumConfig;
 
     return capabilities.reduce((acc, cap) => {
       const {browserName} = cap;

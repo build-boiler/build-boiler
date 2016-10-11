@@ -56,12 +56,12 @@ export default function(config, opts = {}) {
   if (isString(data)) {
     const dataPath = makeDataPath(data);
 
-    parentData =  plasma.load(dataPath, {namespace: true});
+    parentData = plasma.load(dataPath, {namespace: true});
   } else if (Array.isArray(data)) {
     const [fp, opts] = data;
     const dataPath = makeDataPath(fp);
 
-    parentData =  plasma.load(dataPath, opts);
+    parentData = plasma.load(dataPath, opts);
   } else if (isPlainObject(data)) {
     parentData = data;
   } else if (isFunction(data)) {

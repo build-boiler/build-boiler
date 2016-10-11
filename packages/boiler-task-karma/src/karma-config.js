@@ -5,7 +5,7 @@ import makeWebpackConfig from 'boiler-config-webpack';
 import boilerUtils from 'boiler-utils';
 import makeDeviceFilter from './filter-devices';
 import defaultBsBrowsers from './browser-stack/browsers';
-import defaultBsDevices from './browser-stack/devices.js';
+import defaultBsDevices from './browser-stack/devices';
 
 const {colors, log} = gutil;
 const {magenta} = colors;
@@ -40,7 +40,7 @@ export default function(config) {
     assign({}, defaultBsDevices, customDevices) :
     defaultBsDevices;
   const customLaunchers = assign({}, bsBrowsers, bsDevices);
-  let preprocessors = {};
+  const preprocessors = {};
   let ENV, runnerData;
 
   if (isDev) {
@@ -85,7 +85,7 @@ export default function(config) {
   if (ENV === 'ci' || multiDevice || nonLocalDevice.length > 0) {
     const {name, version} = pkg;
     const {BROWSERSTACK_API, BROWSERSTACK_USERNAME} = bsConfig;
-    const filterDevices =  makeDeviceFilter({bsBrowsers, bsDevices});
+    const filterDevices = makeDeviceFilter({bsBrowsers, bsDevices});
     const browsers = filterDevices({desktop, mobile});
     const bsNames = browsers.map(key => {
       const {device, browser} = customLaunchers[key];

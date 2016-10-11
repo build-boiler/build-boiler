@@ -78,7 +78,7 @@ export default function(gulp, plugins, config) {
         }
 
         const logFp = `.bslog-${new Date().getTime()}.txt`;
-        let startTunnel = thunk(browserStackTunnel.start, browserStackTunnel);
+        const startTunnel = thunk(browserStackTunnel.start, browserStackTunnel);
         try {
           yield startTunnel(Object.assign(browserStackOptions.spawnTunnelOptions, {force: true, logfile: logFp}));
         } catch (err) {
@@ -88,9 +88,9 @@ export default function(gulp, plugins, config) {
         if (tunnelOnly) {
           log('Visit BrowserStack Live to QA: https://www.browserstack.com/start');
         } else {
-          let cp = thunk(startRunner);
-          let code = yield cp();
-          let stopTunnel = thunk(browserStackTunnel.stop, browserStackTunnel);
+          const cp = thunk(startRunner);
+          const code = yield cp();
+          const stopTunnel = thunk(browserStackTunnel.stop, browserStackTunnel);
 
           try {
             yield stopTunnel();
@@ -117,14 +117,14 @@ export default function(gulp, plugins, config) {
       const install = require('./selenium-standalone/install');
 
       runGen(function *() {
-        let seleniumInstall = thunk(install);
+        const seleniumInstall = thunk(install);
         try {
           yield seleniumInstall(seleniumOptions.installOptions);
         } catch (err) {
           logError({err, plugin: '[selenium install]'});
         }
 
-        let seleniumStart = thunk(selenium.start, selenium);
+        const seleniumStart = thunk(selenium.start, selenium);
         let child;
 
         try {
@@ -133,8 +133,8 @@ export default function(gulp, plugins, config) {
           logError({err, plugin: `[selenium start]: ${err.message} => pkill java`});
         }
 
-        let cp = thunk(startRunner);
-        let code = yield cp();
+        const cp = thunk(startRunner);
+        const code = yield cp();
 
         try {
           child.kill();
@@ -145,8 +145,8 @@ export default function(gulp, plugins, config) {
       });
     } else if (testEnv === 'ci') {
       runGen(function *() {
-        let cp = thunk(startRunner);
-        let code = yield cp();
+        const cp = thunk(startRunner);
+        const code = yield cp();
 
         exit(code);
       });

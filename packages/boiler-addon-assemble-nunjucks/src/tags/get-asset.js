@@ -67,7 +67,7 @@ export default class GetAsset {
 
         styles = `\n<style>\n${styles}\n</style>\n`;
       } else {
-        styles =  Object.keys(main).reduce((str, key) => {
+        styles = Object.keys(main).reduce((str, key) => {
           const src = main[key];
 
           return str + makeLink(src);

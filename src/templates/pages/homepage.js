@@ -18,8 +18,8 @@ const comp = (
     reactor={fluxStore}
     {...props}
   >
-  <Sample />
-  <AnotherSample />
+    <Sample />
+    <AnotherSample />
   </Wrapper>
 );
 

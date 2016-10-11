@@ -86,7 +86,7 @@ export default function(config, data) {
   const modRoot = addroot(moduleName, 'node_modules');
   const babelKeys = ['plugins', 'presets'];
   const babelRootQuery = Object.keys(babelQuery).reduce((acc, key) => {
-    let val = babelQuery[key];
+    const val = babelQuery[key];
 
     //hack to get babel plugins to work from nested directory
     //https://github.com/babel/babel-loader/issues/166
