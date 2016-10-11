@@ -1,6 +1,7 @@
 import fs from 'fs';
 import _ from 'lodash';
 import makeConfig from './make-webpack-config';
+import transformWebpack2Props from './utils/transform-webpack-2-properties';
 
 export default function(config) {
   const {
@@ -47,14 +48,11 @@ export default function(config) {
   const defaultConfig = {
     context,
     resolveLoader: {
-      //fallback for Webpack 1
-      modulesDirectories: loaderRoot,
       modules: loaderRoot
     },
     resolve: {
       alias,
       extensions: [
-        '',
         '.js',
         '.json',
         '.jsx',
@@ -64,8 +62,6 @@ export default function(config) {
         '.yaml',
         '.yml'
       ],
-      //fallback for Webpack 1
-      modulesDirectories: moduleRoot,
       modules: moduleRoot
     },
     node,
@@ -76,5 +72,7 @@ export default function(config) {
     dirs: moduleDirs
   });
 
-  return configMethods[ENV]();
+  return transformWebpack2Props(
+    configMethods[ENV]()
+  );
 }

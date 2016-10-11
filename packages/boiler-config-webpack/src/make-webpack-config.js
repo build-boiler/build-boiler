@@ -166,7 +166,6 @@ export default function(config, defaultConfig, opts = {}) {
 
   assign(defaultConfig, {
     cache: isDev,
-    debug: isDev,
     externals,
     output: {
       path: addbase(buildDir),
