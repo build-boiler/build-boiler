@@ -1,4 +1,5 @@
 import path from 'path';
+import intersection from 'lodash/intersection';
 import generateEslint from './generate-eslintrc';
 
 /**
@@ -9,6 +10,7 @@ import generateEslint from './generate-eslintrc';
  * @return {Object}
  */
 export default function(opts) {
+  const acceptedKeys = ['web', 'build', 'test'];
   const {
     generate,
     isDev,
@@ -16,6 +18,8 @@ export default function(opts) {
     rules = {}
   } = opts;
   const resolve = path.resolve.bind(path, __dirname, 'config');
+  const keys = Object.keys(rules);
+  const hasCustomRules = keys.length && intersection(acceptedKeys, keys).length;
   let configFile;
 
   switch (lintEnv) {
@@ -37,7 +41,7 @@ export default function(opts) {
   }
 
   return {
-    rules: rules[lintEnv] || rules,
+    rules: hasCustomRules ? rules[lintEnv] : rules,
     configFile,
     useEslintrc: false
   };

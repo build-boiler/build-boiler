@@ -10,7 +10,8 @@ export default function(config, data) {
     taskName,
     environment,
     sources,
-    utils
+    utils,
+    webpackConfig
   } = config;
   const {
     srcDir,
@@ -19,6 +20,7 @@ export default function(config, data) {
   } = sources;
   const {addbase} = utils;
   const {isDev} = environment;
+  const {includePaths} = webpackConfig;
 
   const styleConfig = {
     postcss: [
@@ -33,7 +35,10 @@ export default function(config, data) {
         ],
         cascade: isDev
       })
-    ]
+    ],
+    sassLoader: {
+      includePaths: Array.isArray(includePaths) ? includePaths : [includePaths]
+    }
   };
 
   if (!isMainTask && taskName === globalBundleName) {
