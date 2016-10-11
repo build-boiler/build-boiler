@@ -1,0 +1,30 @@
+{
+  "name": "boiler-config-babelrc",
+  "version": "5.0.0",
+  "description": "Babelrc Config",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "snyk test"
+  },
+  "author": "DtotheFP",
+  "license": "Copyright 2016",
+  "homepage": "https://github.com/build-boiler/build-boiler",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/build-boiler/build-boiler/build-boiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/build-boiler/build-boiler/issues"
+  },
+  "dependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-class-properties": "^6.16.0",
+    "babel-plugin-transform-object-rest-spread": "^6.16.0",
+    "babel-preset-es2015-node4": "^2.1.0",
+    "babel-preset-es2015-node6": "^0.3.0",
+    "babel-preset-es2017": "^6.16.0"
+  },
+  "devDependencies": {
+    "snyk": "^1.18.0"
+  }
+}
