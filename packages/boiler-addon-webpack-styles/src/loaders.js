@@ -1,10 +1,8 @@
-import isString from 'lodash/isString';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default function(config, data) {
-  const {DEBUG, environment, isMainTask, quick, webpackConfig} = config;
+  const {DEBUG, environment, isMainTask, quick} = config;
   const {isMaster} = environment;
-  const {includePaths} = webpackConfig;
   const {loaders} = data;
   //disable SCSS/CSS sourcemaps in PROD
   //this will not disable for extract text plugin with `vendors` bundle
@@ -17,15 +15,6 @@ export default function(config, data) {
     'outputStyle=expanded'
   ];
   let sassLoader, cssLoader;
-
-  if (Array.isArray(includePaths)) {
-    includePaths.reduce((list, fp) => {
-      list.push(`includePaths[]=${fp}`);
-      return list;
-    }, sassParams);
-  } else if (isString(includePaths)) {
-    sassParams.push(`includePaths[]=${includePaths}`);
-  }
 
   if (!!sourceMap) {
     sassParams.push('sourceMap', 'sourceMapContents=true');
