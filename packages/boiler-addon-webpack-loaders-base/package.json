@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-webpack-loaders-base",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Build Boilerplate Webpack Base Loaders",
   "main": "dist/index.js",
   "author": "DtotheFP",
