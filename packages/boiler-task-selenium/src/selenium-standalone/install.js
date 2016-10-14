@@ -1,5 +1,7 @@
 import {merge} from 'lodash';
 
+console.log(process.arch);
+
 const config = {
   // check for more recent versions of selenium here:
   // http://selenium-release.storage.googleapis.com/index.html
@@ -8,10 +10,11 @@ const config = {
     chrome: {
       // check for more recent versions of chrome driver here:
       // http://chromedriver.storage.googleapis.com/index.html
-      version: '2.21',
+      version: '2.24',
       arch: process.arch,
       baseURL: 'http://chromedriver.storage.googleapis.com'
-    }
+    },
+    firefox: {}
   },
   logger(message) {
     global.console.log(message);

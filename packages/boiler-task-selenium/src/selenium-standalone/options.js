@@ -1,9 +1,6 @@
 export default {
-  installOpts: {
-    version: '2.53.0'
-  },
+  installOpts: {},
   startOptions: {
-    version: '2.53.0',
     logLevel: 'verbose',
     spawnOptions: {
       logLevel: 'verbose',
