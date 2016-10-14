@@ -7,7 +7,7 @@ export default function(gulpConfig) {
     isMainTask,
     sources,
     utils,
-    debug
+    debug = false
   } = gulpConfig;
   const {statsFile, globalStatsFile, buildDir} = sources;
   const {addbase} = utils;
