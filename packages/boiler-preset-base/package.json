@@ -1,6 +1,6 @@
 {
   "name": "boiler-preset-base",
-  "version": "5.1.3",
+  "version": "5.1.2",
   "description": "Build Boilerplate Base",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,12 +27,12 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-task-assemble": "^5.1.3",
-    "boiler-task-browser-sync": "^5.1.3",
-    "boiler-task-clean": "^5.1.3",
-    "boiler-task-copy": "^5.1.3",
-    "boiler-task-eslint": "^5.1.3",
-    "boiler-task-webpack": "^5.1.3"
+    "boiler-task-assemble": "^5.1.2",
+    "boiler-task-browser-sync": "^5.1.2",
+    "boiler-task-clean": "^5.1.2",
+    "boiler-task-copy": "^5.1.2",
+    "boiler-task-eslint": "^5.1.2",
+    "boiler-task-webpack": "^5.1.2"
   },
   "scripts": {
     "test": "snyk test"
