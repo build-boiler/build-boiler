@@ -1,6 +1,6 @@
 {
   "name": "boiler-preset-plus",
-  "version": "3.4.5",
+  "version": "3.4.6",
   "description": "Build Boilerplate Plus",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -29,7 +29,7 @@
     "babel-plugin-transform-runtime": "^6.8.0",
     "boiler-preset-base": "^3.4.5",
     "boiler-task-karma": "^3.4.5",
-    "boiler-task-selenium": "^3.4.5"
+    "boiler-task-selenium": "^3.4.6"
   },
   "scripts": {
     "test": "snyk test"
