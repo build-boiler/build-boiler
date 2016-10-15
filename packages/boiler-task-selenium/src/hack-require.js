@@ -89,7 +89,7 @@ export default {
         }
 
         const {code} = babel.transform(str, {
-          presets: ['es2015'],
+          presets: [require.resolve('babel-preset-es2015-node4')],
           plugins: ['add-module-exports']
         });
 
