@@ -1,9 +1,15 @@
+import config from './config';
+
+
+const {version, drivers} = config;
 export default {
   installOpts: {
-    version: '2.53.0'
+    version,
+    drivers
   },
   startOptions: {
-    version: '2.53.0',
+    version,
+    drivers,
     logLevel: 'verbose',
     spawnOptions: {
       logLevel: 'verbose',
