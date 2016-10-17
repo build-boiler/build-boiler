@@ -1,6 +1,6 @@
 {
   "name": "boiler-preset-base",
-  "version": "5.1.4",
+  "version": "5.1.5",
   "description": "Build Boilerplate Base",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -31,8 +31,8 @@
     "boiler-task-browser-sync": "^5.1.4",
     "boiler-task-clean": "^5.1.4",
     "boiler-task-copy": "^5.1.4",
-    "boiler-task-eslint": "^5.1.4",
-    "boiler-task-webpack": "^5.1.4"
+    "boiler-task-eslint": "^5.1.5",
+    "boiler-task-webpack": "^5.1.5"
   },
   "scripts": {
     "test": "snyk test"
