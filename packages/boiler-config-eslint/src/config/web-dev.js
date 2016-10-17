@@ -6,6 +6,7 @@ export default {
     '../rules/react-rules.js'
   ].map(resolver(__dirname)),
   rules: {
+    'no-debugger': 1,
     'no-unused-vars': ['warn', { vars: 'all', args: 'none' }],
     'semi': ['warn', 'always'],
     'comma-dangle': ['warn', 'never'],
