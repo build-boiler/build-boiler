@@ -30,7 +30,7 @@
     "boiler-config-eslint": "^5.1.5",
     "boiler-utils": "^5.1.4",
     "eslint": "^3.4.0",
-    "eslint-friendly-formatter": "^1.1.0",
+    "eslint-friendly-formatter": "2.0.6",
     "gulp-eslint": "^3.0.1",
     "gulp-if": "^2.0.1"
   },
