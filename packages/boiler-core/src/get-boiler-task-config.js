@@ -86,6 +86,8 @@ export default function(baseConfig, taskConfig, opts = {}) {
   //into the task where they belong
   const shouldRev = webpack.shouldRev || taskConfig.shouldRev;
   const includePaths = webpack.includePaths || taskConfig.includePaths || [];
+  const {timestamp} = webpack;
+  const currTime = new Date().getTime();
 
   const webpackConfig = {
     alias: {},
@@ -107,20 +109,35 @@ export default function(baseConfig, taskConfig, opts = {}) {
     webpackPaths
   };
 
+  const addTimeStamp = (fp) => {
+    if (!timestamp) return fp;
+
+    return fp.replace(/^(.*)\.(js|css)$/, (all, name, ext) => {
+      return `${name}-${currTime}.${ext}`;
+    });
+  };
+
   const paths = Object.keys(webpackPaths).reduce((acc, key) => {
     const [devPath, prodPath] = webpackPaths[key];
     const revProd = !isDev && shouldRev;
 
     if (key === 'fileLoader') {
-      Object.assign(acc, {[key]: devPath});
+      Object.assign(acc, {
+        [key]: devPath
+      });
     } else {
-      Object.assign(acc, {[key]: revProd && !isServer ? prodPath : devPath});
+      const fp = revProd && !isServer ? addTimeStamp(prodPath) : devPath;
+
+      Object.assign(acc, {
+        [key]: fp
+      });
     }
 
     return acc;
   }, {});
 
   _.merge(webpackConfig, webpack, {
+    timestamp: timestamp && currTime,
     includePaths,
     paths
   });
