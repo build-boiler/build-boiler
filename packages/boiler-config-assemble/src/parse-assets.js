@@ -6,14 +6,13 @@ import makeTools from 'boiler-addon-isomorphic-tools';
 import {sync as globSync} from 'globby';
 
 export default function(config, opts = {}) {
-  const {environment, sources, utils} = config;
+  const {sources, utils} = config;
   const {
     buildDir,
     statsDir,
     globalStatsFile,
     statsFile
   } = sources;
-  const {isDev} = environment;
   const {addbase} = utils;
   const {isomorphic} = opts;
   //Allow passing a custom `statsDir` from `sources`, useful for stuff
@@ -66,7 +65,7 @@ export default function(config, opts = {}) {
       isMainTask: true
     }));
 
-    prom = tools.development(isDev).server(statsPath).then(() => {
+    prom = tools.server(statsPath).then(() => {
       return Promise.resolve(
         readStats(statsPaths, tools)
       );
