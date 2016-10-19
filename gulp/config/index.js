@@ -249,6 +249,10 @@ export default {
      */
     includePaths: [],
     /**
+     * Include a timestamp in the JS/CSS filepath
+     */
+    timestamp: true,
+    /**
      * Whether to use https://github.com/mikechau/sri-stats-webpack-plugin
      * to write data for subresource integrity
      * @param {Boolean|String} string specifies sha
