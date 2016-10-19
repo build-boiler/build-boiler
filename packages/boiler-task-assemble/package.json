@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-assemble",
-  "version": "3.4.5",
+  "version": "3.5.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -28,8 +28,8 @@
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
     "base-watch": "^0.1.2",
-    "boiler-config-assemble": "^3.4.5",
-    "boiler-utils": "^3.4.5",
+    "boiler-config-assemble": "^3.5.0",
+    "boiler-utils": "^3.5.0",
     "gulp-if": "^2.0.0",
     "lodash": "^4.0.0",
     "snyk": "^1.18.0"
