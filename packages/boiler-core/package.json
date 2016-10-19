@@ -1,6 +1,6 @@
 {
   "name": "boiler-core",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "Build Boilerplate Core",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,8 +27,8 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-config-base": "^4.4.0",
-    "boiler-utils": "^4.4.0",
+    "boiler-config-base": "^4.4.1",
+    "boiler-utils": "^4.4.1",
     "globby": "^4.0.0",
     "gulp-load-plugins": "^1.2.0",
     "lodash": "^4.0.0",
