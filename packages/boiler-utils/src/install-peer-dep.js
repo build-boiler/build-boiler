@@ -1,5 +1,6 @@
 import path from 'path';
 import {execSync} from 'child_process';
+import {readJsonSync} from 'fs-extra';
 import {log, blue, magenta} from './build-logger';
 import tryExists from './try-exists';
 
@@ -25,14 +26,26 @@ export default function(rootDir, addon) {
     const version = peerDependencies[name];
     const exists = tryExists(name, {resolve: true, omitReq: true});
 
-    return exists ? list : [...list, `${name}@${version}`];
+    if (exists) {
+      const re = new RegExp(`^(.*/node_modules/${name}/).*$`);
+      const modulePath = exists.replace(re, '$1package.json');
+      const {version: installedVersion} = readJsonSync(modulePath);
+
+      if (installedVersion[0] !== version[0]) {
+        list.push(`${name}@${version}`);
+      }
+    } else {
+      list.push(`${name}@${version}`);
+    }
+
+    return list;
   }, []).join(' ');
   const installed = [];
 
   if (deps.length) {
     try {
-      log(`Addon ${blue(addon)} Installing  ${magenta(deps)} to devDependencies`);
-      execSync(`npm i -D ${deps}`, {cwd, stdio: 'inherit'});
+      log(`Addon ${blue(addon)} Installing ${magenta(deps)} to devDependencies`);
+      execSync(`npm config set save-exact true && npm i -D ${deps}`, {cwd, stdio: 'inherit'});
       installed.push(...depNames);
     } catch (err) {
       const message = `Error installing ${deps}, please install in your project`;

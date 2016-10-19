@@ -5,6 +5,7 @@ import isPlainObject from 'lodash/isPlainObject';
 import omit from 'lodash/omit';
 import {join} from 'path';
 import webpack from 'webpack';
+import WebpackMd5Hash from 'webpack-md5-hash';
 import formatter from 'eslint-friendly-formatter';
 import boilerUtils from 'boiler-utils';
 import getLoaderPluginConfig from './get-loader-plugin-config';
@@ -208,6 +209,10 @@ export default function(config, defaultConfig, opts = {}) {
         })
       ]);
     }
+
+    prodConfig.plugins.push(
+      new WebpackMd5Hash()
+    );
 
     return prodConfig;
   };

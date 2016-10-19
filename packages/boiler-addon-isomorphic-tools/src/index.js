@@ -15,7 +15,7 @@ export default function(config) {
   if (isPlugin) {
     tools = new WebpackIsomorphicToolsPlugin(toolsConfig).development(isDev);
   } else {
-    tools = new WebpackIsomorphicTools(toolsConfig).development(isDev);
+    tools = new WebpackIsomorphicTools(toolsConfig);
   }
 
   return tools;
