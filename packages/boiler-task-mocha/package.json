@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-mocha",
-  "version": "4.3.1",
+  "version": "4.4.0",
   "description": "Build Boilerplate Mocha Testing",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -30,7 +30,7 @@
     "babel-plugin-transform-runtime": "^6.8.0",
     "babel-polyfill": "^6.3.14",
     "babel-register": "^6.3.13",
-    "boiler-utils": "^4.3.1",
+    "boiler-utils": "^4.4.0",
     "gulp-mocha": "^3.0.0",
     "lodash": "^4.0.0"
   },
