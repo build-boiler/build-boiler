@@ -210,12 +210,12 @@ export default function(config, defaultConfig, opts = {}) {
       ]);
     }
 
+    prodConfig.plugins.push(
+      new WebpackMd5Hash()
+    );
+
     return prodConfig;
   };
-
-  prodConfig.plugins.push(
-    new WebpackMd5Hash()
-  );
 
   return callParent(methodCb, {
     development,
