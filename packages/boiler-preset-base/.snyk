@@ -1,3 +1,27 @@
 version: v1.5.2
-ignore: {}
+ignore:
+  'npm:request:20160119':
+    - boiler-task-browser-sync > browser-sync > localtunnel > request:
+        reason: Laziness
+        expires: '2016-11-18T16:25:49.806Z'
+  'npm:tough-cookie:20160722':
+    - boiler-task-browser-sync > browser-sync > localtunnel > request > tough-cookie:
+        reason: Laziness
+        expires: '2016-11-18T16:25:49.806Z'
+  'npm:connect:20130701':
+    - boiler-task-browser-sync > browser-sync > browser-sync-ui > weinre > express > connect:
+        reason: Laziness
+        expires: '2016-11-18T16:25:49.807Z'
+  'npm:express:20140912':
+    - boiler-task-browser-sync > browser-sync > browser-sync-ui > weinre > express:
+        reason: Laziness
+        expires: '2016-11-18T16:25:49.807Z'
+  'npm:qs:20140806':
+    - boiler-task-browser-sync > browser-sync > browser-sync-ui > weinre > express > qs:
+        reason: Laziness
+        expires: '2016-11-18T16:25:49.807Z'
+  'npm:qs:20140806-1':
+    - boiler-task-browser-sync > browser-sync > browser-sync-ui > weinre > express > qs:
+        reason: Laziness
+        expires: '2016-11-18T16:25:49.807Z'
 patch: {}

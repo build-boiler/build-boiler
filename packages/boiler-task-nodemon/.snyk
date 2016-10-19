@@ -1,5 +1,9 @@
 version: v1.5.2
-ignore: {}
+ignore:
+  'npm:tough-cookie:20160722':
+    - nodemon > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        reason: Laziness
+        expires: '2016-11-18T16:32:54.184Z'
 patch:
   'npm:tough-cookie:20160722':
     - nodemon > chokidar > fsevents > node-pre-gyp > request > tough-cookie:

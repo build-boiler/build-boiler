@@ -2,20 +2,28 @@ version: v1.5.2
 ignore:
   'npm:connect:20130701':
     - browser-sync > browser-sync-ui > weinre > express > connect:
-        reason: None given
-        expires: '2016-09-14T16:01:45.663Z'
+        reason: Laziness
+        expires: '2016-11-18T16:30:45.401Z'
   'npm:express:20140912':
     - browser-sync > browser-sync-ui > weinre > express:
-        reason: None given
-        expires: '2016-09-14T16:01:45.663Z'
+        reason: Laziness
+        expires: '2016-11-18T16:30:45.401Z'
   'npm:qs:20140806':
     - browser-sync > browser-sync-ui > weinre > express > qs:
-        reason: None given
-        expires: '2016-09-14T16:01:45.663Z'
+        reason: Laziness
+        expires: '2016-11-18T16:30:45.401Z'
   'npm:qs:20140806-1':
     - browser-sync > browser-sync-ui > weinre > express > qs:
-        reason: None given
-        expires: '2016-09-14T16:01:45.663Z'
+        reason: Laziness
+        expires: '2016-11-18T16:30:45.401Z'
+  'npm:request:20160119':
+    - browser-sync > localtunnel > request:
+        reason: Laziness
+        expires: '2016-11-18T16:30:45.400Z'
+  'npm:tough-cookie:20160722':
+    - browser-sync > localtunnel > request > tough-cookie:
+        reason: Laziness
+        expires: '2016-11-18T16:30:45.401Z'
 patch:
   'npm:minimatch:20160620':
     - karma-coverage > istanbul > fileset > minimatch:

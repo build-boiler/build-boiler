@@ -1,5 +1,23 @@
 version: v1.5.2
-ignore: {}
+ignore:
+  'npm:hawk:20160119':
+    - selenium-standalone > request > hawk:
+        reason: Laziness
+        expires: '2016-11-18T16:33:13.651Z'
+  'npm:minimatch:20160620':
+    - wdio-mocha-framework > mocha > glob > minimatch:
+        reason: Laziness
+        expires: '2016-11-18T16:33:13.651Z'
+    - nightwatch > minimatch:
+        reason: Laziness
+        expires: '2016-11-18T16:33:13.652Z'
+    - nightwatch > mocha-nightwatch > glob > minimatch:
+        reason: Laziness
+        expires: '2016-11-18T16:33:13.652Z'
+  'npm:request:20160119':
+    - selenium-standalone > request:
+        reason: Laziness
+        expires: '2016-11-18T16:33:13.652Z'
 patch:
   'npm:hawk:20160119':
     - selenium-standalone > request > hawk:

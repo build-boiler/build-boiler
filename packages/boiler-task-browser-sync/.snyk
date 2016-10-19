@@ -2,20 +2,28 @@ version: v1.5.2
 ignore:
   'npm:connect:20130701':
     - browser-sync > browser-sync-ui > weinre > express > connect:
-        reason: None given
-        expires: '2016-09-14T16:00:12.911Z'
+        reason: Laziness
+        expires: '2016-11-18T16:28:37.546Z'
   'npm:express:20140912':
     - browser-sync > browser-sync-ui > weinre > express:
-        reason: None given
-        expires: '2016-09-14T16:00:12.911Z'
+        reason: Laziness
+        expires: '2016-11-18T16:28:37.546Z'
   'npm:qs:20140806':
     - browser-sync > browser-sync-ui > weinre > express > qs:
-        reason: None given
-        expires: '2016-09-14T16:00:12.911Z'
+        reason: Laziness
+        expires: '2016-11-18T16:28:37.546Z'
   'npm:qs:20140806-1':
     - browser-sync > browser-sync-ui > weinre > express > qs:
-        reason: None given
-        expires: '2016-09-14T16:00:12.911Z'
+        reason: Laziness
+        expires: '2016-11-18T16:28:37.546Z'
+  'npm:request:20160119':
+    - browser-sync > localtunnel > request:
+        reason: Laziness
+        expires: '2016-11-18T16:28:37.546Z'
+  'npm:tough-cookie:20160722':
+    - browser-sync > localtunnel > request > tough-cookie:
+        reason: Laziness
+        expires: '2016-11-18T16:28:37.546Z'
 patch:
   'npm:negotiator:20160616':
     - browser-sync > socket.io > engine.io > accepts > negotiator:

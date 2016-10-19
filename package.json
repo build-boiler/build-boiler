@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "gulp",
-    "test": "gulp mocha",
+    "test": "snyk test && gulp mocha",
     "lint:fix:build": "eslint -c ./packages/boiler-config-eslint/dist/config/build.js ./gulp/** ./packages/*/src/** gulpfile.babel.js --fix",
     "lint:fix:test": "eslint -c ./packages/boiler-config-eslint/dist/config/test.js ./tests/** ./packages/*/test/** --fix",
     "lerna:bootstrap": "lerna bootstrap",
