@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-isomorphic-tools",
-  "version": "5.1.4",
+  "version": "5.2.1",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
