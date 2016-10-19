@@ -166,6 +166,16 @@ export default class GetAsset {
         break;
     }
 
+    if (this.integrity) {
+      // HACK: previous runs to the get_asset tag were mutating the `this.integrity` state so if `integrity=true` was taken off
+      // of one tag, if a previous tag with "integrity" had run, then the following tag would still persist the integrity state
+      this.integrity = null;
+    }
+
+    if (this.cors) {
+      this.cors = null;
+    }
+
     return new nunjucks.runtime.SafeString(tag || '');
   }
 }
