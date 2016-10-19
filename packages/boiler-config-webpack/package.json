@@ -30,7 +30,7 @@
     "boiler-addon-isomorphic-tools": "^5.1.4",
     "boiler-config-eslint": "^5.1.5",
     "boiler-utils": "^5.1.4",
-    "eslint-friendly-formatter": "^1.2.2",
+    "eslint-friendly-formatter": "2.0.6",
     "globby": "^4.0.0",
     "gulp-util": "^3.0.7",
     "lodash": "^4.0.0",
