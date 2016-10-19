@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-selenium",
-  "version": "5.1.4",
+  "version": "5.2.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
