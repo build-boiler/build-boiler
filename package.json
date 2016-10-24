@@ -17,9 +17,7 @@
     "bs": "node ./scripts/install.js && lerna bootstrap",
     "compile": "gulp build --release",
     "publish": "gulp build --release && gulp mocha &&  lerna publish",
-    "publish:all": "gulp build --release && gulp mocha && lerna publish --force-publish=* --yes",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "publish:all": "gulp build --release && gulp mocha && lerna publish --force-publish=* --yes"
   },
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -97,6 +95,5 @@
     "browserstack-local": "1.1.0",
     "snyk": "^1.18.0",
     "webpack": "2.1.0-beta.22"
-  },
-  "snyk": true
+  }
 }
