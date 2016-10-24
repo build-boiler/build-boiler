@@ -44,6 +44,6 @@ patch:
         patched: '2016-08-15T15:55:24.390Z'
   'npm:tough-cookie:20160722':
     - glob-watcher > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
-        patched: '2016-08-15T15:55:24.390Z'
+        patched: '2016-10-24T21:04:17.897Z'
     - gulp > glob-watcher > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
-        patched: '2016-08-15T15:55:24.390Z'
+        patched: '2016-10-24T21:04:17.897Z'
