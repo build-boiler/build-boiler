@@ -32,10 +32,12 @@ patch:
         patched: '2016-08-15T15:59:50.169Z'
   'npm:request:20160119':
     - browser-sync > localtunnel > request:
-        patched: '2016-08-15T15:59:50.169Z'
+        patched: '2016-10-24T20:50:06.253Z'
   'npm:tough-cookie:20160722':
     - browser-sync > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
         patched: '2016-08-15T15:59:50.169Z'
+      browser-sync > localtunnel > request > tough-cookie:
+        patched: '2016-10-24T20:50:06.253Z'
     - browser-sync > localtunnel > request > tough-cookie:
         patched: '2016-08-15T15:59:50.169Z'
   'npm:ws:20160624':
