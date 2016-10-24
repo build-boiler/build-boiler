@@ -61,7 +61,8 @@ export default function(gulp, plugins, config) {
       server: {
         baseDir: addbase(buildDir),
         middleware
-      }
+      },
+      online: false
     };
 
     const parentConfig = callParent(arguments, {
