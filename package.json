@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "gulp",
-    "test": "snyk test && gulp mocha",
+    "test": "gulp mocha",
     "lint:fix:build": "eslint -c ./packages/boiler-config-eslint/dist/config/build.js ./gulp/** ./packages/*/src/** gulpfile.babel.js --fix",
     "lint:fix:test": "eslint -c ./packages/boiler-config-eslint/dist/config/test.js ./tests/** ./packages/*/test/** --fix",
     "lerna:bootstrap": "lerna bootstrap",
@@ -19,9 +19,7 @@
     "bs": "node ./scripts/install.js && lerna bootstrap",
     "compile": "gulp build --release",
     "publish": "gulp build --release && gulp mocha &&  lerna publish",
-    "publish:all": "gulp build --release && gulp mocha && lerna publish --force-publish=* --yes",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "publish:all": "gulp build --release && gulp mocha && lerna publish --force-publish=* --yes"
   },
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -106,6 +104,5 @@
     "babel-plugin-transform-runtime": "^6.8.0",
     "browserstack-local": "1.1.0",
     "snyk": "^1.18.0"
-  },
-  "snyk": true
+  }
 }
