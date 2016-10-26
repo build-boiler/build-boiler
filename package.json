@@ -17,9 +17,7 @@
     "bs": "node ./scripts/install.js && lerna bootstrap",
     "compile": "gulp build --release",
     "publish": "gulp build --release && gulp mocha &&  lerna publish",
-    "publish:all": "gulp build --release && gulp mocha && lerna publish --force-publish=* --yes",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "publish:all": "gulp build --release && gulp mocha && lerna publish --force-publish=* --yes"
   },
   "author": "DtotheFP",
   "license": "Copyright 2016",
@@ -95,6 +93,5 @@
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
     "snyk": "^1.18.0"
-  },
-  "snyk": true
+  }
 }
