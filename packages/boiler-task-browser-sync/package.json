@@ -1,6 +1,6 @@
 {
   "name": "boiler-task-browser-sync",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-utils": "^4.4.1",
+    "boiler-utils": "^4.4.2",
     "browser-sync": "^2.14.0",
     "lodash": "^4.0.0",
     "open": "0.0.5",
