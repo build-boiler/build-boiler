@@ -92,6 +92,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "snyk": "^1.18.0"
+    "snyk": "^1.18.0",
+    "webpack": "1.13.3"
   }
 }
