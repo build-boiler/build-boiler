@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-webpack-babel",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Build Boilerplate Static Templating",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -37,7 +37,7 @@
     "babel-preset-stage-0": "^6.1.18",
     "babel-register": "^6.3.13",
     "babel-runtime": "^6.3.19",
-    "boiler-utils": "^3.5.0",
+    "boiler-utils": "^3.6.0",
     "lodash": "^4.0.0",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
