@@ -110,7 +110,7 @@ export default function(baseConfig, taskConfig, opts = {}) {
   };
 
   const addTimeStamp = (fp) => {
-    if (!timestamp) return fp;
+    if (!timestamp && !/\.css$/.test(fp)) return fp;
 
     return fp.replace(/^(.*)\.(js|css)$/, (all, name, ext) => {
       return `${name}-${currTime}.${ext}`;
