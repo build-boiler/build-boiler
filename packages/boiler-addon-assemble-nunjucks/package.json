@@ -1,6 +1,6 @@
 {
   "name": "boiler-addon-assemble-nunjucks",
-  "version": "5.2.2",
+  "version": "5.2.4",
   "description": "Build Boilerplate Middleware for Assemble",
   "main": "dist/index.js",
   "author": "DtotheFP",
@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.8.0",
-    "boiler-utils": "^5.2.2",
+    "boiler-utils": "^5.2.4",
     "cheerio": "^0.20.0",
     "consolidate": "^0.14.0",
     "lodash": "^4.0.0",

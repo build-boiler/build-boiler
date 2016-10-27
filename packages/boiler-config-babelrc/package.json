@@ -1,6 +1,6 @@
 {
   "name": "boiler-config-babelrc",
-  "version": "5.2.2",
+  "version": "5.2.4",
   "description": "Babelrc Config",
   "main": "dist/index.js",
   "scripts": {
